@@ -1,0 +1,60 @@
+swagger: "2.0"
+info:
+  description: "The goal of the component consists in selecting the best data and computation movement actions to be adopted in order to restore the level of data quality, quality of service and security defined by the application developer."
+  version: "0.0.1"
+  title: "Decision System for Data and Computation Movement"
+  license:
+    name: "License TBD"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "TBD"
+basePath: "/"
+schemes:
+- "http"
+paths:
+  /notifyViolation:
+    post:
+      summary: "notifyViolation"
+      description: "The method receives in input the appllication developer's requirements and the list of violated requirements."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "Input"
+        description: "Application requirements and list of violated requirements. Both input merged in the same body because at most 1 body parameter can be defined. [Click here for more info](https://github.com/swagger-api/swagger-editor/issues/889)"
+        required: true
+        schema:
+          $ref: "#/definitions/input"
+
+      responses:
+        405:
+          description: "Invalid input"
+        200:
+          description: "Valid input"
+
+definitions:
+  input:
+    type: "object"
+    properties:
+      violations:
+        type: "array"
+        items: 
+          $ref: "#/definitions/violation"
+      applicationRequirements:
+        $ref: "#/definitions/applicationRequirements"
+
+  violation:
+    type: "object"
+    properties:
+      TBD:
+        type: "integer"
+        format: "int64"
+
+      
+  applicationRequirements:
+    type: "object"
+    properties:
+      TBD:
+        type: "integer"
+        format: "int64"
