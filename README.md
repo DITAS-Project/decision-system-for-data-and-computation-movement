@@ -10,7 +10,7 @@ The goal of the component consists in selecting the best data and computation mo
 
 ## list of functionalities
 * notifyViolation
-  * description: the method receives in input the appllication devloper's requirements and the list of violated requirements, and selects the best data movment or computation movemenet actions.
+  * description: the method receives in input the appllication developer's requirements and the list of violated requirements.
   * caller SLA manager
   * input
     * application developer requirements
