@@ -20,6 +20,16 @@ The goal of the component consists in selecting the best data and computation mo
   
 
 ## Implementation language
-
+Node.js
 
 ## Requirements
+In order to work, this component requires the following modules to be installed:
+
+* express
+* body-parser
+
+## Execution
+To launch this component, execute the following command:
+* node main.js [port]
+
+[port] specifies the HTTP port number where the component will listen to requests. If not specified, default value 8081 will be used.
