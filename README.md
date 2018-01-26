@@ -9,7 +9,7 @@ The goal of the component consists in selecting the best data and computation mo
 * list of data and computation actions
 
 ## List of functionalities
-* notifyViolation
+* /api/notifyViolation
   * description: the method receives in input the appllication developer's requirements and the list of violated requirements.
   * caller SLA manager
   * input
