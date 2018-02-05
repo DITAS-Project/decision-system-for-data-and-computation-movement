@@ -31,10 +31,10 @@ app.use(bodyParser.urlencoded({
 app.post('/api/notifyViolation', function (request, response) {
     
 	//parse and extract non-functional properties from requirements
-	var properties = JSON.parse(request.body.requirements.toString()).userRequirements.NonFunctionalRequirements.properties;
+	var properties = JSON.parse(request.body.requirements.toString()).dataUtilityAndSecurity.dataUtility.properties;
     
     //parse and extract goal model tree from requirements
-	var goalTree = JSON.parse(request.body.requirements.toString()).userRequirements.NonFunctionalRequirements.goalTree;
+	var goalTree = JSON.parse(request.body.requirements.toString()).dataUtilityAndSecurity.dataUtility.goalTree;
     
 	//parse list of service blueprints
 	var violations = request.body.violations.toString();
