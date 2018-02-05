@@ -47,9 +47,24 @@ definitions:
   violation:
     type: "object"
     properties:
-      TBD:
+      type:
+        type: "string"
+        description: "the agreement id"
+      agreementid: 
         type: "integer"
-        format: "int64"
+      guaranteename: 
+        type: "string"
+        description: "the slo name"
+      date: 
+        type: "string"
+        description: "date when the violation was detected"
+      metric:        
+        type: "string"
+        description: "the metric name"
+      value:  
+        type: "number"
+        description: "violation value"
+        
 
       
   applicationRequirements:
