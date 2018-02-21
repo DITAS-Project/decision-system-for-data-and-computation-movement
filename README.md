@@ -18,6 +18,8 @@ The goal of the component consists in selecting the best data and computation mo
   * output
     * list of data and computation movement actions 
   
+## API definition
+API definition in [SwaggerHub](https://app.swaggerhub.com/apis/ditas-project/DecisionSystemForDataAndComputationMovement/0.0.1).
 
 ## Implementation language
 Node.js
