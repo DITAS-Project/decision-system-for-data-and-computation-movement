@@ -11,7 +11,7 @@ pipeline {
             }
             steps {
                 //how can this commans be executed? src folver of what? no folder has been copied yet?
-                //sh 'cd src; npm install'
+                sh 'cd src; npm install'
 
 				// Any artifact? Dont think so
 				// TO-DO
