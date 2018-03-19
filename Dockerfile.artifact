@@ -125,5 +125,10 @@ RUN set -e \
 		exit 1; \
 	fi
 
-EXPOSE 8080
+# end standard config
+
+# Copy app src code to the image
+# COPY DS4M/target/DS4M-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/.
+
+EXPOSE 50003
 CMD ["catalina.sh", "run"]
