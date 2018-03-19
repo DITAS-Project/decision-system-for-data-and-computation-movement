@@ -4,14 +4,18 @@ pipeline {
     stages {
         stage('Build - test') {
             agent {
-                docker {
-                    image 'openjdk:9-jre'
+                dockerfile {
+                    filename 'Dockerfile.artifact'
+                    }
+            
+                //docker {
+                    //image 'openjdk:9-jre'
 					// TODO some cache to avoid npm sintall on every execution?
-                }
+                //}
             }
             steps {
-                //how can this commans be executed? src folver of what? no folder has been copied yet?
-                sh 'cd src; npm install'
+                //how can this commans be executed? src folder of what? no folder has been copied yet?
+                sh 'ls '
 
 				// Any artifact? Dont think so
 				// TO-DO
