@@ -127,6 +127,9 @@ RUN set -e \
 
 # end standard config
 
+#remove root configguration, do deploy DS4M in root address
+RUN rm -rf /usr/local/tomcat/webapps/ROOT/
+
 # Copy app src code to the image
 COPY DS4M/target/ROOT.war /usr/local/tomcat/webapps/.
 
