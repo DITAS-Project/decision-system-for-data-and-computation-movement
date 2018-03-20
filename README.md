@@ -22,16 +22,24 @@ The goal of the component consists in selecting the best data and computation mo
 API definition in [SwaggerHub](https://app.swaggerhub.com/apis/ditas-project/DecisionSystemForDataAndComputationMovement/0.0.1).
 
 ## Implementation language
-Node.js
+Java
 
 ## Requirements
-In order to work, this component requires the following modules to be installed:
+In order to work, this component requires the following elements to be installed:
 
-* express
-* body-parser
+* jre 8
+* tomcat 8.5
 
 ## Execution
 To launch this component, execute the following command:
-* node main.js [port]
+* copy the file decision-system-for-data-and-computation-movement/DS4M/target/ROOT.war in /usr/local/tomcat/webapps/. of the machine where tomcat is installed
+* start tomcat
 
-[port] specifies the HTTP port number where the component will listen to requests. If not specified, default value 8081 will be used.
+## check deployment
+To test if the application is deployed correctly:
+* open a browser 
+* go to <address>:<port>/NotifyViolation
+* a web page saying that the service is up and running should be displayed.
+
+<address>: address of the machine where tomcat is installed
+<port>: port of the application, if no port forwarding has been specified, it is 8080
