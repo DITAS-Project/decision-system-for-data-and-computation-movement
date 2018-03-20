@@ -52,8 +52,8 @@ pipeline {
                 sh "docker login -u ditasgeneric -p ${password}"
                 echo "Done"
                 
-                echo "Pushing the image ditas/data-utility-refinement:latest..."
-                sh "docker push ditas/data-utility-refinement:latest"
+                echo "Pushing the image ditas/decision-system-for-data-and-computation-movement:latest..."
+                sh "docker push ditas/decision-system-for-data-and-computation-movement:latest"
                 echo "Done "
             }
         }
@@ -69,13 +69,13 @@ pipeline {
 
                 // Ensure that a previously running instance is stopped (-f stops and removes in a single step)
                 // || true - "docker stop" failt with exit status 1 if image doen't exists, what makes the Pipeline fail. the "|| true" forces the command to exit with 0.
-                sh 'ssh -i /opt/keypairs/ditas-testbed-keypair.pem cloudsigma@31.171.247.162 sudo docker rm -f data-utility-refinement || true'
+                sh 'ssh -i /opt/keypairs/ditas-testbed-keypair.pem cloudsigma@31.171.247.162 sudo docker rm -f decision-system-for-data-and-computation-movement || true'
 
                 // Ensure that the last image is pulled
-                sh 'ssh -i /opt/keypairs/ditas-testbed-keypair.pem cloudsigma@31.171.247.162 sudo docker pull ditas/data-utility-refinement:latest'
+                sh 'ssh -i /opt/keypairs/ditas-testbed-keypair.pem cloudsigma@31.171.247.162 sudo docker pull ditas/decision-system-for-data-and-computation-movement:latest'
 
                 // Run and name the image to allow stopping by name
-                sh 'ssh -i /opt/keypairs/ditas-testbed-keypair.pem cloudsigma@31.171.247.162 sudo docker run -p 50000:8080 -d --name data-utility-refinement ditas/data-utility-refinement:latest'
+                sh 'ssh -i /opt/keypairs/ditas-testbed-keypair.pem cloudsigma@31.171.247.162 sudo docker run -p 50000:8080 -d --name decision-system-for-data-and-computation-movement ditas/decision-system-for-data-and-computation-movement:latest'
             }
         }
     }
