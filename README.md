@@ -38,8 +38,8 @@ To launch this component, execute the following command:
 ## check deployment
 To test if the application is deployed correctly:
 * open a browser 
-* go to <address>:<port>/NotifyViolation
+* go to __address__:__port__/NotifyViolation
 * a web page saying that the service is up and running should be displayed.
 
-<address>: address of the machine where tomcat is installed
-<port>: port of the application, if no port forwarding has been specified, it is 8080
+__address__: address of the machine where tomcat is installed
+__port__: port of the application, if no port forwarding has been specified, it is 8080
