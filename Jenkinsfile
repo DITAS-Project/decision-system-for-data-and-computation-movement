@@ -75,7 +75,7 @@ pipeline {
                 sh 'ssh -i /opt/keypairs/ditas-testbed-keypair.pem cloudsigma@31.171.247.162 sudo docker pull ditas/decision-system-for-data-and-computation-movement:latest'
 
                 // Run and name the image to allow stopping by name
-                sh 'ssh -i /opt/keypairs/ditas-testbed-keypair.pem cloudsigma@31.171.247.162 sudo docker run -p 50000:8080 -d --name decision-system-for-data-and-computation-movement ditas/decision-system-for-data-and-computation-movement:latest'
+                sh 'ssh -i /opt/keypairs/ditas-testbed-keypair.pem cloudsigma@31.171.247.162 sudo docker run -p 50003:8080 -d --name decision-system-for-data-and-computation-movement ditas/decision-system-for-data-and-computation-movement:latest'
             }
         }
     }
