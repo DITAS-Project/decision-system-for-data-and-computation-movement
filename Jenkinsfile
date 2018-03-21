@@ -11,6 +11,8 @@ pipeline {
             steps {
                 //how can this commans be executed? src folder of what? no folder has been copied yet?
                 sh 'mvn package'
+                ///home/jenkins/workspace/computation-movement_master-BK4HLZBJDRRLGBVKEMXUAH3FBKEDD4DJ2AHEU6LNTH2WOL2FLHXQ/target/ROOT.war
+                sh 'ls'
 
 				// Any artifact? Dont think so
 				// TO-DO
@@ -32,6 +34,7 @@ pipeline {
             steps {
                 // The Dockerfile.artifact copies the code into the image and run the jar generation.
                 echo 'Creating the image...'
+                sh "ls "
                 // This will search for a Dockerfile.artifact in the working directory and build the image to the local repository
                 sh "docker build -t \"ditas/decision-system-for-data-and-computation-movement\" -f Dockerfile.artifact ."
                 echo "Done"
