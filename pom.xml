@@ -5,6 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <build>
+  	<finalName>ROOT</finalName>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
@@ -19,7 +20,7 @@
         <artifactId>maven-war-plugin</artifactId>
         <version>3.0.0</version>
         <configuration>
-          <warSourceDirectory>WebContent</warSourceDirectory>
+          <warSourceDirectory>WebContent</warSourceDirectory>  
         </configuration>
       </plugin>
     </plugins>

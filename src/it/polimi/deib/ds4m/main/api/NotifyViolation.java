@@ -61,6 +61,8 @@ public class NotifyViolation extends HttpServlet {
 		
 		try 
 		{
+			System.out.println("received call");
+			
 	        Violations violations = g.fromJson(violationsJSON, Violations.class);
 	        
 	        Violation violation = violations.getViolations().firstElement();
