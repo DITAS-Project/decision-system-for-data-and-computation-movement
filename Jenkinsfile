@@ -14,6 +14,7 @@ pipeline {
                 ///home/jenkins/workspace/computation-movement_master-BK4HLZBJDRRLGBVKEMXUAH3FBKEDD4DJ2AHEU6LNTH2WOL2FLHXQ/target/ROOT.war
                 sh 'ls'
                 sh 'ls target/'
+                sh 'pwd'
 
 				// Any artifact? Dont think so
 				// TO-DO
