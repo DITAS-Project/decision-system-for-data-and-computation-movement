@@ -34,7 +34,7 @@ import it.polimi.deib.ds4m.main.model.Violations;
 public class NotifyViolationTest 
 {	
 	//set URLS and costants
-	private String URSDS4M_notifyViolation = ":50003/DS4M/NotifyViolation";
+	private String URSDS4M_notifyViolation = "http://localhost:8080/DS4M/NotifyViolation";
 	private String URLdataMovementEnactor = "/dataEnactor/action";
 	private String URLcomputationMovementEnactor = "/dataEnactor/action";
 	
@@ -77,19 +77,19 @@ public class NotifyViolationTest
         HttpClient client = HttpClientBuilder.create().build();
         
         
-       String address; 
-        try 
-        {
-        	address = InetAddress.getLocalHost().getHostAddress();
-		} 
-        catch (UnknownHostException e1) 
-        {
-		
-			e1.printStackTrace();
-			address= "http://localhost";
-		}
+//       String address; 
+//        try 
+//        {
+//        	address = InetAddress.getLocalHost().getHostAddress();
+//		} 
+//        catch (UnknownHostException e1) 
+//        {
+//		
+//			e1.printStackTrace();
+//			address= "http://localhost";
+//		}
         
-        HttpPost post = new HttpPost(address + URSDS4M_notifyViolation);
+        HttpPost post = new HttpPost(URSDS4M_notifyViolation);
 		
         // Create some NameValuePair for HttpPost parameters
         List<NameValuePair> arguments = new ArrayList<>(3);
