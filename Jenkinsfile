@@ -9,7 +9,7 @@ pipeline {
                 }
             }
             steps {
-                // The following command creates the WAR inside the target folder in the workspace
+                // The following command creates the WAR inside the target folder in the workspace 
                 sh 'mvn package'
 
 				// Archive the artifact to be accessible from the Artifacts tab into the Blue Ocean interface, just to have it handy
@@ -31,7 +31,7 @@ pipeline {
             steps {
                 // The Dockerfile.artifact copies the code into the image and run the jar generation.
                 echo 'Creating the image...'
-                
+
                 // This will search for a Dockerfile.artifact in the working directory and build the image to the local repository
                 sh "docker build -t \"ditas/decision-system-for-data-and-computation-movement\" -f Dockerfile.artifact ."
                 echo "Done"
