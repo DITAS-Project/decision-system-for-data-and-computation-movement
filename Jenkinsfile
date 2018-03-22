@@ -5,19 +5,15 @@ pipeline {
         stage('Build - test') {
             agent {
                 dockerfile {
-                    filename 'Dockerfile_build.artifact'
-                    }
+                    filename 'Dockerfile.build'
+                }
             }
             steps {
-                //how can this commans be executed? src folder of what? no folder has been copied yet?
+                // The following command creates the WAR inside the target folder in the workspace
                 sh 'mvn package'
-                ///home/jenkins/workspace/computation-movement_master-BK4HLZBJDRRLGBVKEMXUAH3FBKEDD4DJ2AHEU6LNTH2WOL2FLHXQ/target/ROOT.war
-                sh 'ls'
-                sh 'ls target/'
-                sh 'pwd'
 
-				// Any artifact? Dont think so
-				// TO-DO
+				// Archive the artifact to be accessible from the Artifacts tab into the Blue Ocean interface, just to have it handy
+				archiveArtifacts 'target/*.war'
 
                 // Run the tests
 				//sh 'mvn test'
@@ -27,7 +23,6 @@ pipeline {
                 always {
                     // Record the test report?
                     // TO-DO
-		    echo "To-Do Record tests"
                 }
             }
         }
@@ -36,22 +31,22 @@ pipeline {
             steps {
                 // The Dockerfile.artifact copies the code into the image and run the jar generation.
                 echo 'Creating the image...'
-                sh "ls "
+                
                 // This will search for a Dockerfile.artifact in the working directory and build the image to the local repository
                 sh "docker build -t \"ditas/decision-system-for-data-and-computation-movement\" -f Dockerfile.artifact ."
                 echo "Done"
-                
+
                 echo 'Retrieving Docker Hub password from /opt/ditas-docker-hub.passwd...'
                 // Get the password from a file. This reads the file from the host, not the container. Slaves already have the password in there.
                 script {
                     password = readFile '/opt/ditas-docker-hub.passwd'
                 }
                 echo "Done"
-                
+
                 echo 'Login to Docker Hub as ditasgeneric...'
                 sh "docker login -u ditasgeneric -p ${password}"
                 echo "Done"
-                
+
                 echo "Pushing the image ditas/decision-system-for-data-and-computation-movement:latest..."
                 sh "docker push ditas/decision-system-for-data-and-computation-movement:latest"
                 echo "Done "
@@ -60,22 +55,13 @@ pipeline {
         stage('Image deploy') {
             // TO-DO avoid downloading the source from git again, not neccessary. (All the stages do that unnecessary step at this moment, see logs)
             agent any
+            options {
+                // Already compiled the WAR, so don't checkout againg (checkout also cleans the workspace, removing any generated artifact)
+                skipDefaultCheckout true
+            }
             steps {
-                // Staging environment: 31.171.247.162
-                // Private key for ssh: /opt/keypairs/ditas-testbed-keypair.pem
-
-                // TODO move all these commands to a deploy.sh to open a single SSH connetions
-                // TODO state management? We are killing without careing about any operation the conainer could be doing.
-
-                // Ensure that a previously running instance is stopped (-f stops and removes in a single step)
-                // || true - "docker stop" failt with exit status 1 if image doen't exists, what makes the Pipeline fail. the "|| true" forces the command to exit with 0.
-                sh 'ssh -i /opt/keypairs/ditas-testbed-keypair.pem cloudsigma@31.171.247.162 sudo docker rm -f decision-system-for-data-and-computation-movement || true'
-
-                // Ensure that the last image is pulled
-                sh 'ssh -i /opt/keypairs/ditas-testbed-keypair.pem cloudsigma@31.171.247.162 sudo docker pull ditas/decision-system-for-data-and-computation-movement:latest'
-
-                // Run and name the image to allow stopping by name
-                sh 'ssh -i /opt/keypairs/ditas-testbed-keypair.pem cloudsigma@31.171.247.162 sudo docker run -p 50003:8080 -d --name decision-system-for-data-and-computation-movement ditas/decision-system-for-data-and-computation-movement:latest'
+                // Deploy to Staging environment calling the deployment script
+                sh './jenkins/deploy-staging.sh'
             }
         }
     }
