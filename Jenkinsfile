@@ -19,8 +19,8 @@ pipeline {
 				// Any artifact? Dont think so
 				// TO-DO
 
-                // Run the tests?
-				// TO-DO
+                // Run the tests
+				sh 'mvn test'
             }
             // TODO stop if test fails!
             post {
