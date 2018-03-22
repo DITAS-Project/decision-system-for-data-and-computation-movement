@@ -1,3 +1,9 @@
+#maven folders
 /build/
-#/target/
 /target/
+
+#mac
+.DS_Store
+
+# Logs
+logs
