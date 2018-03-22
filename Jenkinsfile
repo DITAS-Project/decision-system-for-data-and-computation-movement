@@ -12,19 +12,19 @@ pipeline {
                 // The following command creates the WAR inside the target folder in the workspace 
                 sh 'mvn package'
 
-				// Archive the artifact to be accessible from the Artifacts tab into the Blue Ocean interface, just to have it handy
-				archiveArtifacts 'target/*.war'
+                // Archive the artifact to be accessible from the Artifacts tab into the Blue Ocean interface, just to have it handy
+                archiveArtifacts 'target/*.war'
 
                 // Run the tests
-				//sh 'mvn test'
+                //sh 'mvn test'
             }
             // TODO stop if test fails!
-            post {
-                always {
+            //post {
+                //always {
                     // Record the test report?
                     // TO-DO
-                }
-            }
+                //}
+            //}
         }
         stage('Image creation') {
             agent any
