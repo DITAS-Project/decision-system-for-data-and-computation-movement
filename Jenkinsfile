@@ -20,7 +20,7 @@ pipeline {
 				// TO-DO
 
                 // Run the tests
-				sh 'mvn test'
+				//sh 'mvn test'
             }
             // TODO stop if test fails!
             post {
