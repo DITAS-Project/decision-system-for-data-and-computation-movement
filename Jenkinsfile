@@ -28,6 +28,10 @@ pipeline {
         }
         stage('Image creation') {
             agent any
+            options {
+                // Already compiled the WAR, so don't checkout againg (checkout also cleans the workspace, removing any generated artifact)
+                skipDefaultCheckout true
+            }
             steps {
                 // The Dockerfile.artifact copies the code into the image and run the jar generation.
                 echo 'Creating the image...'
@@ -53,10 +57,9 @@ pipeline {
             }
         }
         stage('Image deploy') {
-            // TO-DO avoid downloading the source from git again, not neccessary. (All the stages do that unnecessary step at this moment, see logs)
             agent any
             options {
-                // Already compiled the WAR, so don't checkout againg (checkout also cleans the workspace, removing any generated artifact)
+                // Don't need to checkout Git again
                 skipDefaultCheckout true
             }
             steps {
