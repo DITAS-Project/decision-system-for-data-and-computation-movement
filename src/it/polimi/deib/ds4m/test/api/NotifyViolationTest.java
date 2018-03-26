@@ -32,6 +32,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import com.google.gson.Gson;
 
 import it.polimi.deib.ds4m.main.model.ApplicationRequirements;
+import it.polimi.deib.ds4m.main.model.ApplicationsRequirements;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.Violations;
 
@@ -74,6 +75,7 @@ public class NotifyViolationTest
 	@Test
     public void testSetUp_correct() 
 	{
+		
 		String applicationRequirements;
 		
 		try 
@@ -117,12 +119,7 @@ public class NotifyViolationTest
 	@Test
     public void testNotifyViolations_correct() 
 	{
-		//call the setup
-		ApplicationRequirements applicationRequirements = ApplicationRequirements.getInstance();
-		
-		gsonConverter = new Gson();
-		System.out.println(gsonConverter.toJson(applicationRequirements));
-		
+		this.testSetUp_correct();
 		
         //setup a mock server for data movement
 		stubFor(post(urlEqualTo(URLdataMovementEnactor))
@@ -133,20 +130,6 @@ public class NotifyViolationTest
 		
 		//set up connection 
         HttpClient client = HttpClientBuilder.create().build();
-        
-        
-//       String address; 
-//        try 
-//        {
-//        	address = InetAddress.getLocalHost().getHostAddress();
-//		} 
-//        catch (UnknownHostException e1) 
-//        {
-//		
-//			e1.printStackTrace();
-//			address= "http://localhost";
-//		}
-        
         HttpPost post = new HttpPost(URSDS4M_notifyViolation);
 		
         // Create some NameValuePair for HttpPost parameters
@@ -175,6 +158,8 @@ public class NotifyViolationTest
 	@Test
     public void testNotifyViolations_notCorrect() 
 	{
+		this.testSetUp_correct();
+		
 		//set up connection 
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(URSDS4M_notifyViolation);
@@ -201,6 +186,7 @@ public class NotifyViolationTest
 	@Test
     public void testNotifyViolations_content() 
 	{
+		this.testSetUp_correct();
 		
         //setup a mock server
 		stubFor(post(urlEqualTo(URLdataMovementEnactor))

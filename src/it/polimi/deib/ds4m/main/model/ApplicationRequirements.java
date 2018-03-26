@@ -4,24 +4,6 @@ public class ApplicationRequirements
 {
 	Resource resource;
 	GoalTrees goalTrees;
-
-	//singleton 
-	private static ApplicationRequirements instance = null;
-	
-	//singleton protected constructor
-	protected ApplicationRequirements() 
-	{}
-	
-	//singleton, get instance,
-	//it creates a new instance the first time it is called
-	public static ApplicationRequirements getInstance() 
-	{
-	      if(instance == null) 
-	      {
-	         instance = new ApplicationRequirements();
-	      }
-	      return instance;
-	   }
 	
 	/**
 	 * @return the resource

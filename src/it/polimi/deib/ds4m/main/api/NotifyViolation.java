@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
 import it.polimi.deib.ds4m.main.model.ApplicationRequirements;
+import it.polimi.deib.ds4m.main.model.ApplicationsRequirements;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.Violations;
 
@@ -55,8 +56,11 @@ public class NotifyViolation extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		//retrieve object ftom application scope 
-		//ApplicationRequirements applicationRequirements = (ApplicationRequirements) this.getServletConfig().getServletContext().getAttribute("applicationRequirements");
+		//test
+		Gson gsonConverter = new Gson();
+		ApplicationsRequirements applicationsRequirements = (ApplicationsRequirements) this.getServletConfig().getServletContext().getAttribute("applicationsRequirements");
+		
+		System.out.println("Application requirements API: " + gsonConverter.toJson(applicationsRequirements));
 		
 		//retrieve parameter (the list of violations)
 		String violationsJSON = request.getParameter("violations");

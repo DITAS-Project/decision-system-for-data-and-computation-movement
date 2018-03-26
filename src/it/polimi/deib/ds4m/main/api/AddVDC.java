@@ -13,16 +13,16 @@ import it.polimi.deib.ds4m.main.model.ApplicationRequirements;
 import it.polimi.deib.ds4m.main.model.ApplicationsRequirements;
 
 /**
- * Servlet implementation class SetUp
+ * Servlet implementation class AddVDC
  */
-@WebServlet("/SetUp")
-public class SetUp extends HttpServlet {
+@WebServlet("/AddVDC")
+public class AddVDC extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SetUp() {
+    public AddVDC() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,7 +32,7 @@ public class SetUp extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().println("SetUp, Use POST method");
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -40,11 +40,11 @@ public class SetUp extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		//estract application requirements
+		//extract application requirements
 		//System.out.println("received application requirements");
 		String applicationRequirementsJSON = request.getParameter("applicationRequirements");
 		
-		//coonvert the json in object
+		//convert the json in object
 		Gson g = new Gson();
 		ApplicationRequirements applicationRequirements = g.fromJson(applicationRequirementsJSON, ApplicationRequirements.class);
 		
@@ -60,9 +60,7 @@ public class SetUp extends HttpServlet {
 		
 		//add the application requirements 
 		applicationsRequirements.addApplicationRequirement(applicationRequirements);
-		
-		
-	
+
 	}
 
 }
