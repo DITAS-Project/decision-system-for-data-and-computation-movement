@@ -6,6 +6,9 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -28,6 +31,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 import com.google.gson.Gson;
 
+import it.polimi.deib.ds4m.main.model.ApplicationRequirements;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.Violations;
 
@@ -35,6 +39,7 @@ public class NotifyViolationTest
 {	
 	//set URLS and costants
 	private String URSDS4M_notifyViolation = "http://localhost:8080/DS4M/NotifyViolation";
+	private String URSDS4M_setUp = "http://localhost:8080/DS4M/SetUp";
 	private String URLdataMovementEnactor = "/dataEnactor/action";
 	private String URLcomputationMovementEnactor = "/dataEnactor/action";
 	
@@ -53,7 +58,10 @@ public class NotifyViolationTest
     		//create class for conversion
 		gsonConverter = new Gson();
 
-		//set up class
+		//set up application request
+		
+		
+		//set up violations
 		violations = new Violations();
 		
 		Vector<Violation> violationsVector = new Vector<Violation>();
@@ -64,8 +72,58 @@ public class NotifyViolationTest
 	} 
     
 	@Test
-    public void testAPI_correct() 
+    public void testSetUp_correct() 
 	{
+		String applicationRequirements;
+		
+		try 
+		{
+			applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V10.json", Charset.forName("UTF-8"));
+			
+		} catch (IOException e) 
+		{
+			System.err.println("error in reading file applicationRequiorements");
+			return;
+		}
+		
+		
+		//set up connection 
+        HttpClient client = HttpClientBuilder.create().build();    
+        HttpPost post = new HttpPost(URSDS4M_setUp);
+		
+        // Create some NameValuePair for HttpPost parameters
+        List<NameValuePair> arguments = new ArrayList<>(3);
+        arguments.add(new BasicNameValuePair("applicationRequirements", applicationRequirements));
+
+        //connect to service
+        try {
+            post.setEntity(new UrlEncodedFormEntity(arguments));
+            HttpResponse response = client.execute(post);//response empty
+
+            // Print out the response message
+            //System.out.println(EntityUtils.toString(response.getEntity()));
+            
+            //check the status received
+            assertEquals(0,
+            		response.getStatusLine().getStatusCode(),
+            	     HttpStatus.SC_OK);
+
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+	@Test
+    public void testNotifyViolations_correct() 
+	{
+		//call the setup
+		ApplicationRequirements applicationRequirements = ApplicationRequirements.getInstance();
+		
+		gsonConverter = new Gson();
+		System.out.println(gsonConverter.toJson(applicationRequirements));
+		
+		
         //setup a mock server for data movement
 		stubFor(post(urlEqualTo(URLdataMovementEnactor))
 	            .willReturn(aResponse()
@@ -115,7 +173,7 @@ public class NotifyViolationTest
     }
 	
 	@Test
-    public void testAPI_notCorrect() 
+    public void testNotifyViolations_notCorrect() 
 	{
 		//set up connection 
         HttpClient client = HttpClientBuilder.create().build();
@@ -141,7 +199,7 @@ public class NotifyViolationTest
     }
 	
 	@Test
-    public void testAPI_content() 
+    public void testNotifyViolations_content() 
 	{
 		
         //setup a mock server
@@ -178,6 +236,13 @@ public class NotifyViolationTest
             e.printStackTrace();
         }
     }
+	
+	static String readFile(String path, Charset encoding) 
+			  throws IOException 
+			{
+			  byte[] encoded = Files.readAllBytes(Paths.get(path));
+			  return new String(encoded, encoding);
+			}
 	
 	
 }
