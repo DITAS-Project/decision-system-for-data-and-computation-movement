@@ -9,7 +9,7 @@ pipeline {
                 }
             }
             steps {
-                // The following command creates the WAR inside the target folder in the workspace 
+                // The following command creates the  WAR inside the target folder in the workspace 
                 sh 'mvn package'
 
                 // Archive the artifact to be accessible from the Artifacts tab into the Blue Ocean interface, just to have it handy
