@@ -16,7 +16,8 @@ pipeline {
                 archiveArtifacts 'target/*.war'
 
                 // Run the tests
-                //sh 'mvn test'
+                sh 'mvn test'
+                sh 'echo $?'
             }
             // TODO stop if test fails!
             //post {
