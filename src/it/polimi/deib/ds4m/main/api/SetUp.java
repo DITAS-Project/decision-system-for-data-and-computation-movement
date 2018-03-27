@@ -41,7 +41,7 @@ public class SetUp extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		//estract application requirements
-		//System.out.println("received application requirements");
+		//System.out.println("received application requirements"); 
 		String applicationRequirementsJSON = request.getParameter("applicationRequirements");
 		
 		//coonvert the json in object
