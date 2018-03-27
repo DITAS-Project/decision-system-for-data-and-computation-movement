@@ -16,8 +16,15 @@ pipeline {
                 archiveArtifacts 'target/*.war'
 
                 // Run the tests
-                sh 'mvn test'
-                sh 'echo $?'
+                // sh 'mvn test'
+                
+				try {
+					// Any maven phase that that triggers the test phase can be used here.
+					sh 'mvn test -B'
+				} catch(err) {
+					step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+					throw err
+				}
             }
             // TODO stop if test fails!
             //post {
