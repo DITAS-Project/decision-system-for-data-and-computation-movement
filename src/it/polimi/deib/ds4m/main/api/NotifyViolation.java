@@ -23,10 +23,9 @@ import org.apache.http.util.EntityUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
-import it.polimi.deib.ds4m.main.model.ApplicationRequirements;
-import it.polimi.deib.ds4m.main.model.ApplicationsRequirements;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.Violations;
+import it.polimi.deib.ds4m.main.model.applicationRequirement.ApplicationsRequirements;
 
 /**
  * Servlet implementation class NotifyViolation

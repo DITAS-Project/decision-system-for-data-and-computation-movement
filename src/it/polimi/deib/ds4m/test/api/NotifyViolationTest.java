@@ -31,10 +31,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 import com.google.gson.Gson;
 
-import it.polimi.deib.ds4m.main.model.ApplicationRequirements;
-import it.polimi.deib.ds4m.main.model.ApplicationsRequirements;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.Violations;
+import it.polimi.deib.ds4m.main.model.applicationRequirement.ApplicationRequirements;
+import it.polimi.deib.ds4m.main.model.applicationRequirement.ApplicationsRequirements;
 
 public class NotifyViolationTest 
 {	

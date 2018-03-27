@@ -1,4 +1,4 @@
-package it.polimi.deib.ds4m.main.model;
+package it.polimi.deib.ds4m.main.model.applicationRequirement;
 
 import java.util.Vector;
 
