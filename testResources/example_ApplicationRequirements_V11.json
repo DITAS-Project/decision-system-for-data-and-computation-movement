@@ -1,0 +1,228 @@
+{
+    "resourcesDataAdmin":
+    {
+        "tbd":"tbd"
+    },
+	"goalTrees":
+    {
+        "dataUtility":
+        {
+            "goals":
+            [
+                {
+                    "id": "1",
+                    "name": "Service available", 
+                    "weight":"1",
+                    "metrics": 
+                    [
+                        {
+                            "name":"Availability",
+                            "unit": "percentage",
+                            "minimum":"95",
+                            "maximum":"99",
+                            "utilityFunction":"maximize"
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "name": "Fast data process",
+                    "weight":"1",
+                    "metrics":
+                    [
+                        {
+                            "name": "ResponseTime",
+                            "maximum":"1",
+                            "unit": "second",
+                            "utilityFunction":"minimize"
+                        }
+                    ]
+                },
+                {
+                    "id": "3",
+                    "name": "Data volume",
+                    "weight":"1",
+                    "metrics":
+                    [
+                        {
+                            "name": "volume",
+                            "value":"10000",
+                            "unit": "tuple",
+                            "utilityFunction":"maximize"
+                        }
+                    ]
+                },
+                {
+                    "id": "4",
+                    "name": "Temporal validity",
+                    "weight":"1",
+                    "metrics":
+                    [
+                        {
+                            "name": "Timeliness",
+                            "maximum":"0.6",
+                            "unit": "NONE",
+                            "utilityFunction":"maximize"
+                        }
+                    ]                
+                },
+                {
+                    "id": "5",
+                    "name": "Amount of Data",
+                    "weight":"1",
+                    "metrics":
+                    [
+                        {
+                            "name": "Process completeness",
+                            "minimum":"90",
+                            "unit": "percentage",
+                            "utilityFunction":"maximize"
+                        }
+                    ]                
+                }
+            ],
+            "treeStructure":
+            {
+                "type":"AND",
+                "children":
+                [
+                    {
+                        "type":"OR",
+                        "leaves":["1","4"]
+                    },
+                    {
+                        "type":"AND",
+                        "children":
+                        [
+                            {
+                                "type":"OR",
+                                "leaves":
+                                [
+                                    "3",
+                                    "5"
+                                ]
+                            }
+                        ],
+						"leaves":
+						[
+							"2"
+						]
+                    }
+                ]
+            }      
+        },
+        "security":
+        {
+            "goals":
+            [   
+               {
+                   "id": "1",
+                   "name": "Encryption",
+                   "metrics":[
+                       {
+                           "name":"Algorithm",
+                           "unit":"enum",
+                           "value":"AES"
+                       },
+                       {
+                           "name":"Keylength",
+                           "unit":"number",
+                           "minimum":"128"
+                       }  
+                   ]
+               },
+               {
+                   "id": "2",
+                   "name": "Tracing",
+                   "metrics":
+                   [
+                       {
+                           "name":"Level",
+                           "unit":"enum",
+                           "value":"datasource"
+                       },
+                       {
+                           "name":"SampleRate",
+                           "unit":"percentage",
+                           "minimum":"99",
+                           "maximum":"100"
+                       }  
+                   ]
+               },
+               {
+                   "id": "3",
+                   "name": "ACL",
+                   "metrics":
+                   [
+                       {
+                           "name":"Kind",
+                           "unit":"enum",
+                           "value":"rolebased"
+                       },
+                       {
+                           "name":"Role",
+                           "unit":"enum",
+                           "value":"readOnly"
+                       },
+                       {
+                           "name":"Role",
+                           "unit":"enum",
+                           "value":"readNonPersonal"
+                       } 
+                   ]
+               }
+			],
+            "treeStructure":
+            {
+                "type":"AND",
+                "children":
+                [
+                    {
+                        "type":"OR",
+                        "leaves":
+						[
+							"1",
+							"2"
+						]
+                    }
+                ],
+				"leaves":[
+					"3"
+				]
+            }
+        },
+		"privacy":
+        {
+           "goals":
+           [   
+               {
+                   "id": "1",
+                   "name": "PurposeControl",
+                   "metrics":[
+                       {
+                           "name":"AllowedPurpose",
+                           "unit":"enum",
+                           "value":"NonCommercial"
+                       },
+                       {
+                           "name":"AllowedGuarantor",
+                           "unit":"enum"
+                       }  
+                   ]
+               }
+			],
+           "treeStructure":
+            {
+                "type":"OR",
+				"leaves":
+				[
+					"1",
+					"2"
+				]
+			}
+        }
+
+    }
+}
+
+
