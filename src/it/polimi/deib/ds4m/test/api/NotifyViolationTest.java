@@ -84,8 +84,8 @@ public class NotifyViolationTest
 			
 			
 			Vector<Movement> movementsTmp = new Vector<Movement>();
-			movementsTmp.add(new Movement("ComputationMovement","Edge", "Cloud", impacts, impacts, transformations, costs));
-			movementsTmp.add(new Movement("DataDuplication","Cloud", "Edge", impacts, impacts, transformations, costs));
+			movementsTmp.add(new Movement("ComputationMovement","Edge", "Cloud", impacts, impacts, transformations, costs, 2000));
+			movementsTmp.add(new Movement("DataDuplication","Cloud", "Edge", impacts, impacts, transformations, costs, 300000));
 			
 			Movements movements = new Movements(movementsTmp);
 			movementsJSON = gsonConverter.toJson(movements);

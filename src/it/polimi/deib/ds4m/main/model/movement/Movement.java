@@ -7,6 +7,7 @@ public class Movement
 	private String type;
 	private String from;
 	private String to;
+	private double timeOut;
 	
 	private Vector<String> positiveImpacts;
 	private Vector<String> negativeImpacts;
@@ -15,7 +16,7 @@ public class Movement
 	
 	private Vector<Cost> costs;
 
-	public Movement(String type, String from, String to, Vector<String> positiveImpacts, Vector<String> negativeImpacts, Vector<Transformation> transformations, Vector<Cost> costs ) 
+	public Movement(String type, String from, String to, Vector<String> positiveImpacts, Vector<String> negativeImpacts, Vector<Transformation> transformations, Vector<Cost> costs, double timeOut ) 
 	{
 		this.type=type;
 		this.from=from;
@@ -24,6 +25,7 @@ public class Movement
 		this.negativeImpacts=negativeImpacts;
 		this.transformations=transformations;
 		this.costs=costs;
+		this.timeOut=timeOut;
 	}
 	
 	/**
@@ -108,6 +110,20 @@ public class Movement
 	 */
 	public void setCosts(Vector<Cost> costs) {
 		this.costs = costs;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 
