@@ -10,13 +10,14 @@ pipeline {
             }
             steps {
                 // The following command creates the  WAR inside the target folder in the workspace 
-                sh 'mvn package'
-
+                //sh 'mvn package'
+                sh 'mvn -B -DskipTests clean package'
+                
                 // Archive the artifact to be accessible from the Artifacts tab into the Blue Ocean interface, just to have it handy
                 archiveArtifacts 'target/*.war'
 
-                // Run the tests
-                // sh 'mvn test'
+                // Run the tests (we don't use a different stage for improving the performance, another stage would mean another agent)
+                sh 'mvn test'
               
             }
             // Save the reports always
