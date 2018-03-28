@@ -43,8 +43,10 @@ import it.polimi.deib.ds4m.main.model.movement.Transformation;
 public class NotifyViolationTest 
 {	
 	//set URLS and costants
-	private String URSDS4M_notifyViolation = "http://localhost:8080/DS4M/NotifyViolation";
-	private String URSDS4M_setUp = "http://localhost:8080/DS4M/SetUp";
+	//private String URSDS4M_notifyViolation = "http://localhost:8080/DS4M/NotifyViolation";
+	//private String URSDS4M_setUp = "http://localhost:8080/DS4M/SetUp";
+	private String URSDS4M_notifyViolation = "http://31.171.247.162:50003/NotifyViolation";
+	private String URSDS4M_setUp = "http://31.171.247.162:50003/SetUp";
 	private String URLdataMovementEnactor = "/dataEnactor/action";
 	private String URLcomputationMovementEnactor = "/dataEnactor/action";
 	
