@@ -19,13 +19,13 @@ pipeline {
                 // sh 'mvn test'
               
             }
-            // TODO stop if test fails!
-            //post {
-                //always {
-                    // Record the test report?
-                    // TO-DO
-                //}
-            //}
+            // Save the reports always
+            post {
+                always {
+                    // Record the jUnit test
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
         }
         stage('Image creation') {
             agent any
