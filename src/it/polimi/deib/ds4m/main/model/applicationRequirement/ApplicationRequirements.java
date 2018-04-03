@@ -2,21 +2,11 @@ package it.polimi.deib.ds4m.main.model.applicationRequirement;
 
 public class ApplicationRequirements 
 {
-	Resource resource;
+	ResourcesDataAdmin resourcesDataAdmin;
 	GoalTrees goalTrees;
 	
-	/**
-	 * @return the resource
-	 */
-	public Resource getResource() {
-		return resource;
-	}
-	/**
-	 * @param resource the resource to set
-	 */
-	public void setResource(Resource resource) {
-		this.resource = resource;
-	}
+
+	
 	/**
 	 * @return the goalTrees
 	 */
@@ -28,6 +18,18 @@ public class ApplicationRequirements
 	 */
 	public void setGoalTrees(GoalTrees goalTrees) {
 		this.goalTrees = goalTrees;
+	}
+	/**
+	 * @return the resourcesDataAdmin
+	 */
+	public ResourcesDataAdmin getResourcesDataAdmin() {
+		return resourcesDataAdmin;
+	}
+	/**
+	 * @param resourcesDataAdmin the resourcesDataAdmin to set
+	 */
+	public void setResourcesDataAdmin(ResourcesDataAdmin resourcesDataAdmin) {
+		this.resourcesDataAdmin = resourcesDataAdmin;
 	}
 
 }

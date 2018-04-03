@@ -2,7 +2,8 @@ package it.polimi.deib.ds4m.main.model.applicationRequirement;
 
 import java.util.Vector;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TreeStructure 
 {
@@ -10,6 +11,11 @@ public class TreeStructure
 	Vector<String> leaves;
 	Vector<TreeStructure> childern;	
 	String goalRef;
+	
+	@JsonCreator
+	public TreeStructure(@JsonProperty("children") Vector<TreeStructure> childern) {
+		this.childern=childern;
+	} 
 
 	/**
 	 * @return the type

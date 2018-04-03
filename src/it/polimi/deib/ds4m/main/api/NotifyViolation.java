@@ -20,8 +20,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.Violations;
@@ -56,25 +56,23 @@ public class NotifyViolation extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		//test
-		Gson gsonConverter = new Gson();
+		ObjectMapper mapper = new ObjectMapper();
 		ApplicationsRequirements applicationsRequirements = (ApplicationsRequirements) this.getServletConfig().getServletContext().getAttribute("applicationsRequirements");
 		
-		System.out.println("Application requirements API: " + gsonConverter.toJson(applicationsRequirements));
+		System.out.println("Application requirements API: " + mapper.writeValueAsString( applicationsRequirements));
 		
 		//retrieve parameter (the list of violations)
 		String violationsJSON = request.getParameter("violations");
 		System.out.println("received violations");
-		
-		Gson g = new Gson();
+
 		
 		try 
 		{
-	        Violations violations = g.fromJson(violationsJSON, Violations.class);
+	        Violations violations = mapper.readValue(violationsJSON, Violations.class);
 	        Violation violation = violations.getViolations().firstElement();
 	        
 	        //select data movement
-
-	        
+	        System.out.println("data movement selection");
 	        
 	        //answer to movement enactors
 	        HttpClient client = HttpClientBuilder.create().build();
@@ -82,7 +80,7 @@ public class NotifyViolation extends HttpServlet {
 	        
 	        // Create some NameValuePair for HttpPost parameters
 	        List<NameValuePair> arguments = new ArrayList<>(3);
-	        arguments.add(new BasicNameValuePair("violations", g.toJson(violations)));
+	        arguments.add(new BasicNameValuePair("violations", mapper.writeValueAsString(violations)));
 	        try {
 	            post.setEntity(new UrlEncodedFormEntity(arguments));
 	            HttpResponse responseDE = client.execute(post);//response empty

@@ -4,8 +4,6 @@ package it.polimi.deib.ds4m.test.api;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -26,15 +24,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
-import com.google.gson.Gson;
 
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.Violations;
-import it.polimi.deib.ds4m.main.model.applicationRequirement.ApplicationRequirements;
-import it.polimi.deib.ds4m.main.model.applicationRequirement.ApplicationsRequirements;
 import it.polimi.deib.ds4m.main.model.movement.Cost;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movement.Movements;
@@ -43,10 +40,10 @@ import it.polimi.deib.ds4m.main.model.movement.Transformation;
 public class NotifyViolationTest 
 {	
 	//set URLS and costants
-	//private String URSDS4M_notifyViolation = "http://localhost:8080/DS4M/NotifyViolation";
-	//private String URSDS4M_setUp = "http://localhost:8080/DS4M/SetUp";
-	private String URSDS4M_notifyViolation = "http://31.171.247.162:50003/NotifyViolation";
-	private String URSDS4M_setUp = "http://31.171.247.162:50003/SetUp";
+	private String URSDS4M_notifyViolation = "http://localhost:8080/ROOT/NotifyViolation";
+	private String URSDS4M_setUp = "http://localhost:8080/ROOT/SetUp";
+	//private String URSDS4M_notifyViolation = "http://31.171.247.162:50003/NotifyViolation";
+	//private String URSDS4M_setUp = "http://31.171.247.162:50003/SetUp";
 	private String URLdataMovementEnactor = "/dataEnactor/action";
 	private String URLcomputationMovementEnactor = "/dataEnactor/action";
 	
@@ -56,14 +53,14 @@ public class NotifyViolationTest
 	
 	//set global variables
     Violations violations;
-    Gson gsonConverter;
+    ObjectMapper mapper;
     
 	//setup to be called to instantiate variables
     @Before
 	public void setUp() 
 	{
-    		//create class for conversion
-		gsonConverter = new Gson();
+    	//create class for JSON conversion
+    	mapper = new ObjectMapper();
 
 		//set up movements
 		Boolean movementsFromFile = true;
@@ -90,7 +87,13 @@ public class NotifyViolationTest
 			movementsTmp.add(new Movement("DataDuplication","Cloud", "Edge", impacts, impacts, transformations, costs, 300000));
 			
 			Movements movements = new Movements(movementsTmp);
-			movementsJSON = gsonConverter.toJson(movements);
+			try {
+				movementsJSON = mapper.writeValueAsString(movements);
+			} 
+			catch (JsonProcessingException e) 
+			{
+				e.printStackTrace();
+			}
 		}
 		else
 		{
@@ -113,8 +116,27 @@ public class NotifyViolationTest
 		violations = new Violations();
 		
 		Vector<Violation> violationsVector = new Vector<Violation>();
-		violationsVector.add(new Violation("violation type", 1, "guarantee name", "12/01", "availability", 1.0));
-		violationsVector.add(new Violation("violation type2", 2, "guarantee name2", "12/02", "responce time", 2.0));
+		
+		Violation violation1 = new Violation();
+		violation1.setType("violation type");
+		violation1.setAgreementid(1);
+		violation1.setGuaranteename("guarantee name");
+		violation1.setDate("12/01");
+		violation1.setMetric("availability");
+		violation1.setValue(1.0);
+		
+		violationsVector.add(violation1);
+		
+		Violation violation2 = new Violation();
+		violation2.setType("violation type");
+		violation2.setAgreementid(2);
+		violation2.setGuaranteename("guarantee name");
+		violation2.setDate("12/01");
+		violation2.setMetric("ResponceTime");
+		violation2.setValue(1.0);
+		
+		violationsVector.add(violation2);
+	
 		
 		violations.setViolations(violationsVector);
 	} 
@@ -127,7 +149,7 @@ public class NotifyViolationTest
 		
 		try 
 		{
-			applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V10.json", Charset.forName("UTF-8"));
+			applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -181,7 +203,15 @@ public class NotifyViolationTest
 		
         // Create some NameValuePair for HttpPost parameters
         List<NameValuePair> arguments = new ArrayList<>(3);
-        arguments.add(new BasicNameValuePair("violations", gsonConverter.toJson(violations)));
+        
+        try
+        {
+			arguments.add(new BasicNameValuePair("violations", mapper.writeValueAsString(violations)));
+		} 
+        catch (JsonProcessingException e1) 
+        {
+			e1.printStackTrace();
+		}
 
         //connect to service
         try {
@@ -250,7 +280,13 @@ public class NotifyViolationTest
 		
         // Create some NameValuePair for HttpPost parameters
         List<NameValuePair> arguments = new ArrayList<>(3);
-        arguments.add(new BasicNameValuePair("violations", gsonConverter.toJson(violations)));
+        try {
+			arguments.add(new BasicNameValuePair("violations", mapper.writeValueAsString(violations)));
+		} 
+        catch (JsonProcessingException e1) 
+        {
+			e1.printStackTrace();
+		}
 
         //connect to service
         try {
@@ -261,8 +297,7 @@ public class NotifyViolationTest
             //System.out.println(EntityUtils.toString(response.getEntity()));
             
             //check the answer to the mocked server
-            verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor))
-                    .withHeader("Content-Type", equalTo("application/x-www-form-urlencoded")));
+            verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withHeader("Content-Type", equalTo("application/x-www-form-urlencoded")));
             
             
         } catch (IOException e) {

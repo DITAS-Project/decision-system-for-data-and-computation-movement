@@ -7,7 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.model.applicationRequirement.ApplicationRequirements;
 import it.polimi.deib.ds4m.main.model.applicationRequirement.ApplicationsRequirements;
@@ -45,8 +46,10 @@ public class SetUp extends HttpServlet {
 		String applicationRequirementsJSON = request.getParameter("applicationRequirements");
 		
 		//coonvert the json in object
-		Gson g = new Gson();
-		ApplicationRequirements applicationRequirements = g.fromJson(applicationRequirementsJSON, ApplicationRequirements.class);
+		ObjectMapper mapper = new ObjectMapper();
+		ApplicationRequirements applicationRequirements = mapper.readValue(applicationRequirementsJSON,
+	            new TypeReference<ApplicationRequirements>() {});
+		
 		
 		//if it is not set create a collection of appl.s requirements
 		ApplicationsRequirements applicationsRequirements;

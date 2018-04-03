@@ -6,14 +6,6 @@ public class Violations
 {	
 	//define a set of violations
 	private Vector<Violation> violations;
-	
-	public Violations() 
-	{
-		
-		violations = new Vector<Violation>();
-		
-	}
-
 
 
 	/**

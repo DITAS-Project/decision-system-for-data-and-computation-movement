@@ -2,20 +2,20 @@ package it.polimi.deib.ds4m.main.model;
 
 public class Violation 
 {
-	public Violation(String type,
-	Integer agreementid,
-	String guaranteename,
-	String date,
-	String metric,
-	Double value)
-	{
-		this.type=type;
-		this.agreementid = agreementid;
-		this.guaranteename = guaranteename;
-		this.date = date;
-		this.metric = metric;
-		this.value = value;
-	}
+//	public Violation(String type,
+//	Integer agreementid,
+//	String guaranteename,
+//	String date,
+//	String metric,
+//	Double value)
+//	{
+//		this.type=type;
+//		this.agreementid = agreementid;
+//		this.guaranteename = guaranteename;
+//		this.date = date;
+//		this.metric = metric;
+//		this.value = value;
+//	}
 	
 	public String type;
 	public Integer agreementid;
@@ -23,5 +23,78 @@ public class Violation
 	public String date;
 	public String metric;
 	public Double value;
+	
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+	/**
+	 * @return the agreementid
+	 */
+	public Integer getAgreementid() {
+		return agreementid;
+	}
+	/**
+	 * @param agreementid the agreementid to set
+	 */
+	public void setAgreementid(Integer agreementid) {
+		this.agreementid = agreementid;
+	}
+	/**
+	 * @return the guaranteename
+	 */
+	public String getGuaranteename() {
+		return guaranteename;
+	}
+	/**
+	 * @param guaranteename the guaranteename to set
+	 */
+	public void setGuaranteename(String guaranteename) {
+		this.guaranteename = guaranteename;
+	}
+	/**
+	 * @return the date
+	 */
+	public String getDate() {
+		return date;
+	}
+	/**
+	 * @param date the date to set
+	 */
+	public void setDate(String date) {
+		this.date = date;
+	}
+	/**
+	 * @return the metric
+	 */
+	public String getMetric() {
+		return metric;
+	}
+	/**
+	 * @param metric the metric to set
+	 */
+	public void setMetric(String metric) {
+		this.metric = metric;
+	}
+	/**
+	 * @return the value
+	 */
+	public Double getValue() {
+		return value;
+	}
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(Double value) {
+		this.value = value;
+	}
 
 }
