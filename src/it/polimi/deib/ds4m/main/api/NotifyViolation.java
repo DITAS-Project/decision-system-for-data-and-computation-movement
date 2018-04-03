@@ -55,11 +55,12 @@ public class NotifyViolation extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		//test
+		//create the json parser
 		ObjectMapper mapper = new ObjectMapper();
-		ApplicationsRequirements applicationsRequirements = (ApplicationsRequirements) this.getServletConfig().getServletContext().getAttribute("applicationsRequirements");
 		
-		System.out.println("Application requirements API: " + mapper.writeValueAsString( applicationsRequirements));
+		//retrieve the application requirements
+		ApplicationsRequirements applicationsRequirements = (ApplicationsRequirements) this.getServletConfig().getServletContext().getAttribute("applicationsRequirements");
+		//System.out.println("Application requirements API: " + mapper.writeValueAsString( applicationsRequirements));
 		
 		//retrieve parameter (the list of violations)
 		String violationsJSON = request.getParameter("violations");
@@ -74,7 +75,7 @@ public class NotifyViolation extends HttpServlet {
 	        //select data movement
 	        System.out.println("data movement selection");
 	        
-	        //answer to movement enactors
+	        //call to movement enactors
 	        HttpClient client = HttpClientBuilder.create().build();
 	        HttpPost post = new HttpPost("http://localhost:8089/dataEnactor/action");
 	        
