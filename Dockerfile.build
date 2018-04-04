@@ -3,7 +3,7 @@ FROM openjdk:8-jdk-alpine
 
 RUN apk add --no-cache curl tar bash procps
 
-VOLUME /home/cloudsigma/.m2:/root/.m2
+VOLUME /home/cloudsigma/jenkinstmp:/root/.m2
 
 ARG MAVEN_VERSION=3.5.3
 ARG USER_HOME_DIR="/root"
