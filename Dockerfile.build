@@ -3,6 +3,8 @@ FROM openjdk:8-jdk-alpine
 
 RUN apk add --no-cache curl tar bash procps
 
+VOLUME /home/cloudsigma/.m2:/root/.m2
+
 ARG MAVEN_VERSION=3.5.3
 ARG USER_HOME_DIR="/root"
 ARG SHA=b52956373fab1dd4277926507ab189fb797b3bc51a2a267a193c931fffad8408
