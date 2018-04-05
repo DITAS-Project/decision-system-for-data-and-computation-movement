@@ -31,10 +31,62 @@ paths:
                 $ref: '#/components/schemas/Error'
         200:
           description: "Valid input"
-
+  /setUp:
+    post:
+      summary: "set Up"
+      description: "The API is called when the service is deployed, it receives in input the abstract blueprint."
+      
+      requestBody:
+        description: "Concrete blueprint."
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/concreteBlueprint"
+              
+      responses:
+        405:
+          description: "Invalid input"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        200:
+          description: "Valid input"
+          
+          
+  /addVDC:
+    post:
+      summary: "add VDC"
+      description: "The API is called when a new VDC is deployed, it receives in input the abstract blueprint."
+      
+      requestBody:
+        description: "Concrete blueprint."
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/concreteBlueprint"
+              
+      responses:
+        405:
+          description: "Invalid input"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        200:
+          description: "Valid input"
           
 components:
   schemas:
+    concreteBlueprint:
+      properties:
+        name:
+          type: string
+        tag:
+          type: string   
+    
     applicationRequirements:
       properties:
         name:
@@ -52,7 +104,7 @@ components:
           type: "integer"
         guaranteename: 
           type: "string"
-          description: "the slo name"
+          description: "the sla name"
         date: 
           type: "string"
           description: "date when the violation was detected"
@@ -68,9 +120,9 @@ components:
         violations:
           type: "array"
           items: 
-            $ref: "#components/schemas/violation"
+            $ref: "#/components/schemas/violation"
         applicationRequirements:
-          $ref: "#components/schemas/applicationRequirements"
+          $ref: "#/components/schemas/applicationRequirements"
           
     Error:
       required:

@@ -19,7 +19,6 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -124,6 +123,8 @@ public class NotifyViolationTest
 		violation1.setDate("12/01");
 		violation1.setMetric("availability");
 		violation1.setValue(1.0);
+		violation1.setMethodID("1");
+		violation1.setVdcID("1");
 		
 		violationsVector.add(violation1);
 		
@@ -134,11 +135,20 @@ public class NotifyViolationTest
 		violation2.setDate("12/01");
 		violation2.setMetric("ResponceTime");
 		violation2.setValue(1.0);
+		violation2.setMethodID("2");
+		violation2.setVdcID("1");
 		
 		violationsVector.add(violation2);
 	
 		
 		violations.setViolations(violationsVector);
+		
+		try {
+			System.out.println(mapper.writeValueAsString(violations));
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	} 
     
 	@Test
@@ -194,8 +204,7 @@ public class NotifyViolationTest
 		stubFor(post(urlEqualTo(URLdataMovementEnactor))
 	            .willReturn(aResponse()
 	                .withHeader("Content-Type", "application/x-www-form-urlencoded")
-	                .withStatus(200)
-	                .withBody("ack")));
+	                .withStatus(200)));
 		
 		//set up connection 
         HttpClient client = HttpClientBuilder.create().build();
@@ -294,12 +303,14 @@ public class NotifyViolationTest
             HttpResponse response = client.execute(post);//response empty
 
             // Print out the response message
-            //System.out.println(EntityUtils.toString(response.getEntity()));
+            //System.out.println("responce enactors" + EntityUtils.toString(response.getEntity()));
             
             //check the answer to the mocked server
             verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withHeader("Content-Type", equalTo("application/x-www-form-urlencoded")));
             
+            verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withRequestBody(containing("violations=%7B%22movementsEnaction%22%3A%5B%7B%22from%22%3A%22IP%22%2C%22to%22%3A%22IP%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Pseudonimization%22%5D%7D%2C%7B%22from%22%3A%22IP%22%2C%22to%22%3A%22IP%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Pseudonimization%22%5D%7D%5D%7D")));
             
+            	
         } catch (IOException e) {
             e.printStackTrace();
         }

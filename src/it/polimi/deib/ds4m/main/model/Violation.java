@@ -23,6 +23,8 @@ public class Violation
 	public String date;
 	public String metric;
 	public Double value;
+	public String methodID;
+	public String vdcID;
 	
 	/**
 	 * @return the type
@@ -96,5 +98,30 @@ public class Violation
 	public void setValue(Double value) {
 		this.value = value;
 	}
+	/**
+	 * @return the methodID
+	 */
+	public String getMethodID() {
+		return methodID;
+	}
+	/**
+	 * @param methodID the methodID to set
+	 */
+	public void setMethodID(String methodID) {
+		this.methodID = methodID;
+	}
+	/**
+	 * @return the vdcID
+	 */
+	public String getVdcID() {
+		return vdcID;
+	}
+	/**
+	 * @param vdcID the vdcID to set
+	 */
+	public void setVdcID(String vdcID) {
+		this.vdcID = vdcID;
+	}
+
 
 }
