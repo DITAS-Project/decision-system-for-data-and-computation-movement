@@ -6,7 +6,7 @@ pipeline {
             agent {
                 dockerfile {
                     filename 'Dockerfile.build'
-                    args '-v /home/cloudsigma/jenkinstmp:/usr/share/maven/ref/repository'
+                    args '-u 0 -v /home/cloudsigma/jenkinstmp:/root/.m2 -v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
