@@ -1,35 +1,39 @@
 package it.polimi.deib.ds4m.main.model.applicationRequirement;
 
+import java.util.Vector;
+
 public class ApplicationRequirements 
 {
-	ResourcesDataAdmin resourcesDataAdmin;
-	GoalTrees goalTrees;
+	FunctionalProperties functionalProperties;
+	Vector<Method> methods;
 	
 
 	
+
 	/**
-	 * @return the goalTrees
+	 * @return the functionalProperties
 	 */
-	public GoalTrees getGoalTrees() {
-		return goalTrees;
+	public FunctionalProperties getFunctionalProperties() {
+		return functionalProperties;
 	}
 	/**
-	 * @param goalTrees the goalTrees to set
+	 * @param functionalProperties the functionalProperties to set
 	 */
-	public void setGoalTrees(GoalTrees goalTrees) {
-		this.goalTrees = goalTrees;
+	public void setFunctionalProperties(FunctionalProperties functionalProperties) {
+		this.functionalProperties = functionalProperties;
 	}
 	/**
-	 * @return the resourcesDataAdmin
+	 * @return the methods
 	 */
-	public ResourcesDataAdmin getResourcesDataAdmin() {
-		return resourcesDataAdmin;
+	public Vector<Method> getMethods() {
+		return methods;
 	}
 	/**
-	 * @param resourcesDataAdmin the resourcesDataAdmin to set
+	 * @param methods the methods to set
 	 */
-	public void setResourcesDataAdmin(ResourcesDataAdmin resourcesDataAdmin) {
-		this.resourcesDataAdmin = resourcesDataAdmin;
+	public void setMethods(Vector<Method> methods) {
+		this.methods = methods;
 	}
+
 
 }

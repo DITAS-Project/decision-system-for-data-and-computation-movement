@@ -1,12 +1,14 @@
 package it.polimi.deib.ds4m.main.model.applicationRequirement;
 
-public class Metric {
+import java.util.Vector;
+
+public class Metric 
+{
+	private String id;
 	private String name;
-	private String unit;
-	private Double maximum;
-	private Double minimum;
-	private String value;
-	private String utilityFunction;
+	private String type;
+	private Vector<Property> properties;
+
 	
 	/**
 	 * @return the name
@@ -20,65 +22,43 @@ public class Metric {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	/**
-	 * @return the unit
+	 * @return the id
 	 */
-	public String getUnit() {
-		return unit;
+	public String getId() {
+		return id;
 	}
 	/**
-	 * @param unit the unit to set
+	 * @param id the id to set
 	 */
-	public void setUnit(String unit) {
-		this.unit = unit;
+	public void setId(String id) {
+		this.id = id;
 	}
 	/**
-	 * @return the maximum
+	 * @return the type
 	 */
-	public Double getMaximum() {
-		return maximum;
+	public String getType() {
+		return type;
 	}
 	/**
-	 * @param maximum the maximum to set
+	 * @param type the type to set
 	 */
-	public void setMaximum(Double maximum) {
-		this.maximum = maximum;
+	public void setType(String type) {
+		this.type = type;
 	}
 	/**
-	 * @return the minimum
+	 * @return the properties
 	 */
-	public Double getMinimum() {
-		return minimum;
+	public Vector<Property> getProperties() {
+		return properties;
 	}
 	/**
-	 * @param minimum the minimum to set
+	 * @param properties the properties to set
 	 */
-	public void setMinimum(Double minimum) {
-		this.minimum = minimum;
+	public void setProperties(Vector<Property> properties) {
+		this.properties = properties;
 	}
-	/**
-	 * @return the value
-	 */
-	public String getValue() {
-		return value;
-	}
-	/**
-	 * @param value the value to set
-	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
-	/**
-	 * @return the utilityFunction
-	 */
-	public String getUtilityFunction() {
-		return utilityFunction;
-	}
-	/**
-	 * @param utilityFunction the utilityFunction to set
-	 */
-	public void setUtilityFunction(String utilityFunction) {
-		this.utilityFunction = utilityFunction;
-	}
+
 
 }

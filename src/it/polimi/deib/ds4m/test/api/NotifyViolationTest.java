@@ -159,7 +159,8 @@ public class NotifyViolationTest
 		
 		try 
 		{
-			applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
+			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
+			applicationRequirements=readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -174,7 +175,7 @@ public class NotifyViolationTest
 		
         // Create some NameValuePair for HttpPost parameters
         List<NameValuePair> arguments = new ArrayList<>(3);
-        arguments.add(new BasicNameValuePair("applicationRequirements", applicationRequirements));
+        arguments.add(new BasicNameValuePair("ConcreteBlueprint", applicationRequirements));
 
         //connect to service
         try {

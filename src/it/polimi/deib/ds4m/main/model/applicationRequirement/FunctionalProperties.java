@@ -1,6 +1,6 @@
 package it.polimi.deib.ds4m.main.model.applicationRequirement;
 
-public class ResourcesDataAdmin {
+public class FunctionalProperties {
 	String tbd;
 
 	/**

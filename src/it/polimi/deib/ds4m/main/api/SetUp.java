@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.model.applicationRequirement.ApplicationRequirements;
@@ -43,12 +44,18 @@ public class SetUp extends HttpServlet {
 	{
 		//estract application requirements
 		//System.out.println("received application requirements"); 
-		String applicationRequirementsJSON = request.getParameter("applicationRequirements");
+		String applicationRequirementsJSON = request.getParameter("ConcreteBlueprint");
 		
 		//coonvert the json in object
 		ObjectMapper mapper = new ObjectMapper();
-		ApplicationRequirements applicationRequirements = mapper.readValue(applicationRequirementsJSON,
-	            new TypeReference<ApplicationRequirements>() {});
+		JsonNode root = mapper.readTree(applicationRequirementsJSON);
+		JsonNode dataManagement = root.get("DATA_MANAGEMENT");
+		 System.out.println(dataManagement.toString());
+		
+		ApplicationRequirements applicationRequirements = mapper.treeToValue(dataManagement, ApplicationRequirements.class);
+		
+		//ApplicationRequirements applicationRequirements = mapper.readValue(applicationRequirementsJSON,
+	    //        new TypeReference<ApplicationRequirements>() {});
 		
 		
 		//if it is not set create a collection of appl.s requirements
