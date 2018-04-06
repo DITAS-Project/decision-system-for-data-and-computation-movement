@@ -1,18 +1,22 @@
 package it.polimi.deib.ds4m.main.api;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Vector;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.model.applicationRequirement.ApplicationRequirements;
-import it.polimi.deib.ds4m.main.model.applicationRequirement.ApplicationsRequirements;
+import it.polimi.deib.ds4m.main.model.applicationRequirement.VDC;
+import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 
 /**
  * Servlet implementation class SetUp
@@ -42,34 +46,40 @@ public class SetUp extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		//estract application requirements
-		//System.out.println("received application requirements"); 
-		String applicationRequirementsJSON = request.getParameter("ConcreteBlueprint");
+		//retrieve concrete blueprint
+		String concreteBlueprintJSON = request.getParameter("ConcreteBlueprint");
 		
-		//coonvert the json in object
+		//convert the json in object
 		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(applicationRequirementsJSON);
-		JsonNode dataManagement = root.get("DATA_MANAGEMENT");
-		 System.out.println(dataManagement.toString());
+		JsonNode root = mapper.readTree(concreteBlueprintJSON);
 		
+		//retrieve DATA MANAGEMENT
+		JsonNode dataManagement = root.get("DATA_MANAGEMENT");
 		ApplicationRequirements applicationRequirements = mapper.treeToValue(dataManagement, ApplicationRequirements.class);
 		
-		//ApplicationRequirements applicationRequirements = mapper.readValue(applicationRequirementsJSON,
-	    //        new TypeReference<ApplicationRequirements>() {});
+		//retrieve data sources
+		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
+		List<DataSource> dataSources = Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class));
+		
+		//set up vdc
+		VDC vdc = new VDC();
+		vdc.addApplicationRequirement(applicationRequirements);
+		vdc.setDataSources(dataSources);
+		vdc.setId("ID");
 		
 		
 		//if it is not set create a collection of appl.s requirements
-		ApplicationsRequirements applicationsRequirements;
-		if  (this.getServletConfig().getServletContext().getAttribute("applicationRequirements") == null)
+		Vector<VDC> VDCs;
+		if  (this.getServletConfig().getServletContext().getAttribute("VDCs") == null)
 		{
-			applicationsRequirements = new ApplicationsRequirements();
-			this.getServletConfig().getServletContext().setAttribute("applicationsRequirements", applicationsRequirements);
+			VDCs = new Vector<VDC>();
+			this.getServletConfig().getServletContext().setAttribute("VDCs", VDCs);
 		}
 		else
-			applicationsRequirements = (ApplicationsRequirements) this.getServletConfig().getServletContext().getAttribute("applicationRequirements");
+			VDCs = (Vector<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
 		
 		//add the application requirements 
-		applicationsRequirements.addApplicationRequirement(applicationRequirements);
+		VDCs.addElement(vdc);
 		
 		
 	

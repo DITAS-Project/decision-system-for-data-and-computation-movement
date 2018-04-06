@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.Violations;
-import it.polimi.deib.ds4m.main.model.applicationRequirement.ApplicationsRequirements;
+import it.polimi.deib.ds4m.main.model.applicationRequirement.VDC;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementsEnaction;
 
@@ -62,8 +62,9 @@ public class NotifyViolation extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		//retrieve the application requirements
-		ApplicationsRequirements applicationsRequirements = (ApplicationsRequirements) this.getServletConfig().getServletContext().getAttribute("applicationsRequirements");
+		Vector<VDC> VDCs = (Vector<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
 		//System.out.println("Application requirements API: " + mapper.writeValueAsString( applicationsRequirements));
+		
 		
 		//retrieve parameter (the list of violations)
 		String violationsJSON = request.getParameter("violations");
