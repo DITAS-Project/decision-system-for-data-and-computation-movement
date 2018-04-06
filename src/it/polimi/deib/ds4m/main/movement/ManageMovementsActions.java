@@ -24,12 +24,14 @@ public class ManageMovementsActions
 			
 			//retrieve movements
 			JsonNode movementNode = root.get("movements");		
-			Vector<Movement> movements = new Vector<Movement> (Arrays.asList(mapper.treeToValue(movementNode, Movement[].class)));
+			Vector<Movement> movements;
 			
 			//assigned copied 
 			for(DataSource dataSource: dataSources)
 			{
+				movements = new Vector<Movement> (Arrays.asList(mapper.treeToValue(movementNode, Movement[].class)));
 				dataSource.setMovements(movements);
+				movements = null;
 			}
 			
 			return true;

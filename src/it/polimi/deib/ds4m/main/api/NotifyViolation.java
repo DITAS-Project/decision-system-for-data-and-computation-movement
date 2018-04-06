@@ -63,19 +63,18 @@ public class NotifyViolation extends HttpServlet {
 		
 		//retrieve the application requirements
 		Vector<VDC> VDCs = (Vector<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
-		//System.out.println("Application requirements API: " + mapper.writeValueAsString( applicationsRequirements));
-		
 		
 		//retrieve parameter (the list of violations)
 		String violationsJSON = request.getParameter("violations");
 
-		
 		try 
 		{
+			//convert 
 	        Violations violations = mapper.readValue(violationsJSON, Violations.class);
 	        Violation violation = violations.getViolations().firstElement();
 	        
 	        //select data movement
+	        
 	        
 	       
 	        

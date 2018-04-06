@@ -89,12 +89,6 @@ public class NotifyViolationTest
 		
 		violations.setViolations(violationsVector);
 		
-		try {
-			System.out.println(mapper.writeValueAsString(violations));
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	} 
     
 	@Test

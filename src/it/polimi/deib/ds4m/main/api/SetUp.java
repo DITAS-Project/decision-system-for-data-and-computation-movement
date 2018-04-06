@@ -71,19 +71,16 @@ public class SetUp extends HttpServlet {
 		List<DataSource> dataSources = Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class));
 		
 		//retrieve movement classes
-		//String movementsJSON=readFile("../testResources/example_MovementClasses_V1.json", Charset.forName("UTF-8"));
-		//String movementsJSON = ServletContext.getResourceAsStream("/WEB-INF<folder name>/<file name>")
 		InputStream inputstream = this.getServletConfig().getServletContext().getResourceAsStream("/WEB-INF/movementClasses.json");
-				
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
 	    StringBuilder movementsJSON = new StringBuilder();
 	    String line;
 	    while ((line = reader.readLine()) != null) {
 	    	movementsJSON.append(line);
 	    }
-	    System.out.println(movementsJSON.toString());   //Prints the string content read from input stream
 	    reader.close();
 		
+	    //instantiate movement classes for each data source 
 	    ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON.toString() );
 	    
 		//set up vdc
