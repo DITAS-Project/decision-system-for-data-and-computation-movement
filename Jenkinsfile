@@ -6,6 +6,7 @@ pipeline {
             agent {
                 dockerfile {
                     filename 'Dockerfile.build'
+                    args '-v /home/cloudsigma/jenkinstmp:/root/.m2'
                 }
             }
             steps {
