@@ -5,6 +5,7 @@
                 "type":"ComputationMovement",
                 "from":"Edge",
                 "to":"Cloud",
+                "restTime":"12",
                 "positiveImpacts":["1","2","4"],
                 "negativeImpacts":["1","2","4"],
                 "transformations":
@@ -66,6 +67,7 @@
                 "to":"Edge",
                 "positiveImpacts":["1","2","4"],
                 "negativeImpacts":["1","2","4"],
+                "restTime":"15",
                 "transformations":
                 [
                     {

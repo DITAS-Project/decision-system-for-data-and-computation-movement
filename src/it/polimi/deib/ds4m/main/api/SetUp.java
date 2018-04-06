@@ -1,6 +1,13 @@
 package it.polimi.deib.ds4m.main.api;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -14,9 +21,11 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
 import it.polimi.deib.ds4m.main.model.applicationRequirement.ApplicationRequirements;
 import it.polimi.deib.ds4m.main.model.applicationRequirement.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
+import it.polimi.deib.ds4m.main.movement.ManageMovementsActions;
 
 /**
  * Servlet implementation class SetUp
@@ -61,12 +70,27 @@ public class SetUp extends HttpServlet {
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
 		List<DataSource> dataSources = Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class));
 		
+		//retrieve movement classes
+		//String movementsJSON=readFile("../testResources/example_MovementClasses_V1.json", Charset.forName("UTF-8"));
+		//String movementsJSON = ServletContext.getResourceAsStream("/WEB-INF<folder name>/<file name>")
+		InputStream inputstream = this.getServletConfig().getServletContext().getResourceAsStream("/WEB-INF/movementClasses.json");
+				
+		BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
+	    StringBuilder movementsJSON = new StringBuilder();
+	    String line;
+	    while ((line = reader.readLine()) != null) {
+	    	movementsJSON.append(line);
+	    }
+	    System.out.println(movementsJSON.toString());   //Prints the string content read from input stream
+	    reader.close();
+		
+	    ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON.toString() );
+	    
 		//set up vdc
 		VDC vdc = new VDC();
 		vdc.addApplicationRequirement(applicationRequirements);
 		vdc.setDataSources(dataSources);
 		vdc.setId("ID");
-		
 		
 		//if it is not set create a collection of appl.s requirements
 		Vector<VDC> VDCs;
@@ -80,9 +104,16 @@ public class SetUp extends HttpServlet {
 		
 		//add the application requirements 
 		VDCs.addElement(vdc);
-		
-		
 	
+	}
+	
+	static String readFile(String path, Charset encoding) throws IOException 
+	{		
+		
+		System.out.println(System.getProperty("user.dir"));
+		
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded, encoding);
 	}
 
 }

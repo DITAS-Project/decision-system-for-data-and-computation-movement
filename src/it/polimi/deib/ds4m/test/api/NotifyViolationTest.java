@@ -31,10 +31,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.Violations;
-import it.polimi.deib.ds4m.main.model.movement.Cost;
-import it.polimi.deib.ds4m.main.model.movement.Movement;
-import it.polimi.deib.ds4m.main.model.movement.Movements;
-import it.polimi.deib.ds4m.main.model.movement.Transformation;
 
 public class NotifyViolationTest 
 {	
@@ -60,56 +56,6 @@ public class NotifyViolationTest
 	{
     	//create class for JSON conversion
     	mapper = new ObjectMapper();
-
-		//set up movements
-		Boolean movementsFromFile = true;
-		String movementsJSON;
-		
-		if (!movementsFromFile)
-		{
-			Vector<Cost> costs = new Vector<Cost>();
-			costs.add(new Cost("moneraty","dollars/MB",12));
-			costs.add(new Cost("time","ms/MB",0.3));
-			
-			Vector<String> impacts = new Vector<String>();
-			impacts.add("1");
-			impacts.add("2");
-			impacts.add("4");
-			
-			Vector<Transformation> transformations = new Vector<Transformation>();
-			transformations.add(new Transformation("Encryption", impacts, impacts, costs));
-			transformations.add(new Transformation("Aggregation", impacts, impacts, costs));
-			
-			
-			Vector<Movement> movementsTmp = new Vector<Movement>();
-			movementsTmp.add(new Movement("ComputationMovement","Edge", "Cloud", impacts, impacts, transformations, costs, 2000));
-			movementsTmp.add(new Movement("DataDuplication","Cloud", "Edge", impacts, impacts, transformations, costs, 300000));
-			
-			Movements movements = new Movements(movementsTmp);
-			try {
-				movementsJSON = mapper.writeValueAsString(movements);
-			} 
-			catch (JsonProcessingException e) 
-			{
-				e.printStackTrace();
-			}
-		}
-		else
-		{
-			try 
-			{
-				movementsJSON=readFile("./testResources/example_MovementClasses_V1.json", Charset.forName("UTF-8"));
-				
-			} catch (IOException e) 
-			{
-				System.err.println("error in reading file applicationRequiorements");
-				return;
-			}
-			
-		}
-		
-		
-		
 		
 		//set up violations
 		violations = new Violations();
@@ -316,6 +262,7 @@ public class NotifyViolationTest
             e.printStackTrace();
         }
     }
+
 	
 	static String readFile(String path, Charset encoding) 
 			  throws IOException 
@@ -323,6 +270,5 @@ public class NotifyViolationTest
 			  byte[] encoded = Files.readAllBytes(Paths.get(path));
 			  return new String(encoded, encoding);
 			}
-	
 	
 }

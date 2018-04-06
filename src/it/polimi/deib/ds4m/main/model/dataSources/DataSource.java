@@ -1,10 +1,20 @@
 package it.polimi.deib.ds4m.main.model.dataSources;
 
+import java.util.Vector;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import it.polimi.deib.ds4m.main.model.movement.Movement;
+
 public class DataSource 
 {
-	String name;
-	String type;
-    Parameters parameters;
+	private String name;
+	private String type;
+	private Parameters parameters;
+    
+    @JsonIgnore
+    private Vector<Movement> movements;
+    
 	/**
 	 * @return the name
 	 */
@@ -40,6 +50,18 @@ public class DataSource
 	 */
 	public void setParameters(Parameters parameters) {
 		this.parameters = parameters;
+	}
+	/**
+	 * @return the movements
+	 */
+	public Vector<Movement> getMovements() {
+		return movements;
+	}
+	/**
+	 * @param movements the movements to set
+	 */
+	public void setMovements(Vector<Movement> movements) {
+		this.movements = movements;
 	}
 
 }
