@@ -10,13 +10,28 @@ The goal of the component consists in selecting the best data and computation mo
 
 ## List of functionalities
 * /api/notifyViolation
-  * description: the method receives in input the appllication developer's requirements and the list of violated requirements.
+  * description: the method receives in input a list of violations.
   * caller SLA manager
   * input
-    * application developer requirements
     * list of violated requirements
   * output
-    * list of data and computation movement actions 
+    * list of data and computation movement actions
+    
+* /api/setUP
+  * description: the method receives in input the concrete blueprint of the first VDC deployed.
+  * caller deployment module
+  * input
+    * concrete blueprint
+  * output
+    * none
+     
+* /api/setUP
+  * description: the method receives in input the concrete blueprint of the VDC deployed.
+  * caller deployment module
+  * input
+    * concrete blueprint
+  * output
+    * none
   
 ## API definition
 API definition in [SwaggerHub](https://app.swaggerhub.com/apis/ditas-project/DecisionSystemForDataAndComputationMovement/0.0.1).
