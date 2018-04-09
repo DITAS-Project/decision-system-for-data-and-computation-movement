@@ -25,7 +25,7 @@ The goal of the component consists in selecting the best data and computation mo
   * output
     * none
      
-* /api/setUP
+* /api/addVDC
   * description: the method receives in input the concrete blueprint of the VDC deployed.
   * caller deployment module
   * input
