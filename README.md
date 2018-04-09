@@ -2,14 +2,14 @@
 The goal of the component consists in selecting the best data and computation movement actions to be adopted in order to restore the level of data quality, quality of service and security defined by the application developer.
 
 ## Input
-* application developer requirements
+* concrete bluepri
 * list of violated requirements
 
 ## Output
 * list of data and computation actions
 
 ## List of functionalities
-* /api/notifyViolation
+* /api/NotifyViolation
   * description: the method receives in input a list of violations.
   * caller SLA manager
   * input
@@ -17,7 +17,7 @@ The goal of the component consists in selecting the best data and computation mo
   * output
     * list of data and computation movement actions
     
-* /api/setUP
+* /api/SetUP
   * description: the method receives in input the concrete blueprint of the first VDC deployed.
   * caller deployment module
   * input
@@ -25,7 +25,7 @@ The goal of the component consists in selecting the best data and computation mo
   * output
     * none
      
-* /api/addVDC
+* /api/AddVDC
   * description: the method receives in input the concrete blueprint of the VDC deployed.
   * caller deployment module
   * input
