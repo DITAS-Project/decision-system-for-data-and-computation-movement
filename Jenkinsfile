@@ -11,7 +11,7 @@ pipeline {
                 }
             }
             steps {
-                // The following command creates the  WAR inside the target folder in the workspace 
+                // The following command creates the WAR inside the target folder in the workspace 
                 //sh 'mvn package'
                 sh 'mvn -B -DskipTests clean package'
                 
