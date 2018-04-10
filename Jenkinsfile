@@ -13,7 +13,7 @@ pipeline {
             steps {
                 // The following command creates the  WAR inside the target folder in the workspace 
                 //sh 'mvn package'
-                sh 'mvn -B -DskipTests clean package'
+                sh 'mvn -B -DskipTests -Dmaven.repo.local=/tmp clean package'
                 
                 // Archive the artifact to be accessible from the Artifacts tab into the Blue Ocean interface, just to have it handy
                 archiveArtifacts 'target/*.war'
