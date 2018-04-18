@@ -8,45 +8,22 @@ import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 public class VDC 
 {	
 	//vector of requirements
-	private Vector<DataManagement> appRequirements;
-	private List<DataSource> DataSources;
+	private DataManagement dataManagement;
+	private Vector<DataSource> DataSources;
 	private String id;
 	
 	
-	
-	//protected constructor for singleton
-	public VDC() 
-	{
-		appRequirements = new Vector<DataManagement>();
-	}	
-
-	/**
-	 * @return the appRequirements
-	 */
-	public Vector<DataManagement> getApplicationsRequirements() {
-		return appRequirements;
-	}
-
-	/**
-	 * @param appRequirements the appRequirements to set
-	 */
-	
-	public void addApplicationRequirement(DataManagement applicationRequirements) 
-	{
-		this.appRequirements.addElement(applicationRequirements);
-	}
-
 	/**
 	 * @return the dataSources
 	 */
-	public List<DataSource> getDataSources() {
+	public Vector<DataSource> getDataSources() {
 		return DataSources;
 	}
 
 	/**
 	 * @param dataSources the dataSources to set
 	 */
-	public void setDataSources(List<DataSource> dataSources) {
+	public void setDataSources(Vector<DataSource> dataSources) {
 		DataSources = dataSources;
 	}
 
@@ -62,6 +39,26 @@ public class VDC
 	 */
 	public void setId(String id) {
 		this.id = id;
+	}
+
+
+
+
+	/**
+	 * @return the dataManagement
+	 */
+	public DataManagement getDataManagement() {
+		return dataManagement;
+	}
+
+
+
+
+	/**
+	 * @param dataManagement the dataManagement to set
+	 */
+	public void setDataManagement(DataManagement dataManagement) {
+		this.dataManagement = dataManagement;
 	}
 
 	

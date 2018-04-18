@@ -6,9 +6,7 @@ public class DataManagement
 {
 	FunctionalProperties functionalProperties;
 	Vector<Method> methods;
-	
 
-	
 
 	/**
 	 * @return the functionalProperties

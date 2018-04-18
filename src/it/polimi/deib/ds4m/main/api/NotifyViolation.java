@@ -71,7 +71,6 @@ public class NotifyViolation extends HttpServlet {
 		{
 			//convert 
 	        Violations violations = mapper.readValue(violationsJSON, Violations.class);
-	        Violation violation = violations.getViolations().firstElement();
 	        
 	        //identify goal
 	        

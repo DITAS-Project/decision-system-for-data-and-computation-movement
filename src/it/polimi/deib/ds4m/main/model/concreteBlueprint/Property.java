@@ -7,6 +7,7 @@ public class Property
 	private Double maximum;
 	private Double minimum;
 	private String value;
+	private String utilityFunction;
 	/**
 	 * @return the unit
 	 */
@@ -66,6 +67,18 @@ public class Property
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	/**
+	 * @return the utilityFunction
+	 */
+	public String getUtilityFunction() {
+		return utilityFunction;
+	}
+	/**
+	 * @param utilityFunction the utilityFunction to set
+	 */
+	public void setUtilityFunction(String utilityFunction) {
+		this.utilityFunction = utilityFunction;
 	}
 
 }

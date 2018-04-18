@@ -62,12 +62,12 @@ public class SetUp extends HttpServlet {
 		JsonNode root = mapper.readTree(concreteBlueprintJSON);
 		
 		//retrieve DATA MANAGEMENT
-		JsonNode dataManagement = root.get("DATA_MANAGEMENT");
-		DataManagement applicationRequirements = mapper.treeToValue(dataManagement, DataManagement.class);
+		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
+		DataManagement dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		List<DataSource> dataSources = Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class));
+		Vector<DataSource> dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
 		
 		//retrieve movement classes
 		InputStream inputstream = this.getServletConfig().getServletContext().getResourceAsStream("/WEB-INF/movementClasses.json");
@@ -84,7 +84,7 @@ public class SetUp extends HttpServlet {
 	    
 		//set up vdc
 		VDC vdc = new VDC();
-		vdc.addApplicationRequirement(applicationRequirements);
+		vdc.setDataManagement(dataManagement);
 		vdc.setDataSources(dataSources);
 		vdc.setId("ID");
 		
