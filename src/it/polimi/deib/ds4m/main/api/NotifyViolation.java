@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.Violations;
-import it.polimi.deib.ds4m.main.model.applicationRequirement.VDC;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementsEnaction;
 
@@ -73,9 +73,17 @@ public class NotifyViolation extends HttpServlet {
 	        Violations violations = mapper.readValue(violationsJSON, Violations.class);
 	        Violation violation = violations.getViolations().firstElement();
 	        
-	        //select data movement
+	        //identify goal
 	        
+	        //identify dm actions with positrive effect on goal
 	        
+	        //filter dm actions that operates on data sources used by the method who generate the conflicts
+	        
+	        //order the dm action using a strategy
+	        
+	        //check other trees
+	        
+	        //select first data movement action	        
 	       
 	        
 	        //generate the movement

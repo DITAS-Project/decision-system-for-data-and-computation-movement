@@ -21,9 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
-import it.polimi.deib.ds4m.main.model.applicationRequirement.ApplicationRequirements;
-import it.polimi.deib.ds4m.main.model.applicationRequirement.VDC;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.movement.ManageMovementsActions;
 
@@ -64,7 +63,7 @@ public class SetUp extends HttpServlet {
 		
 		//retrieve DATA MANAGEMENT
 		JsonNode dataManagement = root.get("DATA_MANAGEMENT");
-		ApplicationRequirements applicationRequirements = mapper.treeToValue(dataManagement, ApplicationRequirements.class);
+		DataManagement applicationRequirements = mapper.treeToValue(dataManagement, DataManagement.class);
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");

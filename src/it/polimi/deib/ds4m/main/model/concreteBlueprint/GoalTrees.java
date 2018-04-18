@@ -1,4 +1,4 @@
-package it.polimi.deib.ds4m.main.model.applicationRequirement;
+package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
 public class GoalTrees 
 {

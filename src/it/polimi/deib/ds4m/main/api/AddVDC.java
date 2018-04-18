@@ -1,6 +1,9 @@
 package it.polimi.deib.ds4m.main.api;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -15,9 +18,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import it.polimi.deib.ds4m.main.model.applicationRequirement.ApplicationRequirements;
-import it.polimi.deib.ds4m.main.model.applicationRequirement.VDC;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
+import it.polimi.deib.ds4m.main.movement.ManageMovementsActions;
 
 /**
  * Servlet implementation class AddVDC
@@ -56,11 +60,24 @@ public class AddVDC extends HttpServlet {
 		
 		//retrieve DATA MANAGEMENT
 		JsonNode dataManagement = root.get("DATA_MANAGEMENT");
-		ApplicationRequirements applicationRequirements = mapper.treeToValue(dataManagement, ApplicationRequirements.class);
+		DataManagement applicationRequirements = mapper.treeToValue(dataManagement, DataManagement.class);
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
 		List<DataSource> dataSources = Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class));
+		
+		//retrieve movement classes
+		InputStream inputstream = this.getServletConfig().getServletContext().getResourceAsStream("/WEB-INF/movementClasses.json");
+		BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
+	    StringBuilder movementsJSON = new StringBuilder();
+	    String line;
+	    while ((line = reader.readLine()) != null) {
+	    	movementsJSON.append(line);
+	    }
+	    reader.close();
+		
+		//instantiate movement classes for each data source 
+	    ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON.toString() );
 		
 		//set up vdc
 		VDC vdc = new VDC();

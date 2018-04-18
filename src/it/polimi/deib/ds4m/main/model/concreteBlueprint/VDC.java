@@ -1,4 +1,4 @@
-package it.polimi.deib.ds4m.main.model.applicationRequirement;
+package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
 import java.util.List;
 import java.util.Vector;
@@ -8,7 +8,7 @@ import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 public class VDC 
 {	
 	//vector of requirements
-	private Vector<ApplicationRequirements> appRequirements;
+	private Vector<DataManagement> appRequirements;
 	private List<DataSource> DataSources;
 	private String id;
 	
@@ -17,13 +17,13 @@ public class VDC
 	//protected constructor for singleton
 	public VDC() 
 	{
-		appRequirements = new Vector<ApplicationRequirements>();
+		appRequirements = new Vector<DataManagement>();
 	}	
 
 	/**
 	 * @return the appRequirements
 	 */
-	public Vector<ApplicationRequirements> getApplicationsRequirements() {
+	public Vector<DataManagement> getApplicationsRequirements() {
 		return appRequirements;
 	}
 
@@ -31,7 +31,7 @@ public class VDC
 	 * @param appRequirements the appRequirements to set
 	 */
 	
-	public void addApplicationRequirement(ApplicationRequirements applicationRequirements) 
+	public void addApplicationRequirement(DataManagement applicationRequirements) 
 	{
 		this.appRequirements.addElement(applicationRequirements);
 	}

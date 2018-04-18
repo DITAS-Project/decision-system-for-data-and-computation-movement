@@ -1,8 +1,8 @@
-package it.polimi.deib.ds4m.main.model.applicationRequirement;
+package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
 import java.util.Vector;
 
-public class ApplicationRequirements 
+public class DataManagement 
 {
 	FunctionalProperties functionalProperties;
 	Vector<Method> methods;
