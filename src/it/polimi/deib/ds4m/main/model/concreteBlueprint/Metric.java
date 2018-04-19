@@ -2,6 +2,8 @@ package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
 import java.util.Vector;
 
+import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class Metric 
 {
 	private String id;
@@ -59,6 +61,53 @@ public class Metric
 	public void setProperties(Vector<Property> properties) {
 		this.properties = properties;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		//standard behavior of equals 
+	    if (obj == null) {
+	        return false;
+	    }
+	    
+	    if (!Metric.class.isAssignableFrom(obj.getClass())) {
+	        return false;
+	    }
+	    
+	    //check all the fields
+	    final Metric other = (Metric) obj;	    
+	    if (!this.id.equals(other.getId()) ) {
+	        return false;
+	    }
+	    
+	    if (!this.name.equals(other.getName()) ) {
+	        return false;
+	    }
+	    
+	    if (!this.type.equals(other.getType()) ) {
+	        return false;
+	    }
+	    
+	    if (!this.properties.equals(other.getProperties()) ) {
+	        return false;
+	    }
+	    
+	    
+	    
+	    return true;
+	}
+	
+	//Whenever equals is modified, also hasCode has to be modified
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+            // if deriving: appendSuper(super.hashCode()).
+            append(name).
+            append(id).
+            append(type).
+            append(properties).
+            toHashCode();
+    }
 
 
 }

@@ -1,40 +1,26 @@
 package it.polimi.deib.ds4m.main.movement;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 import it.polimi.deib.ds4m.main.model.Violation;
-import it.polimi.deib.ds4m.main.model.Violations;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Method;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Metric;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Property;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
-import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
-import it.polimi.deib.ds4m.main.model.movement.Movement;
 
 public class ManageGoalTree {
 	
-	public static Goal findViolatedGoals(Violations violations, Vector<VDC> VDCs)
+	//examine 1 volation at time.
+	//multipole violation reres to multiole method, with diffrente goal threes
+	public static Set<Goal> findViolatedGoals(Violation violation, VDC violatedVDC)
 	{
-		
-		//for the time being select only the first violation
-        Violation violation = violations.getViolations().firstElement();
-        
-        //select the correct VDC
-        VDC vdc = null;
-        for(VDC vdcExamined : VDCs)
-        {
-        	if (vdcExamined.getId().equals(violation.getVdcID()))
-        		vdc = vdcExamined;
-        }
-        
-        //if not found return null
-		if (vdc == null)
-			return null;
         
 		//retrieve the method that violated from the vdc
 		Method method = null;
-		for (Method methodExamined : vdc.getDataManagement().getMethods())
+		for (Method methodExamined : violatedVDC.getDataManagement().getMethods())
 		{
 			if (methodExamined.getName().equals(violation.getMethodID()))
 					method = methodExamined;
@@ -44,7 +30,7 @@ public class ManageGoalTree {
 			return null;
 		
 		//retrieve all violated goals
-		Vector<Goal> violatedGoals = new Vector<Goal>();
+		Set<Goal> violatedGoals = new HashSet<Goal>();//hashset since goal cannot be duplicated// implemented equals for goal and sub classes
 		for (Goal goal : method.getConstraints().getDataUtility().getGoals())
 		{
 			Vector<Metric> Metrics = goal.getMetrics();
@@ -57,30 +43,24 @@ public class ManageGoalTree {
 					Vector<Property> properties = metric.getProperties();
 					for (Property property : properties)
 						if (property.getName().equals(violation.getMetric()))
-							if (property.getUtilityFunction().equals("Maximize") && property.getMinimum()<violation.getValue())
-								violatedGoals.add(goal);//skip duplicated goals??? //no problems for false positives since all properties are in AND.
-							else if (property.getUtilityFunction().equals("Minimize") && property.getMaximum()>violation.getValue())
+							if (property.getMinimum()!=null && property.getMaximum()==null && property.getMinimum()<violation.getValue())
+								violatedGoals.add(goal);//skip duplicated goals, no problems for false positives since all properties are in AND.
+							else if (property.getMinimum()==null && property.getMaximum()!=null && property.getMaximum()>violation.getValue())
+								violatedGoals.add(goal);
+							else if (property.getMinimum()!=null && property.getMaximum()!=null && property.getMinimum()<violation.getValue() && property.getMaximum()>violation.getValue())
+								violatedGoals.add(goal);
+							else if (property.getMinimum()==null && property.getMaximum()==null && property.getValue().compareTo(violation.getValue())==0)
 								violatedGoals.add(goal);
 				//}
 			}
 		}
 		
+		//at this point the violatedGoals should contains a set of violated goals
 		
+		//TODO: check the tree
+
 		
-		//retrieve the data sources used by the method
-		//TODO: to insert binding in blueprint
-		Vector<DataSource> dataSources = vdc.getDataSources();
-		
-		//for each data source involved in the method
-		for (DataSource dataSource : dataSources)
-		{
-			//retrieve the movements
-			Vector<Movement> Movements = dataSource.getMovements();
-			
-			//for each movements check if it has a positive impact on the goal
-		}
-		
-		return null;
+		return violatedGoals;
 	}
 
 }

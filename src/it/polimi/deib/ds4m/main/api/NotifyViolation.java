@@ -3,6 +3,7 @@ package it.polimi.deib.ds4m.main.api;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
@@ -26,9 +27,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.Violations;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
+import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementsEnaction;
+import it.polimi.deib.ds4m.main.movement.ManageGoalTree;
+import it.polimi.deib.ds4m.main.movement.ManageMovementsActions;
+import it.polimi.deib.ds4m.main.movement.ManageVDC;
 
 /**
  * Servlet implementation class NotifyViolation
@@ -72,15 +78,25 @@ public class NotifyViolation extends HttpServlet {
 			//convert 
 	        Violations violations = mapper.readValue(violationsJSON, Violations.class);
 	        
+	        Violation violation = violations.getViolations().firstElement();//for the time being take the first one
+	        
+	        //identify VDC
+	        VDC violatedVDC = ManageVDC.findViolatedVDC(violation, VDCs);
+	        
 	        //identify goal
+	        Set<Goal> violatedGoals = ManageGoalTree.findViolatedGoals(violation, violatedVDC);
 	        
 	        //identify dm actions with positrive effect on goal
+	        Vector<Movement> movementToBeEnacted = ManageMovementsActions.findMovementAction(violatedGoals, violatedVDC);
 	        
 	        //filter dm actions that operates on data sources used by the method who generate the conflicts
+	        //NOT NEEDED?
 	        
 	        //order the dm action using a strategy
+	        ManageMovementsActions.orderMovementAction(movementToBeEnacted, ManageMovementsActions.Strategy.COSTS);
 	        
-	        //check other trees
+	        //check other trees of other VDCs, for all method? 
+	        
 	        
 	        //select first data movement action	        
 	       
