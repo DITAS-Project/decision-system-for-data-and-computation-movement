@@ -2,6 +2,9 @@ package it.polimi.deib.ds4m.main.model.movementEnaction;
 
 import java.util.Vector;
 
+import it.polimi.deib.ds4m.main.model.movement.Movement;
+import it.polimi.deib.ds4m.main.model.movement.Transformation;
+
 public class MovementEnaction 
 {
 	String from;
@@ -43,6 +46,18 @@ public class MovementEnaction
 	 */
 	public void setTransformations(Vector<String> transformations) {
 		this.transformations = transformations;
+	}
+	
+	public void importMovement (Movement movement) 
+	{
+		this.from = movement.getFrom();
+		this.to = movement.getTo();
+		
+
+		for(Transformation transformationMovement : movement.getTransformations())
+		{
+			transformations.addElement(transformationMovement.getType());
+		}
 	}
 
 

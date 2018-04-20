@@ -87,42 +87,54 @@ public class NotifyViolation extends HttpServlet {
 	        Set<Goal> violatedGoals = ManageGoalTree.findViolatedGoals(violation, violatedVDC);
 	        
 	        //identify dm actions with positrive effect on goal
-	        Vector<Movement> movementToBeEnacted = ManageMovementsActions.findMovementAction(violatedGoals, violatedVDC);
+	        Vector<Movement> movementsToBeEnacted = ManageMovementsActions.findMovementAction(violatedGoals, violatedVDC);
 	        
 	        //filter dm actions that operates on data sources used by the method who generate the conflicts
 	        //NOT NEEDED?
 	        
 	        //order the dm action using a strategy
-	        ManageMovementsActions.orderMovementAction(movementToBeEnacted, ManageMovementsActions.Strategy.COSTS);
+	        ManageMovementsActions.orderMovementAction(movementsToBeEnacted, ManageMovementsActions.Strategy.COSTS);
 	        
 	        //check other trees of other VDCs, for all method? 
-	        
+	        movementsToBeEnacted = ManageVDC.chechOtherVDC(movementsToBeEnacted, VDCs, violatedVDC);
 	        
 	        //select first data movement action	        
+	       //Movement movement = movementsToBeEnacted.firstElement(); 
 	       
-	        
-	        //generate the movement
-	        MovementEnaction movementEnaction1 = new MovementEnaction();
-	        movementEnaction1.setFrom("IP");
-	        movementEnaction1.setTo("IP");
-	        Vector<String> transformations1 = new Vector<String>();
-	        transformations1.add("Encryption");
-	        transformations1.add("Pseudonimization");
-	        movementEnaction1.setTransformations(transformations1);
-	        
-	        MovementEnaction movementEnaction2 = new MovementEnaction();
-	        movementEnaction2.setFrom("IP");
-	        movementEnaction2.setTo("IP");
-	        Vector<String> transformations2 = new Vector<String>();
-	        transformations2.add("Encryption");
-	        transformations2.add("Pseudonimization");
-	        movementEnaction2.setTransformations(transformations2);
-	        
-	        MovementsEnaction movementsEnaction = new MovementsEnaction();
-	        Vector<MovementEnaction> movementEnactions = new Vector<MovementEnaction>();
-	        movementEnactions.add(movementEnaction1);
-	        movementEnactions.add(movementEnaction2);
-	        movementsEnaction.setMovementsEnaction(movementEnactions);
+	       //transform the selected movement actions in element to be sent
+	       MovementsEnaction movementsEnaction = new MovementsEnaction();
+	       Vector<MovementEnaction> movementEnactions = new Vector<MovementEnaction>();
+	       
+	       for (Movement movement : movementsToBeEnacted)
+	       {
+	    	   MovementEnaction movementEnaction = new MovementEnaction();
+	    	   movementEnaction.importMovement(movement);
+	    	   movementEnactions.add(movementEnaction);
+	       }
+	       movementsEnaction.setMovementsEnaction(movementEnactions);
+	       
+//	        //generate the movement
+//	        MovementEnaction movementEnaction1 = new MovementEnaction();
+//	        movementEnaction1.setFrom("IP");
+//	        movementEnaction1.setTo("IP");
+//	        Vector<String> transformations1 = new Vector<String>();
+//	        transformations1.add("Encryption");
+//	        transformations1.add("Pseudonimization");
+//	        movementEnaction1.setTransformations(transformations1);
+//	        
+//	        MovementEnaction movementEnaction2 = new MovementEnaction();
+//	        movementEnaction2.setFrom("IP");
+//	        movementEnaction2.setTo("IP");
+//	        Vector<String> transformations2 = new Vector<String>();
+//	        transformations2.add("Encryption");
+//	        transformations2.add("Pseudonimization");
+//	        movementEnaction2.setTransformations(transformations2);
+//	        
+//	        MovementsEnaction movementsEnaction = new MovementsEnaction();
+//	        Vector<MovementEnaction> movementEnactions = new Vector<MovementEnaction>();
+//	        movementEnactions.add(movementEnaction1);
+//	        movementEnactions.add(movementEnaction2);
+//	        movementsEnaction.setMovementsEnaction(movementEnactions);
 	        
 	        //call to movement enactors
 	        HttpClient client = HttpClientBuilder.create().build();
