@@ -8,7 +8,7 @@ public class Property
 	private String unit;
 	private Double maximum;
 	private Double minimum;
-	private Double value;
+	private String value;
 
 	
 	/**
@@ -50,13 +50,13 @@ public class Property
 	/**
 	 * @return the value
 	 */
-	public Double getValue() {
+	public String getValue() {
 		return value;
 	}
 	/**
 	 * @param value the value to set
 	 */
-	public void setValue(Double value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 	/**

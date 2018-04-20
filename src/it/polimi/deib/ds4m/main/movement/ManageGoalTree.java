@@ -43,13 +43,16 @@ public class ManageGoalTree {
 					Vector<Property> properties = metric.getProperties();
 					for (Property property : properties)
 						if (property.getName().equals(violation.getMetric()))
-							if (property.getMinimum()!=null && property.getMaximum()==null && property.getMinimum()<violation.getValue())
+							//i assume that if ""minimum or maximum are set then value is a number ( Duble)
+							if (property.getMinimum()!=null && property.getMaximum()==null && property.getMinimum() < Double.parseDouble(violation.getValue()))
 								violatedGoals.add(goal);//skip duplicated goals, no problems for false positives since all properties are in AND.
-							else if (property.getMinimum()==null && property.getMaximum()!=null && property.getMaximum()>violation.getValue())
+							else if (property.getMinimum()==null && property.getMaximum()!=null && property.getMaximum() > Double.parseDouble(violation.getValue()))
 								violatedGoals.add(goal);
-							else if (property.getMinimum()!=null && property.getMaximum()!=null && property.getMinimum()<violation.getValue() && property.getMaximum()>violation.getValue())
+							else if (property.getMinimum()!=null && property.getMaximum()!=null && 
+									property.getMinimum()< Double.parseDouble(violation.getValue()) 
+									&& property.getMaximum() > Double.parseDouble(violation.getValue()))
 								violatedGoals.add(goal);
-							else if (property.getMinimum()==null && property.getMaximum()==null && property.getValue().compareTo(violation.getValue())==0)
+							else if (property.getMinimum()==null && property.getMaximum()==null && property.getValue().equals(violation.getValue()))
 								violatedGoals.add(goal);
 				//}
 			}

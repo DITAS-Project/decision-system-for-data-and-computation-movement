@@ -45,7 +45,7 @@ public class ManageMovementsActionsTest
 		
 		
 		//retrieve movement classes
-	    String movementsJSON = Utility.readFile("./WEB-INF/movementClasses.json", Charset.forName("UTF-8"));
+	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
 	    
 	    //instantiate movement classes for each data source 
 	    ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON);

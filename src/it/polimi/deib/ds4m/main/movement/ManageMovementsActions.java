@@ -52,6 +52,7 @@ public class ManageMovementsActions
 			
 		} catch (IOException e) 
 		{
+			e.printStackTrace();
 			return false;
 		}
 

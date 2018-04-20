@@ -22,7 +22,7 @@ public class Violation
 	public String guaranteename;
 	public String date;
 	public String metric;
-	public Double value;
+	public String value;
 	public String methodID;
 	public String vdcID;
 	
@@ -89,13 +89,13 @@ public class Violation
 	/**
 	 * @return the value
 	 */
-	public Double getValue() {
+	public String getValue() {
 		return value;
 	}
 	/**
 	 * @param value the value to set
 	 */
-	public void setValue(Double value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 	/**
