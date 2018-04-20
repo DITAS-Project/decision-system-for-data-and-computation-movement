@@ -1,14 +1,10 @@
-package it.polimi.deib.ds4m.test.api;
+package it.polimi.deib.ds4m.test.management;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Vector;
 
@@ -19,7 +15,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.Utility;
 import it.polimi.deib.ds4m.main.model.Violation;
-import it.polimi.deib.ds4m.main.model.Violations;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;

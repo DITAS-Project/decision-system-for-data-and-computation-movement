@@ -1,4 +1,4 @@
-package it.polimi.deib.ds4m.test.api;
+package it.polimi.deib.ds4m.test.management;
 
 import static org.junit.Assert.assertTrue;
 
@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.Utility;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.movement.ManageMovementsActions;
 
