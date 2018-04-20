@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
-
+import it.polimi.deib.ds4m.main.Utility;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.Violations;
 
@@ -95,12 +95,12 @@ public class NotifyViolationTest
     public void testSetUp_correct() 
 	{
 		
-		String applicationRequirements;
+		String concreteBlueprint;
 		
 		try 
 		{
 			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			applicationRequirements=readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
+			concreteBlueprint=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -115,7 +115,7 @@ public class NotifyViolationTest
 		
         // Create some NameValuePair for HttpPost parameters
         List<NameValuePair> arguments = new ArrayList<>(3);
-        arguments.add(new BasicNameValuePair("ConcreteBlueprint", applicationRequirements));
+        arguments.add(new BasicNameValuePair("ConcreteBlueprint", concreteBlueprint));
 
         //connect to service
         try {
@@ -257,12 +257,5 @@ public class NotifyViolationTest
         }
     }
 
-	
-	static String readFile(String path, Charset encoding) 
-			  throws IOException 
-			{
-			  byte[] encoded = Files.readAllBytes(Paths.get(path));
-			  return new String(encoded, encoding);
-			}
 	
 }
