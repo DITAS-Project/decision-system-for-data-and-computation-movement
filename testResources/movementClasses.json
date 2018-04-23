@@ -19,7 +19,7 @@
                             {
                                 "type":"monetary",
                                 "unit":"dollars/MB",
-                                "value":12.0
+                                "value":15.0
                             },
                             {
                                 "type":"time",
@@ -52,7 +52,7 @@
                         {
                             "type":"monetary",
                             "unit":"dollars/MB",
-                            "value":12.0
+                            "value":15.0
                         },
                         {
                             "type":"time",

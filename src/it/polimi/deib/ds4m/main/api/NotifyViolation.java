@@ -93,7 +93,7 @@ public class NotifyViolation extends HttpServlet {
 	        //NOT NEEDED?
 	        
 	        //order the dm action using a strategy
-	        ManageMovementsActions.orderMovementAction(movementsToBeEnacted, ManageMovementsActions.Strategy.COSTS);
+	        ManageMovementsActions.orderMovementAction(movementsToBeEnacted, ManageMovementsActions.Strategy.MONETARY);
 	        
 	        //check other trees of other VDCs, for all method? 
 	        movementsToBeEnacted = ManageVDC.chechOtherVDC(movementsToBeEnacted, VDCs, violatedVDC);

@@ -29,7 +29,7 @@ public class ManageMovementsActions
 	//definition of possible strategies
 	public enum Strategy
 	{
-		COSTS,
+		MONETARY,
 		TIME,
 		POSITIVEIMPACTS		
 	}
@@ -125,7 +125,7 @@ public class ManageMovementsActions
 	{
 		
 		switch(strategy) {
-			case COSTS: 
+			case MONETARY: 
 				Collections.sort(movementsToBeEnacted, new ManageMovementsActions().new MonetaryCostComparator());
 				break;
 			case TIME: 
@@ -146,7 +146,9 @@ public class ManageMovementsActions
 	/**
 	 * @author Mattia Salnitri
 	 * 
-	 * The class implements comparator, and it is used to order the movements with the cost strategy. It assumes that the measure units are the same for all movements  
+	 * The class implements comparator, and it is used to order the movements with the cost strategy. It assumes that the measure units are the same for all movements
+	 * attention: the comparator, used with collection.sort, will order the list with ascending costs
+	 * form documentation of sort: The sort order is always ascending, where the Comparator defines which items are larger than others.  
 	 *
 	 */
 	class MonetaryCostComparator implements Comparator<Movement> {
