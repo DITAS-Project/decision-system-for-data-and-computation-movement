@@ -1,7 +1,6 @@
 package it.polimi.deib.ds4m.main.movement;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,8 +17,16 @@ import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Cost;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 
+/**
+ * @author Mattia Salnitri
+ * 
+ * The class manages the movement actions
+ *
+ */
 public class ManageMovementsActions 
 {
+
+	//definition of possible strategies
 	public enum Strategy
 	{
 		COSTS,
@@ -27,9 +34,17 @@ public class ManageMovementsActions
 		POSITIVEIMPACTS		
 	}
 	
+	/**
+	 * The method instantiate the movement actions given a set of movement classes a set of data sources. 
+	 * In particular, it creates a deep copy, by de-serializing the JSON of the movement classes, and assigning it to eachdata source 
+	 * 
+	 * @param dataSources set of data sources
+	 * @param movementsJSON JSON representing the movement action classes
+	 * @return true if the instantiation was correct, false otherwise
+	 */
 	public static Boolean instantiateMovementActions(List<DataSource> dataSources, String movementsJSON) 
 	{
-		//deep copy movements, raggiunto serializzando di volta in volta
+		//deep copy movements, done be de-serializing time by time 
 		//convert the json in object
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode root;
@@ -58,10 +73,18 @@ public class ManageMovementsActions
 
 	}
 	
+	/**
+	 * the method finds the movement actions that impact positively on a violated set of goals
+	 * 
+	 * @param violatedGoals the violated set of goals
+	 * @param vdc the VDC that contains the method that violated the goals 
+	 * @return the movements to be enacted that impact positively on the violated goals. a movement might impact on a subset of goals
+	 */
 	public static Vector<Movement> findMovementAction(Set<Goal> violatedGoals, VDC vdc)
 	{
 		//retrieve the data sources used by the method
 		//TODO: to insert binding in blueprint
+		//TODO: to consider transformations
 		Vector<DataSource> dataSources = vdc.getDataSources();
 		
 		//create vector of movements to be enacted 
@@ -88,10 +111,16 @@ public class ManageMovementsActions
 			}
 		}
 		
-		
 		return movementsToBeEnacted;
 	}
 	
+	/**
+	 * The method order a set of movements based on a given strategy. 
+	 * 
+	 * @param movementsToBeEnacted the set of movements actions to be ordered
+	 * @param strategy the ordering strategy
+	 * @return the ordered movement actions
+	 */
 	public static Vector<Movement> orderMovementAction(Vector<Movement> movementsToBeEnacted, Strategy strategy)
 	{
 		
@@ -110,13 +139,16 @@ public class ManageMovementsActions
 		
 		}
 
-		
-		
 		return movementsToBeEnacted;
 	}
 	
 	
-	//assume same measure unit
+	/**
+	 * @author Mattia Salnitri
+	 * 
+	 * The class implements comparator, and it is used to order the movements with the cost strategy. It assumes that the measure units are the same for all movements  
+	 *
+	 */
 	class MonetaryCostComparator implements Comparator<Movement> {
 	    @Override
 	    public int compare(Movement a, Movement b) 
@@ -143,6 +175,12 @@ public class ManageMovementsActions
 	}
 	
 	//assume same measure unit
+	/**
+	 * @author Mattia Salnitri
+	 *
+	 * The class implements comparator, and it is used to order the movements with the cost strategy. It assumes that the measure units are the same for all movements  
+	 *
+	 */
 	class TimeCostComparator implements Comparator<Movement> {
 	    @Override
 	    public int compare(Movement a, Movement b) 

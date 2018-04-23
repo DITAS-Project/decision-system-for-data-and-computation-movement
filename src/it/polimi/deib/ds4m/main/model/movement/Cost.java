@@ -8,6 +8,13 @@ public class Cost
 	private String unit;
 	private double value;
 	
+	
+	public Cost() 
+	{
+		
+	}
+	
+	
 	public Cost(String type, String unit, double value) 
 	{
 		this.type=type;
@@ -60,7 +67,7 @@ public class Cost
 	        return false;
 	    }
 	    
-	    if (!Movement.class.isAssignableFrom(obj.getClass())) {
+	    if (!Cost.class.isAssignableFrom(obj.getClass())) {
 	        return false;
 	    }
 	    

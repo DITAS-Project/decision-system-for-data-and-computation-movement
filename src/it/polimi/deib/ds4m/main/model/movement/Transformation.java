@@ -11,6 +11,14 @@ public class Transformation
 	
 	private Vector<Cost> costs;
 	
+	public Transformation() 
+	{
+		positiveImpacts = new Vector<String>();
+		negativeImpacts = new Vector<String>();
+		
+		costs = new Vector<Cost>();
+	}
+	
 	public Transformation(String type, Vector<String> positiveImpacts, Vector<String> negativeImpacts, Vector<Cost> costs)
 	{
 		this.type=type;

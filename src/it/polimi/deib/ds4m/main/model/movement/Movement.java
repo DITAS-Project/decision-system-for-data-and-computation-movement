@@ -18,6 +18,16 @@ public class Movement
 	
 	private Vector<Cost> costs;
 
+	//default creator
+	public Movement()
+	{
+		positiveImpacts = new Vector<String>();
+		negativeImpacts = new Vector<String>();
+		
+		transformations = new Vector<Transformation>();
+		
+	}
+	
 	public Movement(String type, String from, String to, Vector<String> positiveImpacts, Vector<String> negativeImpacts, Vector<Transformation> transformations, Vector<Cost> costs, double restTime ) 
 	{
 		this.type=type;

@@ -6,7 +6,7 @@
                 "from":"Edge",
                 "to":"Cloud",
                 "restTime":"12",
-                "positiveImpacts":["1","2","4"],
+                "positiveImpacts":["1"],
                 "negativeImpacts":["1","2","4"],
                 "transformations":
                 [
@@ -65,7 +65,7 @@
                 "type":"DataDuplication",
                 "from":"Cloud",
                 "to":"Edge",
-                "positiveImpacts":["1","2","4"],
+                "positiveImpacts":["1","2"],
                 "negativeImpacts":["1","2","4"],
                 "restTime":"15",
                 "transformations":
