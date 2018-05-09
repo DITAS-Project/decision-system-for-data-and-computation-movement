@@ -252,6 +252,7 @@ public class ManageMovementsActionsTest
 	
 	/**
 	 * Test if the movement action retrieved is correct. the test is on only one  action
+	 * using monetary strategy 
 	 * 
 	 * @throws IOException
 	 */
@@ -345,6 +346,7 @@ public class ManageMovementsActionsTest
 	
 	/**
 	 * Test if the movement action retrieved is correct. the test is on only one  action
+	 * using time strategy
 	 * 
 	 * @throws IOException
 	 */

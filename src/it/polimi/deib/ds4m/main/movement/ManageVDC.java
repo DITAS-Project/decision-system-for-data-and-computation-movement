@@ -13,6 +13,14 @@ import it.polimi.deib.ds4m.main.model.movement.Movement;
 
 public class ManageVDC 
 {
+	
+	/**
+	 * the function find the violated VDC given the violation (with inside the ID) and given the list of VDC managed by the VDM  
+	 * 
+	 * @param violation the violation received by the SLA manager
+	 * @param VDCs the list of VDC
+	 * @return the violated VDC or null, if it is not found
+	 */
 	public static VDC findViolatedVDC(Violation violation, Vector<VDC> VDCs)
 	{
         

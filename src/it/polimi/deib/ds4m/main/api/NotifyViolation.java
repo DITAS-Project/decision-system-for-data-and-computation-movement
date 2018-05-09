@@ -78,6 +78,7 @@ public class NotifyViolation extends HttpServlet {
 			//convert 
 	        Violations violations = mapper.readValue(violationsJSON, Violations.class);
 	        
+	        //TODO: one single violation implemented
 	        Violation violation = violations.getViolations().firstElement();//for the time being take the first one
 	        
 	        //identify VDC
