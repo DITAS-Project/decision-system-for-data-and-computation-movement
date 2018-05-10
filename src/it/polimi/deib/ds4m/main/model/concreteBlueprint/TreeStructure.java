@@ -7,10 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TreeStructure 
 {
-	String type;
-	Vector<String> leaves;
-	Vector<TreeStructure> childern;	
-	String goalRef;
+	String type;//type of decoposition
+	Vector<String> leaves; //the leaves of the goal
+	Vector<TreeStructure> childern;	//the children ( decomposed goals)
+	String goalRef; //to be removed?
 	
 	@JsonCreator
 	public TreeStructure(@JsonProperty("children") Vector<TreeStructure> childern) {

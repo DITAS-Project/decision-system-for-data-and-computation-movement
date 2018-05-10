@@ -87,7 +87,7 @@ public class ManageGoalTree {
 			Vector<Metric> Metrics = goal.getMetrics();//get the metrics on the goal
 			for (Metric metric : Metrics)
 			{
-				//if the metric is the same //skipped this check since violations are not sent grouped by metrics? 
+				//if the metric is the same //skipped this check since violations are not sent grouped by metrics, but only the violated properties are sent. 
 				//if (metric.getName().equals(violation.getMetric()))
 				//{
 					//if the values are actually violated, the add it
@@ -95,22 +95,24 @@ public class ManageGoalTree {
 					for (Property property : properties)
 						if (property.getName().equals(violation.getMetric()))
 							//i assume that if ""minimum or maximum are set then value is a number ( Double)
-							if (property.getMinimum()!=null && property.getMaximum()==null && property.getMinimum() < Double.parseDouble(violation.getValue()))
+							if (property.getMinimum()!=null && property.getMaximum()==null && property.getMinimum() >= Double.parseDouble(violation.getValue()))
 								violatedGoals.add(goal);//skip duplicated goals, no problems for false positives since all properties are in AND.
-							else if (property.getMinimum()==null && property.getMaximum()!=null && property.getMaximum() > Double.parseDouble(violation.getValue()))
+							else if (property.getMinimum()==null && property.getMaximum()!=null && property.getMaximum() <= Double.parseDouble(violation.getValue()))
 								violatedGoals.add(goal);
 							else if (property.getMinimum()!=null && property.getMaximum()!=null && 
-									property.getMinimum()< Double.parseDouble(violation.getValue()) 
-									&& property.getMaximum() > Double.parseDouble(violation.getValue()))
-								violatedGoals.add(goal);
-							else if (property.getMinimum()==null && property.getMaximum()==null && property.getValue().equals(violation.getValue()))
+									(
+											property.getMinimum()< Double.parseDouble(violation.getValue()) // if it is out of range below OR 
+											|| property.getMaximum() > Double.parseDouble(violation.getValue())) //it is out of range above
+									)
+								violatedGoals.add(goal); //then it it is violated
+							else if (property.getMinimum()==null && property.getMaximum()==null && !property.getValue().equals(violation.getValue()))
 								violatedGoals.add(goal);
 				//}
 			}
 		}
 		
 		
-		return null;
+		return violatedGoals;
 	}
 	
 }
