@@ -64,6 +64,8 @@ public class NotifyViolation extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
+		
+		System.out.println("called notify");
 		//create the json parser
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -83,12 +85,31 @@ public class NotifyViolation extends HttpServlet {
 	        
 	        //identify VDC
 	        VDC violatedVDC = ManageVDC.findViolatedVDC(violation, VDCs);
-	        
+	        if (violatedVDC==null)
+	        {
+	        	System.err.println("NotifyViolation: No violated VDC found");
+	        	response.setStatus(HttpStatus.SC_BAD_REQUEST);
+	        	return;
+	        }
+
 	        //identify goal
 	        Set<Goal> violatedGoals = ManageGoalTree.findViolatedGoals(violation, violatedVDC);
+	        if (violatedGoals==null)
+	        {
+	        	System.err.println("NotifyViolation: No violated goals found");
+	        	response.setStatus(HttpStatus.SC_BAD_REQUEST);
+	        	return;
+	        }
 	        
-	        //identify dm actions with positrive effect on goal
+	        
+	        //identify movement actions with positive effect on goal
 	        Vector<Movement> movementsToBeEnacted = ManageMovementsActions.findMovementAction(violatedGoals, violatedVDC);
+	        if (movementsToBeEnacted==null)
+	        {
+	        	System.err.println("NotifyViolation: No movements to be enacted found");
+	        	response.setStatus(HttpStatus.SC_BAD_REQUEST);
+	        	return;
+	        }
 	        
 	        //filter dm actions that operates on data sources used by the method who generate the conflicts
 	        //NOT NEEDED?
@@ -98,10 +119,20 @@ public class NotifyViolation extends HttpServlet {
 	        
 	        //check other trees of other VDCs, for all method? 
 	        movementsToBeEnacted = ManageVDC.chechOtherVDC(movementsToBeEnacted, VDCs, violatedVDC);
+	        if (movementsToBeEnacted==null)
+	        {
+	        	System.err.println("NotifyViolation: all movements to be enacted have been removed");
+	        	response.setStatus(HttpStatus.SC_BAD_REQUEST);
+	        	return;
+	        }
+	        
+	        System.out.println("movements to be enacted defined");
 	        
 	        //select first data movement action	        
 	       //Movement movement = movementsToBeEnacted.firstElement(); 
 	       
+	       //TODO differentiate between data and computation movements
+	        
 	       //transform the selected movement actions in element to be sent
 	       MovementsEnaction movementsEnaction = new MovementsEnaction();
 	       Vector<MovementEnaction> movementEnactions = new Vector<MovementEnaction>();
@@ -145,7 +176,7 @@ public class NotifyViolation extends HttpServlet {
 	        
 	        // Create some NameValuePair for HttpPost parameters
 	        List<NameValuePair> arguments = new ArrayList<>(3);
-	        arguments.add(new BasicNameValuePair("violations", mapper.writeValueAsString(movementsEnaction)));
+	        arguments.add(new BasicNameValuePair("movementsEnaction", mapper.writeValueAsString(movementsEnaction)));
 	        try {
 	            post.setEntity(new UrlEncodedFormEntity(arguments));
 	            HttpResponse responseDE = client.execute(post);//response empty
@@ -171,5 +202,7 @@ public class NotifyViolation extends HttpServlet {
 		
 		
 	}
+	
+	
 
 }

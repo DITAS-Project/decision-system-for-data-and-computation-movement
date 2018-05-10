@@ -184,8 +184,7 @@ public class ManageMovementsActionsTest
 		
 
 		Vector<Movement> movementsToBeEnacted = ManageMovementsActions.findMovementAction(violatedGoals,  vdc);
-		
-		
+
 		//TODO: important: not i don't filter data sources so I got 4, with the filtering this might change.
 		assertTrue(movementsToBeEnacted.size()==4);
 	}
@@ -437,5 +436,7 @@ public class ManageMovementsActionsTest
 		}
 		
 	}
+	
+	
 
 }

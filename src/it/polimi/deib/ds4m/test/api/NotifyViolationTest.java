@@ -65,10 +65,10 @@ public class NotifyViolationTest
 		violation1.setAgreementid(1);
 		violation1.setGuaranteename("guarantee name");
 		violation1.setDate("12/01");
-		violation1.setMetric("availability");
-		violation1.setValue("1.0");
-		violation1.setMethodID("1");
-		violation1.setVdcID("1");
+		violation1.setMetric("Availability");
+		violation1.setValue("90.0");
+		violation1.setMethodID("GetAllBloodTests");
+		violation1.setVdcID("01");
 		
 		violationsVector.add(violation1);
 		
@@ -77,10 +77,10 @@ public class NotifyViolationTest
 		violation2.setAgreementid(2);
 		violation2.setGuaranteename("guarantee name");
 		violation2.setDate("12/01");
-		violation2.setMetric("ResponceTime");
-		violation2.setValue("1.0");
-		violation2.setMethodID("2");
-		violation2.setVdcID("1");
+		violation2.setMetric("ResponseTime");
+		violation2.setValue("5.0");
+		violation2.setMethodID("GetAllBloodTests");
+		violation2.setVdcID("01");
 		
 		violationsVector.add(violation2);
 	
@@ -191,8 +191,7 @@ public class NotifyViolationTest
 		
         // Create some NameValuePair for HttpPost parameters
         List<NameValuePair> arguments = new ArrayList<>(3);
-        arguments.add(new BasicNameValuePair("violations", "{\\\"violations\\\":[{\\\"type11\\\":\\\"violation type\\\",\\\"agreementid\\\":1,\\\"guaranteename\\\":\\\"guarantee name\\\",\\\"date\\\":\\\"12/01\\\",\\\"metric\\\":\\\"availability\\\",\\\"value\\\":1.0},{\\\"type\\\":\\\"violation type2\\\",\\\"agreementid\\\":2,\\\"guaranteename11\\\":\\\"guarantee name2\\\",\\\"date\\\":\\\"12/02\\\",\\\"metric\\\":\\\"responce time\\\",\\\"value\\\":2.0}]}"));
-
+        arguments.add(new BasicNameValuePair("violations", "{\\\"violations\\\":[{\\\"type11\\\":\\\"violation type\\\",\\\"vdcID\\\":\\\"01\\\",\\\"agreementid\\\":1,\\\"guaranteename\\\":\\\"guarantee name\\\",\\\"date\\\":\\\"12/01\\\",\\\"metric\\\":\\\"Availability\\\",\\\"value\\\":1.0},{\\\"type\\\":\\\"violation type2\\\",\\\"agreementid\\\":2,\\\"vdcID\\\":\\\"01\\\",\\\"guaranteename11\\\":\\\"guarantee name2\\\",\\\"date\\\":\\\"12/02\\\",\\\"metric\\\":\\\"ResponseTime\\\",\\\"value\\\":5.0}]}"));
         //connect to service
         try {
             post.setEntity(new UrlEncodedFormEntity(arguments));
@@ -208,7 +207,7 @@ public class NotifyViolationTest
         }
     }
 	
-	//@Test
+	@Test
     public void testNotifyViolations_content() 
 	{
 		this.testSetUp_correct();
@@ -247,7 +246,7 @@ public class NotifyViolationTest
             //check the answer to the mocked server
             verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withHeader("Content-Type", equalTo("application/x-www-form-urlencoded")));
             
-            verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withRequestBody(containing("violations=%7B%22movementsEnaction%22%3A%5B%7B%22from%22%3A%22IP%22%2C%22to%22%3A%22IP%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Pseudonimization%22%5D%7D%2C%7B%22from%22%3A%22IP%22%2C%22to%22%3A%22IP%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Pseudonimization%22%5D%7D%5D%7D")));
+            verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withRequestBody(containing("movementsEnaction=%7B%22movementsEnaction%22%3A%5B%7B%22from%22%3A%22IP%22%2C%22to%22%3A%22IP%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Pseudonimization%22%5D%7D%2C%7B%22from%22%3A%22IP%22%2C%22to%22%3A%22IP%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Pseudonimization%22%5D%7D%5D%7D")));
             
             	
         } catch (IOException e) {

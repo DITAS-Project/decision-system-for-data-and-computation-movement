@@ -34,10 +34,18 @@ public class ManageVDC
 
 	}
 	
+	/**
+	 * Controls if the movement to be enacted have negative impacts on goals that don't have other positive impact associated, in other VDCs. 
+	 * ATTENTION: the selection of movements of other VDC does not consider the impacts. ( see implementation of "equals) of movements"
+	 * 
+	 * @param movementsToBeEnacted the list of movements to be enacted
+	 * @param VDCs the other VDCs
+	 * @param VDCselected the VDC selected (and that violated the requirements)
+	 * @return the movement to be enacted but with the movements that negatively impact goal with no other positive impact, back behind in the list 
+	 */
 	public static Vector<Movement> chechOtherVDC(Vector<Movement> movementsToBeEnacted, Vector<VDC> VDCs, VDC VDCselected)
 	{
 		//create an hasSet to collect movement to be moved behind in the
-		//ATTENTION: the comparison does not consider the impacts.
 		Set<Movement> movementsToBeMovedBehind = new HashSet<Movement>();
 		
 		for (VDC vdc : VDCs)
@@ -49,26 +57,26 @@ public class ManageVDC
 			Vector<Method> methods = vdc.getDataManagement().getMethods();
 			for (Method method : methods)
 			{
+				//set of movement ( hash set since i need only 1 movement per type in 1 method ( if the input is well formed, there shouldn't be more then 1)
+				HashSet <Movement> movementsToBeEnactedOtherVDC = new HashSet <>();
 				
 				Vector<DataSource> dataSources = vdc.getDataSources();
 				for (DataSource dataSource : dataSources)
 				{
 					Vector<Movement> movements = dataSource.getMovements();
 					
-					//create a copy to be modified
-					//ATTENTION: the elements inside are still copied by reference, it is a shallow copy
-					Vector <Movement> movementsToBeEnactedOtherVDC = new Vector<>(movements);
-					
+					//remove, from all possible movement of the data source, of the VDC, all movements that will not be enacted
 					for (Movement movement : movements)
 					{
-						//remove movements that will not be enacted
 						for (Movement movementToBeEnacted : movementsToBeEnacted )
 						{
-							//TODO:check if is enough 
-							if (!movement.getType().equals(movementToBeEnacted.getType()))
-								movementsToBeEnactedOtherVDC.remove(movement);
+							//if the movement of the data source of the other VDC correspond to a movement that will be enacted, then it will be considered 
+							if (movement.equals(movementToBeEnacted))
+								movementsToBeEnactedOtherVDC.add(movement);
 						}
 					}
+					
+					//at this point all movements that corresponds to the ones that can be enacted in the original VDC, are selected.  
 					
 					//check if there is a goal that has only negative impact for a movement, if yes put the movement in the back
 					for (Movement movement : movementsToBeEnactedOtherVDC) 
@@ -117,13 +125,12 @@ public class ManageVDC
 		}
 		
 		//here i collect all movement of all method of all VDCs that have a negative impact on goals that have no positive impact.
-		//i move scu movement behon in the vectopr of movement to be enacted.
+		//i move such movements behind in the vector of movements to be enacted.
 		//if i move all of them, the initial order is given back
-		
 		//move element at the end of the vector
 		for (Movement movement : movementsToBeMovedBehind)
 		{
-			int posMovement = movementsToBeEnacted.lastIndexOf(movement);//movement derive from the list of do, whgile movement to be enacted is a parameter//use equals (overridden method)
+			int posMovement = movementsToBeEnacted.lastIndexOf(movement);//movement derive from the list of do, while movement to be enacted is a parameter//use equals (overridden method)
 			Movement movementTmp=movementsToBeEnacted.get(posMovement);
 			movementsToBeEnacted.remove(posMovement);
 			movementsToBeEnacted.add(movementTmp);
