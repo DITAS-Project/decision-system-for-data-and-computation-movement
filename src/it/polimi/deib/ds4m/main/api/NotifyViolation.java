@@ -86,7 +86,7 @@ public class NotifyViolation extends HttpServlet {
 	        if (violatedVDC==null)
 	        {
 	        	System.err.println("NotifyViolation: No violated VDC found");
-	        	response.setStatus(HttpStatus.SC_BAD_REQUEST);
+	        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	        	return;
 	        }
 
@@ -95,7 +95,7 @@ public class NotifyViolation extends HttpServlet {
 	        if (violatedGoals==null)
 	        {
 	        	System.err.println("NotifyViolation: No violated goals found");
-	        	response.setStatus(HttpStatus.SC_BAD_REQUEST);
+	        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	        	return;
 	        }
 	        
@@ -105,7 +105,7 @@ public class NotifyViolation extends HttpServlet {
 	        if (movementsToBeEnacted==null)
 	        {
 	        	System.err.println("NotifyViolation: No movements to be enacted found");
-	        	response.setStatus(HttpStatus.SC_BAD_REQUEST);
+	        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	        	return;
 	        }
 	        
@@ -120,7 +120,7 @@ public class NotifyViolation extends HttpServlet {
 	        if (movementsToBeEnacted==null)
 	        {
 	        	System.err.println("NotifyViolation: all movements to be enacted have been removed");
-	        	response.setStatus(HttpStatus.SC_BAD_REQUEST);
+	        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	        	return;
 	        }
 	        
@@ -140,29 +140,6 @@ public class NotifyViolation extends HttpServlet {
 	    	   movementEnactions.add(movementEnaction);
 	       }
 	       movementsEnaction.setMovementsEnaction(movementEnactions);
-	       
-//	        //generate the movement
-//	        MovementEnaction movementEnaction1 = new MovementEnaction();
-//	        movementEnaction1.setFrom("IP");
-//	        movementEnaction1.setTo("IP");
-//	        Vector<String> transformations1 = new Vector<String>();
-//	        transformations1.add("Encryption");
-//	        transformations1.add("Pseudonimization");
-//	        movementEnaction1.setTransformations(transformations1);
-//	        
-//	        MovementEnaction movementEnaction2 = new MovementEnaction();
-//	        movementEnaction2.setFrom("IP");
-//	        movementEnaction2.setTo("IP");
-//	        Vector<String> transformations2 = new Vector<String>();
-//	        transformations2.add("Encryption");
-//	        transformations2.add("Pseudonimization");
-//	        movementEnaction2.setTransformations(transformations2);
-//	        
-//	        MovementsEnaction movementsEnaction = new MovementsEnaction();
-//	        Vector<MovementEnaction> movementEnactions = new Vector<MovementEnaction>();
-//	        movementEnactions.add(movementEnaction1);
-//	        movementEnactions.add(movementEnaction2);
-//	        movementsEnaction.setMovementsEnaction(movementEnactions);
 	        
 	        //call to movement enactors
 	        HttpClient client = HttpClientBuilder.create().build();
@@ -193,7 +170,9 @@ public class NotifyViolation extends HttpServlet {
 		}
 		catch (JsonParseException e)
 		{
-			response.setStatus(HttpStatus.SC_BAD_REQUEST);	
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			
+			
 		}
 		
 		

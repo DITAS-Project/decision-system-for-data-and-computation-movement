@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpStatus;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -55,34 +57,70 @@ public class SetUp extends HttpServlet {
 		
 		//convert the json in object
 		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(concreteBlueprintJSON);
+		JsonNode root; 
+		try {
+			root = mapper.readTree(concreteBlueprintJSON);
+		}
+		catch (JsonParseException e)
+		{
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;
+		}
 		
 		//retrieve DATA MANAGEMENT
 		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		DataManagement dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
+		DataManagement dataManagement;
+		try {
+			dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
+		}
+		catch (JsonProcessingException e) 
+		{
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;			
+		}
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		Vector<DataSource> dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+		Vector<DataSource> dataSources;
+		try {
+			dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+		}
+		catch (JsonProcessingException e) 
+		{
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;			
+		}
 		
-		//retrieve movement classes
-		InputStream inputstream = this.getServletConfig().getServletContext().getResourceAsStream("/WEB-INF/movementClasses.json");
-		BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
-	    StringBuilder movementsJSON = new StringBuilder();
-	    String line;
-	    while ((line = reader.readLine()) != null) {
-	    	movementsJSON.append(line);
-	    }
-	    reader.close();
+		StringBuilder movementsJSON;
+		try {
+			//retrieve movement classes
+			InputStream inputstream = this.getServletConfig().getServletContext().getResourceAsStream("/WEB-INF/movementClasses.json");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
+		    movementsJSON = new StringBuilder();
+		    String line;
+		    while ((line = reader.readLine()) != null) {
+		    	movementsJSON.append(line);
+		    }
+		    reader.close();
+		}
+		catch (IOException  e) 
+		{
+			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			return;
+		}
 		
 	    //instantiate movement classes for each data source 
-	    ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON.toString() );
+	    if (!ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON.toString()))
+	    {
+			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			return;
+	    }
 	    
 		//set up vdc
 		VDC vdc = new VDC();
 		vdc.setDataManagement(dataManagement);
 		vdc.setDataSources(dataSources);
-		vdc.setId("01");
+		vdc.setId("01");//TODO insert VDC ID in comncrete blueprint
 		
 		//if it is not set create a collection of appl.s requirements
 		Vector<VDC> VDCs;

@@ -1,0 +1,116 @@
+swagger: "2.0"
+info:
+  description: "The goal of the component consists in selecting the best data and computation movement actions to be adopted in order to restore the level of data quality, quality of service and security defined by the application developer."
+  version: "0.0.1"
+  title: "Decision System for Data and Computation Movement"
+  license:
+    name: "License TBD"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "TBD"
+basePath: "/"
+schemes:
+- "http"
+paths:
+  /notifyViolation:
+    post:
+      summary: "notifyViolation"
+      description: "The method receives in input the list of violated requirements."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "Input"
+        description: "the List of violations"
+        required: true
+        schema:
+          $ref: "#/definitions/violations"
+
+      responses:
+        400:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+        200:
+          description: "Input processed correctly"
+          
+  /setUp:
+    post:
+      summary: "set Up"
+      description: "The API is called when the service is deployed, it receives in input the abstract blueprint."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "Input"
+        description: "Concrete blueprimt of the deployed blueprint"
+        required: true
+        schema:
+          $ref: "#/definitions/concreteBlueprint"
+      responses:
+        400:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+        200:
+          description: "Input processed correctly"
+          
+  /addVDC:
+    post:
+      summary: "add VDC"
+      description: "The API is called when a new VDC is deployed, it receives in input the abstract blueprint."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "Input"
+        description: "Application requirements and list of violated requirements. Both input merged in the same body because at most 1 body parameter can be defined. [Click here for more info](https://github.com/swagger-api/swagger-editor/issues/889)"
+        required: true
+        schema:
+          $ref: "#/definitions/concreteBlueprint"
+      responses:
+        400:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+        200:
+          description: "Input processed correctly"
+
+definitions:
+  concreteBlueprint:
+    properties:
+      name:
+        type: string
+      tag:
+        type: string  
+        
+  violations:
+    type: "array"
+    items: 
+      $ref: "#/definitions/violation"
+
+  violation:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+        description: "the agreement id"
+      agreementid: 
+        type: "integer"
+      guaranteename: 
+        type: "string"
+        description: "the slo name"
+      date: 
+        type: "string"
+        description: "date when the violation was detected"
+      metric:        
+        type: "string"
+        description: "the metric name"
+      value:  
+        type: "number"
+        description: "violation value"
