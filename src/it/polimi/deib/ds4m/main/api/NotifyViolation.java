@@ -64,8 +64,6 @@ public class NotifyViolation extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		
-		System.out.println("called notify");
 		//create the json parser
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -126,18 +124,16 @@ public class NotifyViolation extends HttpServlet {
 	        	return;
 	        }
 	        
-	        System.out.println("movements to be enacted defined");
-	        
 	        //select first data movement action	        
 	       //Movement movement = movementsToBeEnacted.firstElement(); 
 	       
 	       //TODO differentiate between data and computation movements
 	        
 	       //transform the selected movement actions in element to be sent
-	       MovementsEnaction movementsEnaction = new MovementsEnaction();
-	       Vector<MovementEnaction> movementEnactions = new Vector<MovementEnaction>();
+	       MovementsEnaction movementsEnaction = new MovementsEnaction();//container of movements  
+	       Vector<MovementEnaction> movementEnactions = new Vector<MovementEnaction>();// vector to be dded to the container
 	       
-	       for (Movement movement : movementsToBeEnacted)
+	       for (Movement movement : movementsToBeEnacted)//for each movement to be enacted selected, add it to the vector to be sent
 	       {
 	    	   MovementEnaction movementEnaction = new MovementEnaction();
 	    	   movementEnaction.importMovement(movement);

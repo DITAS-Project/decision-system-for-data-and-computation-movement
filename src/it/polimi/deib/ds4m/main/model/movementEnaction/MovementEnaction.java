@@ -53,11 +53,15 @@ public class MovementEnaction
 		this.from = movement.getFrom();
 		this.to = movement.getTo();
 		
-
-		for(Transformation transformationMovement : movement.getTransformations())
-		{
-			transformations.addElement(transformationMovement.getType());
-		}
+		
+		if (transformations==null)
+			transformations = new Vector<String>();
+		
+		if (movement.getTransformations()!=null)	
+			for(Transformation transformationMovement : movement.getTransformations())
+			{
+				transformations.addElement(transformationMovement.getType());
+			}
 	}
 
 

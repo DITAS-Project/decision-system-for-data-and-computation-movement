@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpStatus;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -80,7 +82,7 @@ public class SetUp extends HttpServlet {
 		VDC vdc = new VDC();
 		vdc.setDataManagement(dataManagement);
 		vdc.setDataSources(dataSources);
-		vdc.setId("ID");
+		vdc.setId("01");
 		
 		//if it is not set create a collection of appl.s requirements
 		Vector<VDC> VDCs;
@@ -94,6 +96,8 @@ public class SetUp extends HttpServlet {
 		
 		//add the application requirements 
 		VDCs.addElement(vdc);
+		
+		response.setStatus(HttpStatus.SC_OK);
 	
 	}
 	
