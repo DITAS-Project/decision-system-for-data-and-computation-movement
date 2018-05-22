@@ -22,7 +22,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Cost;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
-import it.polimi.deib.ds4m.main.movement.ManageMovementsActions;
+import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 
 public class ManageMovementsActionsTest 
 {
@@ -62,7 +62,7 @@ public class ManageMovementsActionsTest
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
 	    
 	    //instantiate movement classes for each data source 
-	    ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON);
+	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON);
 	    
 	    //2 data sources and 2 moment action classes so 4 data movement action instance 
  	    assertTrue(dataSources.get(0).getMovements().size()==2);
@@ -107,7 +107,7 @@ public class ManageMovementsActionsTest
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
 	    
 	    //instantiate movement classes for each data source 
-	    ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON);
+	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON);
 	    
  	    
  	    //data movement instance consists of copy  of movement classes
@@ -166,7 +166,7 @@ public class ManageMovementsActionsTest
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
 		
 	    //instantiate movement classes for each data source 
-	    ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON.toString() );
+	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString() );
 	    
 		//set up vdc
 		VDC vdc = new VDC();
@@ -183,7 +183,7 @@ public class ManageMovementsActionsTest
 		violatedGoals.add(g1);
 		
 
-		Vector<Movement> movementsToBeEnacted = ManageMovementsActions.findMovementAction(violatedGoals,  vdc);
+		Vector<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals,  vdc);
 
 		//TODO: important: not i don't filter data sources so I got 4, with the filtering this might change.
 		assertTrue(movementsToBeEnacted.size()==4);
@@ -227,7 +227,7 @@ public class ManageMovementsActionsTest
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
 		
 	    //instantiate movement classes for each data source 
-	    ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON.toString() );
+	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString() );
 	    
 		//set up vdc
 		VDC vdc = new VDC();
@@ -243,7 +243,7 @@ public class ManageMovementsActionsTest
 
 		violatedGoals.add(g1);
 		
-		Vector<Movement> movementsToBeEnacted = ManageMovementsActions.findMovementAction(violatedGoals,  vdc);
+		Vector<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals,  vdc);
 		
 		//important: i statically chose the first movement of the first class, because i know it will be selected
 		assertTrue(movementsToBeEnacted.elementAt(0).equals(dataSources.get(0).getMovements().get(0)));
@@ -288,7 +288,7 @@ public class ManageMovementsActionsTest
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
 		
 	    //instantiate movement classes for each data source 
-	    ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON.toString() );
+	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString() );
 	    
 		//set up vdc
 		VDC vdc = new VDC();
@@ -304,9 +304,9 @@ public class ManageMovementsActionsTest
 
 		violatedGoals.add(g1);
 		
-		Vector<Movement> movementsToBeEnacted = ManageMovementsActions.findMovementAction(violatedGoals,  vdc);
+		Vector<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals,  vdc);
 		
-		movementsToBeEnacted = ManageMovementsActions.orderMovementAction(movementsToBeEnacted, ManageMovementsActions.Strategy.MONETARY);
+		movementsToBeEnacted = MovementsActionsManager.orderMovementAction(movementsToBeEnacted, MovementsActionsManager.Strategy.MONETARY);
 		
 		
 		int positionCost= -1;
@@ -382,7 +382,7 @@ public class ManageMovementsActionsTest
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
 		
 	    //instantiate movement classes for each data source 
-	    ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON.toString() );
+	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString() );
 	    
 		//set up vdc
 		VDC vdc = new VDC();
@@ -398,9 +398,9 @@ public class ManageMovementsActionsTest
 
 		violatedGoals.add(g1);
 		
-		Vector<Movement> movementsToBeEnacted = ManageMovementsActions.findMovementAction(violatedGoals,  vdc);
+		Vector<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals,  vdc);
 		
-		movementsToBeEnacted = ManageMovementsActions.orderMovementAction(movementsToBeEnacted, ManageMovementsActions.Strategy.TIME);
+		movementsToBeEnacted = MovementsActionsManager.orderMovementAction(movementsToBeEnacted, MovementsActionsManager.Strategy.TIME);
 		
 		
 		int positionCost= -1;

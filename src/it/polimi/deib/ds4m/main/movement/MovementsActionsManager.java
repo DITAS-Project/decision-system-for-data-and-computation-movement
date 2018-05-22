@@ -23,7 +23,7 @@ import it.polimi.deib.ds4m.main.model.movement.Movement;
  * The class manages the movement actions
  *
  */
-public class ManageMovementsActions 
+public class MovementsActionsManager 
 {
 
 	//definition of possible strategies
@@ -126,10 +126,10 @@ public class ManageMovementsActions
 		
 		switch(strategy) {
 			case MONETARY: 
-				Collections.sort(movementsToBeEnacted, new ManageMovementsActions().new MonetaryCostComparator());
+				Collections.sort(movementsToBeEnacted, new MovementsActionsManager().new MonetaryCostComparator());
 				break;
 			case TIME: 
-				Collections.sort(movementsToBeEnacted, new ManageMovementsActions().new TimeCostComparator());
+				Collections.sort(movementsToBeEnacted, new MovementsActionsManager().new TimeCostComparator());
 				break;
 			case POSITIVEIMPACTS:
 				System.err.println("positive impact ordering non implemented yet");

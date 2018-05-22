@@ -24,8 +24,8 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Cost;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
-import it.polimi.deib.ds4m.main.movement.ManageMovementsActions;
-import it.polimi.deib.ds4m.main.movement.ManageVDC;
+import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
+import it.polimi.deib.ds4m.main.movement.VDCManager;
 
 public class ManageVDCTest {
 	
@@ -61,7 +61,7 @@ public class ManageVDCTest {
 		
 		
 		//identify VDC
-        VDC violatedVDC = ManageVDC.findViolatedVDC(violation, VDCs);
+        VDC violatedVDC = VDCManager.findViolatedVDC(violation, VDCs);
         
         assertTrue(violatedVDC.getId().equals("01"));
 		
@@ -100,7 +100,7 @@ public class ManageVDCTest {
 		
 		
 		//identify VDC
-        VDC violatedVDC = ManageVDC.findViolatedVDC(violation, VDCs);
+        VDC violatedVDC = VDCManager.findViolatedVDC(violation, VDCs);
         
         assertTrue(violatedVDC==null);
 		
@@ -146,7 +146,7 @@ public class ManageVDCTest {
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
 	    
 	    //instantiate movement classes for each data source 
-	    ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON);
+	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON);
 		
 		
 		//set up vdc
@@ -205,7 +205,7 @@ public class ManageVDCTest {
 		movementsToBeEnacted.add(movement1);
 		movementsToBeEnacted.add(movement2);
 		
-		movementsToBeEnacted = ManageVDC.chechOtherVDC(movementsToBeEnacted, VDCs, VDCselected);
+		movementsToBeEnacted = VDCManager.chechOtherVDC(movementsToBeEnacted, VDCs, VDCselected);
         
         //check that the movement is put back
         assertTrue(movementsToBeEnacted.indexOf(movement1)==0);
@@ -253,7 +253,7 @@ public class ManageVDCTest {
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
 	    
 	    //instantiate movement classes for each data source 
-	    ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON);
+	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON);
 		
 		
 		//set up vdc
@@ -325,7 +325,7 @@ public class ManageVDCTest {
 		movementsToBeEnacted.add(movement1);
 		movementsToBeEnacted.add(movement2);
 		
-		movementsToBeEnacted = ManageVDC.chechOtherVDC(movementsToBeEnacted, VDCs, VDCselected);
+		movementsToBeEnacted = VDCManager.chechOtherVDC(movementsToBeEnacted, VDCs, VDCselected);
         
         //check that the movement is put back
         assertTrue(movementsToBeEnacted.indexOf(movement1)==1);
@@ -371,7 +371,7 @@ public class ManageVDCTest {
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
 	    
 	    //instantiate movement classes for each data source 
-	    ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON);
+	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON);
 		
 		
 		//set up vdc
@@ -455,7 +455,7 @@ public class ManageVDCTest {
 		movementsToBeEnacted.add(movement1);
 		movementsToBeEnacted.add(movement2);
 		
-		movementsToBeEnacted = ManageVDC.chechOtherVDC(movementsToBeEnacted, VDCs, VDCselected);
+		movementsToBeEnacted = VDCManager.chechOtherVDC(movementsToBeEnacted, VDCs, VDCselected);
         
         //check that the movement is put back
         assertTrue(movementsToBeEnacted.indexOf(movement1)==2);

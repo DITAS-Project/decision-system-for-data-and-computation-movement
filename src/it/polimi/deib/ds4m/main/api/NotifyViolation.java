@@ -31,9 +31,9 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementsEnaction;
-import it.polimi.deib.ds4m.main.movement.ManageGoalTree;
-import it.polimi.deib.ds4m.main.movement.ManageMovementsActions;
-import it.polimi.deib.ds4m.main.movement.ManageVDC;
+import it.polimi.deib.ds4m.main.movement.GoalTreeManager;
+import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
+import it.polimi.deib.ds4m.main.movement.VDCManager;
 
 /**
  * Servlet implementation class NotifyViolation
@@ -82,7 +82,7 @@ public class NotifyViolation extends HttpServlet {
 	        Violation violation = violations.getViolations().firstElement();//for the time being take the first one
 	        
 	        //identify VDC
-	        VDC violatedVDC = ManageVDC.findViolatedVDC(violation, VDCs);
+	        VDC violatedVDC = VDCManager.findViolatedVDC(violation, VDCs);
 	        if (violatedVDC==null)
 	        {
 	        	System.err.println("NotifyViolation: No violated VDC found");
@@ -91,7 +91,7 @@ public class NotifyViolation extends HttpServlet {
 	        }
 
 	        //identify goal
-	        Set<Goal> violatedGoals = ManageGoalTree.findViolatedGoals(violation, violatedVDC);
+	        Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 	        if (violatedGoals==null)
 	        {
 	        	System.err.println("NotifyViolation: No violated goals found");
@@ -101,7 +101,7 @@ public class NotifyViolation extends HttpServlet {
 	        
 	        
 	        //identify movement actions with positive effect on goal
-	        Vector<Movement> movementsToBeEnacted = ManageMovementsActions.findMovementAction(violatedGoals, violatedVDC);
+	        Vector<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals, violatedVDC);
 	        if (movementsToBeEnacted==null)
 	        {
 	        	System.err.println("NotifyViolation: No movements to be enacted found");
@@ -113,10 +113,10 @@ public class NotifyViolation extends HttpServlet {
 	        //NOT NEEDED?
 	        
 	        //order the dm action using a strategy
-	        ManageMovementsActions.orderMovementAction(movementsToBeEnacted, ManageMovementsActions.Strategy.MONETARY);
+	        MovementsActionsManager.orderMovementAction(movementsToBeEnacted, MovementsActionsManager.Strategy.MONETARY);
 	        
 	        //check other trees of other VDCs, for all method? 
-	        movementsToBeEnacted = ManageVDC.chechOtherVDC(movementsToBeEnacted, VDCs, violatedVDC);
+	        movementsToBeEnacted = VDCManager.chechOtherVDC(movementsToBeEnacted, VDCs, violatedVDC);
 	        if (movementsToBeEnacted==null)
 	        {
 	        	System.err.println("NotifyViolation: all movements to be enacted have been removed");

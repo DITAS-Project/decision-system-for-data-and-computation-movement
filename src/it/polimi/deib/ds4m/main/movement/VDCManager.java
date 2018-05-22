@@ -11,7 +11,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 
-public class ManageVDC 
+public class VDCManager 
 {
 	
 	/**

@@ -20,7 +20,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.GoalTree;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Metric;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Property;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
-import it.polimi.deib.ds4m.main.movement.ManageGoalTree;
+import it.polimi.deib.ds4m.main.movement.GoalTreeManager;
 
 public class ManageGoalTreeTest {
 	
@@ -73,7 +73,7 @@ public class ManageGoalTreeTest {
 		violatedVDC.setId("ID");
 		
 		
-		Set<Goal> violatedGoals = ManageGoalTree.findViolatedGoals(violation, violatedVDC);
+		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -134,7 +134,7 @@ public class ManageGoalTreeTest {
 		violatedVDC.setId("ID");
 		
 		
-		Set<Goal> violatedGoals = ManageGoalTree.findViolatedGoals(violation, violatedVDC);
+		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -194,7 +194,7 @@ public class ManageGoalTreeTest {
 		violatedVDC.setId("ID");
 		
 		
-		Set<Goal> violatedGoals = ManageGoalTree.findViolatedGoals(violation, violatedVDC);
+		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -255,7 +255,7 @@ public class ManageGoalTreeTest {
 		violatedVDC.setId("ID");
 		
 		
-		Set<Goal> violatedGoals = ManageGoalTree.findViolatedGoals(violation, violatedVDC);
+		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -317,7 +317,7 @@ public class ManageGoalTreeTest {
 		violatedVDC.setId("ID");
 		
 		
-		Set<Goal> violatedGoals = ManageGoalTree.findViolatedGoals(violation, violatedVDC);
+		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -414,7 +414,7 @@ public class ManageGoalTreeTest {
 		violatedVDC.setId("ID");
 		
 		
-		Set<Goal> violatedGoals = ManageGoalTree.findViolatedGoals(violation, violatedVDC);
+		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==2);
 		

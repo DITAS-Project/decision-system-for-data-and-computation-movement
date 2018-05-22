@@ -11,7 +11,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.Metric;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Property;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 
-public class ManageGoalTree {
+public class GoalTreeManager {
 	
 	//definition of possible strategies
 	public enum TreeType

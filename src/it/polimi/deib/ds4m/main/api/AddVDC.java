@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
-import it.polimi.deib.ds4m.main.movement.ManageMovementsActions;
+import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 
 /**
  * Servlet implementation class AddVDC
@@ -104,7 +104,7 @@ public class AddVDC extends HttpServlet {
 		}
 		
 	    //instantiate movement classes for each data source 
-	    if (!ManageMovementsActions.instantiateMovementActions(dataSources,movementsJSON.toString()))
+	    if (!MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString()))
 	    {
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			return;
