@@ -4,22 +4,9 @@ import java.util.Vector;
 
 public class DataManagement 
 {
-	FunctionalProperties functionalProperties;
 	Vector<Method> methods;
 
 
-	/**
-	 * @return the functionalProperties
-	 */
-	public FunctionalProperties getFunctionalProperties() {
-		return functionalProperties;
-	}
-	/**
-	 * @param functionalProperties the functionalProperties to set
-	 */
-	public void setFunctionalProperties(FunctionalProperties functionalProperties) {
-		this.functionalProperties = functionalProperties;
-	}
 	/**
 	 * @return the methods
 	 */
