@@ -86,6 +86,7 @@ public class Goal
             append(ID).
             append(weight).
             append(attributes).
+            append(attributesLinked).
             toHashCode();
     }
 	/**

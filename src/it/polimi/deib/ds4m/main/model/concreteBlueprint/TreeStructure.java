@@ -12,6 +12,24 @@ public class TreeStructure
 	Vector<TreeStructure> childern;	//the children ( decomposed goals)
 	String goalRef; //to be removed?
 	
+	/**
+	 * recursive function that returns all leaf goals
+	 * 
+	 * @param treeStructure
+	 * @param attributes
+	 */
+	public static void getAllLeaves(TreeStructure treeStructure, Vector<Goal> leaves)
+	{
+		if (treeStructure.getLeaves()==null)
+			for (TreeStructure cildren : treeStructure.getChildern())
+				getAllLeaves(cildren, leaves);
+		else
+			leaves.addAll(treeStructure.getLeaves());
+				
+	}
+	
+	
+	//recursive declaration
 	@JsonCreator
 	public TreeStructure(@JsonProperty("children") Vector<TreeStructure> childern) {
 		this.childern=childern;

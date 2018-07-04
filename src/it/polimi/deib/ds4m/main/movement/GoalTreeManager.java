@@ -6,9 +6,10 @@ import java.util.Vector;
 
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.Method;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Attribute;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Property;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 
 public class GoalTreeManager {
@@ -34,20 +35,20 @@ public class GoalTreeManager {
 	{
         
 		//retrieve the method that violated from the vdc
-		Method method = null;
-		for (Method methodExamined : violatedVDC.getDataManagement().getMethods())
+		AbstractProperty abstractProperty = null;
+		for (AbstractProperty abstractPropertyExamined : violatedVDC.getAbstractProperties())
 		{
-			if (methodExamined.getName().equals(violation.getMethodID()))
-					method = methodExamined;
+			if (abstractPropertyExamined.getMethod_id().equals(violation.getMethodID()))
+				abstractProperty = abstractPropertyExamined;
 		}
 		//if not found return null
-		if (method == null)
+		if (abstractProperty == null)
 			return null;
 		
 		//create set of goal add all the violated ones
-		Set<Goal> violatedGoals = searchGoal(method, violation, TreeType.DATAUTILITY);
-		violatedGoals.addAll(searchGoal(method, violation, TreeType.SECURITY));		
-		violatedGoals.addAll(searchGoal(method, violation, TreeType.PRIVACY));
+		Set<Goal> violatedGoals = searchGoal(abstractProperty, violation, TreeType.DATAUTILITY);
+		violatedGoals.addAll(searchGoal(abstractProperty, violation, TreeType.SECURITY));		
+		violatedGoals.addAll(searchGoal(abstractProperty, violation, TreeType.PRIVACY));
 
 		//at this point the violatedGoals contains a set of violated goals
 		
@@ -57,39 +58,38 @@ public class GoalTreeManager {
 		return violatedGoals;
 	}
 
-	private static Set<Goal> searchGoal(Method method, Violation violation, TreeType treeType)
+	private static Set<Goal> searchGoal(AbstractProperty abstractProperty, Violation violation, TreeType treeType)
 	{
 		
 		//retrieve all violated goals
 		Set<Goal> violatedGoals = new HashSet<Goal>();//hash set since goal cannot be duplicated// implemented equals for goal and sub classes
 		
-		Vector<Goal> goals = null;
+		Vector<Goal> leaves = null;
+		
 		
 		switch (treeType) {
 		case DATAUTILITY:
-			goals = method.getConstraints().getDataUtility().getGoals();
+			TreeStructure.getAllLeaves(abstractProperty.getGoalTrees().getDataUtility(),leaves);
 			break;
 			
 		case PRIVACY:
-			goals = method.getConstraints().getPrivacy().getGoals();
+			TreeStructure.getAllLeaves(abstractProperty.getGoalTrees().getPrivacy(),leaves);
 			break;
 			
 		case SECURITY:
-			goals = method.getConstraints().getSecurity().getGoals();
+			TreeStructure.getAllLeaves(abstractProperty.getGoalTrees().getSecurity(),leaves);
 		}
 		
 		
-		if (goals == null)
+		if (leaves == null)
 			return null;
 		
-		for (Goal goal : goals)//retrieves all goals f the method
+		for (Goal leaf : leaves)//retrieves all goals f the method
 		{
-			Vector<Attribute> Metrics = goal.getMetrics();//get the metrics on the goal
-			for (Attribute metric : Metrics)
+			Vector<Attribute> attributes = leaf.getMetrics();//get the metrics on the goal
+			for (Attribute attribute : attributes)
 			{
-				//if the metric is the same //skipped this check since violations are not sent grouped by metrics, but only the violated properties are sent. 
-				//if (metric.getName().equals(violation.getMetric()))
-				//{
+				for (Map.Entry<String, Property>  property : attribute.getProperties())//iterazione sulla mappa <---
 					//if the values are actually violated, the add it
 					Vector<Property> properties = metric.getProperties();
 					for (Property property : properties)
@@ -107,7 +107,6 @@ public class GoalTreeManager {
 								violatedGoals.add(goal); //then it it is violated
 							else if (property.getMinimum()==null && property.getMaximum()==null && !property.getValue().equals(violation.getValue()))
 								violatedGoals.add(goal);
-				//}
 			}
 		}
 		

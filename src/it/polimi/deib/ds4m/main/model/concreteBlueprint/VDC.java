@@ -70,6 +70,10 @@ public class VDC
 		this.abstractProperties = abstractProperties;
 	}
 
+	/**
+	 * connects the attributes in the abstract properties with the attributes in the data management, using the id link.
+	 * it populates the  attribute linked of the leaves in the abstract property objects.
+	 */
 	public void connectAbstractProperties()
 	{
 		for (AbstractProperty abstractProperty : abstractProperties)
@@ -104,6 +108,12 @@ public class VDC
 		}
 	}
 	
+	/**
+	 * recursive function that inspect the tree structure, examine the IDs and connects the attributes of absract properties wityh data management.
+	 * 
+	 * @param treeStructure
+	 * @param attributes
+	 */
 	private void connect(TreeStructure treeStructure, Vector<Attribute> attributes)
 	{
 		if (treeStructure.getLeaves()==null)
