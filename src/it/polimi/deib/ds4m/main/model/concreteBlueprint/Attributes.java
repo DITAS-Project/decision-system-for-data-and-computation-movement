@@ -4,44 +4,44 @@ import java.util.Vector;
 
 public class Attributes 
 {
-	Vector<Metric> dataUtility;
-	Vector<Metric> security;
-	Vector<Metric> privacy;
+	Vector<Attribute> dataUtility;
+	Vector<Attribute> security;
+	Vector<Attribute> privacy;
 	
 	/**
 	 * @return the dataUtility
 	 */
-	public Vector<Metric> getDataUtility() {
+	public Vector<Attribute> getDataUtility() {
 		return dataUtility;
 	}
 	/**
 	 * @param dataUtility the dataUtility to set
 	 */
-	public void setDataUtility(Vector<Metric> dataUtility) {
+	public void setDataUtility(Vector<Attribute> dataUtility) {
 		this.dataUtility = dataUtility;
 	}
 	/**
 	 * @return the security
 	 */
-	public Vector<Metric> getSecurity() {
+	public Vector<Attribute> getSecurity() {
 		return security;
 	}
 	/**
 	 * @param security the security to set
 	 */
-	public void setSecurity(Vector<Metric> security) {
+	public void setSecurity(Vector<Attribute> security) {
 		this.security = security;
 	}
 	/**
 	 * @return the privacy
 	 */
-	public Vector<Metric> getPrivacy() {
+	public Vector<Attribute> getPrivacy() {
 		return privacy;
 	}
 	/**
 	 * @param privacy the privacy to set
 	 */
-	public void setPrivacy(Vector<Metric> privacy) {
+	public void setPrivacy(Vector<Attribute> privacy) {
 		this.privacy = privacy;
 	}
 

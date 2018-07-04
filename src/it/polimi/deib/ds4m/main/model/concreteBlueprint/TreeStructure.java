@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class TreeStructure 
 {
 	String type;//type of decoposition
-	Vector<String> leaves; //the leaves of the goal
+	Vector<Goal> leaves; //the leaves of the goal
 	Vector<TreeStructure> childern;	//the children ( decomposed goals)
 	String goalRef; //to be removed?
 	
@@ -29,20 +29,6 @@ public class TreeStructure
 	 */
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	/**
-	 * @return the leaves
-	 */
-	public Vector<String> getLeaves() {
-		return leaves;
-	}
-
-	/**
-	 * @param leaves the leaves to set
-	 */
-	public void setLeaves(Vector<String> leaves) {
-		this.leaves = leaves;
 	}
 
 	/**
@@ -71,6 +57,20 @@ public class TreeStructure
 	 */
 	public void setGoalRef(String goalRef) {
 		this.goalRef = goalRef;
+	}
+
+	/**
+	 * @return the leaves
+	 */
+	public Vector<Goal> getLeaves() {
+		return leaves;
+	}
+
+	/**
+	 * @param leaves the leaves to set
+	 */
+	public void setLeaves(Vector<Goal> leaves) {
+		this.leaves = leaves;
 	}
 	
 

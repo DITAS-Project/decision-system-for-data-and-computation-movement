@@ -7,7 +7,7 @@ import java.util.Vector;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Method;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.Metric;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.Attribute;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Property;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 
@@ -84,8 +84,8 @@ public class GoalTreeManager {
 		
 		for (Goal goal : goals)//retrieves all goals f the method
 		{
-			Vector<Metric> Metrics = goal.getMetrics();//get the metrics on the goal
-			for (Metric metric : Metrics)
+			Vector<Attribute> Metrics = goal.getMetrics();//get the metrics on the goal
+			for (Attribute metric : Metrics)
 			{
 				//if the metric is the same //skipped this check since violations are not sent grouped by metrics, but only the violated properties are sent. 
 				//if (metric.getName().equals(violation.getMetric()))

@@ -17,7 +17,7 @@ import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.GoalTree;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.Metric;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.Attribute;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Property;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.movement.GoalTreeManager;
@@ -382,14 +382,14 @@ public class ManageGoalTreeTest {
 		property.setName("Availability");
 		property.setUnit("percentage");
 		
-		Metric metric = new Metric();
+		Attribute metric = new Attribute();
 		metric.setId("11");
 		metric.setName("Availability2");
 		metric.setType("Availability");
 		metric.setProperties(new Vector<Property>());
 		metric.getProperties().addElement(property);
 		
-		Vector<Metric> metrics = new Vector<Metric>();
+		Vector<Attribute> metrics = new Vector<Attribute>();
 		metrics.add(metric);
 		
 		Goal newGoal = new Goal();

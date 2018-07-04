@@ -5,7 +5,7 @@ import java.util.Vector;
 
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class Metric 
+public class Attribute 
 {
 	private String id;
 	private String description;
@@ -75,12 +75,12 @@ public class Metric
 	        return false;
 	    }
 	    
-	    if (!Metric.class.isAssignableFrom(obj.getClass())) {
+	    if (!Attribute.class.isAssignableFrom(obj.getClass())) {
 	        return false;
 	    }
 	    
 	    //check all the fields
-	    final Metric other = (Metric) obj;	    
+	    final Attribute other = (Attribute) obj;	    
 	    if (!this.id.equals(other.getId()) ) {
 	        return false;
 	    }

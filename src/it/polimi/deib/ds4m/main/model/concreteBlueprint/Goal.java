@@ -1,30 +1,24 @@
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
+import java.util.ArrayList;
 import java.util.Vector;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
+@JsonIgnoreProperties(value = { "attributesLinked" })
 public class Goal 
 {
-	Vector<Metric> metrics;
+	Vector<String> attributes;
+	ArrayList<Attribute> attributesLinked;
 	String ID;
-	String name;
+	String description;
 	Double weight;
 	
+
 	/**
-	 * @return the metrics
-	 */
-	public Vector<Metric> getMetrics() {
-		return metrics;
-	}
-	/**
-	 * @param metrics the metrics to set
-	 */
-	public void setMetrics(Vector<Metric> metrics) {
-		this.metrics = metrics;
-	}
-	/**
-	 * @return the iD
+	 * @return the ID
 	 */
 	public String getID() {
 		return ID;
@@ -34,18 +28,6 @@ public class Goal
 	 */
 	public void setID(String iD) {
 		ID = iD;
-	}
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 	/**
 	 * @return the weight
@@ -78,7 +60,7 @@ public class Goal
 	        return false;
 	    }
 	    
-	    if (!this.name.equals(other.getName()) ) {
+	    if (!this.description.equals(other.getDescription()) ) {
 	        return false;
 	    }
 	    
@@ -86,7 +68,7 @@ public class Goal
 	        return false;
 	    }
 	    
-	    if (!this.metrics.equals(other.getMetrics()) ) {
+	    if (!this.attributes.equals(other.getAttributes()) ) {
 	        return false;
 	    }
 	    
@@ -100,12 +82,48 @@ public class Goal
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
             // if deriving: appendSuper(super.hashCode()).
-            append(name).
+            append(description).
             append(ID).
             append(weight).
-            append(metrics).
+            append(attributes).
             toHashCode();
     }
+	/**
+	 * @return the attributes
+	 */
+	public Vector<String> getAttributes() {
+		return attributes;
+	}
+	/**
+	 * @param attributes the attributes to set
+	 */
+	public void setAttributes(Vector<String> attributes) {
+		this.attributes = attributes;
+	}
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	/**
+	 * @return the attributesLinked
+	 */
+	public ArrayList<Attribute> getAttributesLinked() {
+		return attributesLinked;
+	}
+	/**
+	 * @param attributesLinked the attributesLinked to set
+	 */
+	public void setAttributesLinked(ArrayList<Attribute> attributesLinked) {
+		this.attributesLinked = attributesLinked;
+	}
 	
 	
 }

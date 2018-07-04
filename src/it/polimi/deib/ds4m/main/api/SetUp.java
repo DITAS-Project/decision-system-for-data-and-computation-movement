@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
@@ -76,14 +77,10 @@ public class SetUp extends HttpServlet {
 		
 		//retrieve DATA MANAGEMENT
 		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		ArrayList<DataManagement> dataManagement = new ArrayList<DataManagement>();//initialized only for the getClass method 
+		ArrayList<DataManagement> dataManagement; 
 		try {
-			//convert nodetree in JSON string
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			mapper.writeValue(baos, dataManagementJson);
-			 
 			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
-			dataManagement = mapper.readValue(baos.toString(), new TypeReference<ArrayList<DataManagement>>(){});//this serializes directly a vector
+			dataManagement = new ArrayList<DataManagement>(Arrays.asList(mapper.treeToValue(dataManagementJson, DataManagement[].class)));
 		}
 		
 		catch (JsonProcessingException e) 
@@ -92,6 +89,21 @@ public class SetUp extends HttpServlet {
 			e.printStackTrace();
 			return;			
 		}
+		
+		//retrieve ABSTRACT_PROPERTIES
+		JsonNode abstractPropertiesJson = root.get("ABSTRACT_PROPERTIES");
+		ArrayList<AbstractProperty> abstractProperties; 
+		try {
+			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+			abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
+		}
+		
+		catch (JsonProcessingException e) 
+		{
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			e.printStackTrace();
+			return;			
+		}		
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
@@ -133,7 +145,9 @@ public class SetUp extends HttpServlet {
 		//set up vdc
 		VDC vdc = new VDC();
 		vdc.setDataManagement(dataManagement);
+		vdc.setAbstractProperties(abstractProperties);
 		vdc.setDataSources(dataSources);
+		vdc.connectAbstractProperties();
 		vdc.setId("01");//TODO insert VDC ID in concrete blueprint
 		
 		//if it is not set create a collection of appl.s requirements
