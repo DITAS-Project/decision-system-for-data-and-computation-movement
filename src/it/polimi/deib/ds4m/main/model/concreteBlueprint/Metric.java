@@ -1,5 +1,6 @@
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
+import java.util.Map;
 import java.util.Vector;
 
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -7,22 +8,22 @@ import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 public class Metric 
 {
 	private String id;
-	private String name;
+	private String description;
 	private String type;
-	private Vector<Property> properties;
+	Map<String, Property> properties;
 
 	
 	/**
-	 * @return the name
+	 * @return the description
 	 */
-	public String getName() {
-		return name;
+	public String getDescription() {
+		return description;
 	}
 	/**
-	 * @param name the name to set
+	 * @param description the description to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	/**
@@ -52,13 +53,17 @@ public class Metric
 	/**
 	 * @return the properties
 	 */
-	public Vector<Property> getProperties() {
+
+	/**
+	 * @return the properties
+	 */
+	public Map<String, Property> getProperties() {
 		return properties;
 	}
 	/**
 	 * @param properties the properties to set
 	 */
-	public void setProperties(Vector<Property> properties) {
+	public void setProperties(Map<String, Property> properties) {
 		this.properties = properties;
 	}
 	
@@ -80,7 +85,7 @@ public class Metric
 	        return false;
 	    }
 	    
-	    if (!this.name.equals(other.getName()) ) {
+	    if (!this.description.equals(other.getDescription()) ) {
 	        return false;
 	    }
 	    
@@ -102,12 +107,13 @@ public class Metric
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
             // if deriving: appendSuper(super.hashCode()).
-            append(name).
+            append(description).
             append(id).
             append(type).
             append(properties).
             toHashCode();
     }
+
 
 
 }

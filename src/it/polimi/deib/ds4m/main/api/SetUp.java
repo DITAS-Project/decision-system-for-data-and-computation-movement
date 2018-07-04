@@ -1,9 +1,13 @@
 package it.polimi.deib.ds4m.main.api;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
@@ -15,8 +19,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpStatus;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -69,13 +76,20 @@ public class SetUp extends HttpServlet {
 		
 		//retrieve DATA MANAGEMENT
 		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		DataManagement dataManagement;
+		ArrayList<DataManagement> dataManagement = new ArrayList<DataManagement>();//initialized only for the getClass method 
 		try {
-			dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
+			//convert nodetree in JSON string
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			mapper.writeValue(baos, dataManagementJson);
+			 
+			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+			dataManagement = mapper.readValue(baos.toString(), new TypeReference<ArrayList<DataManagement>>(){});//this serializes directly a vector
 		}
+		
 		catch (JsonProcessingException e) 
 		{
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			e.printStackTrace();
 			return;			
 		}
 		
@@ -120,7 +134,7 @@ public class SetUp extends HttpServlet {
 		VDC vdc = new VDC();
 		vdc.setDataManagement(dataManagement);
 		vdc.setDataSources(dataSources);
-		vdc.setId("01");//TODO insert VDC ID in comncrete blueprint
+		vdc.setId("01");//TODO insert VDC ID in concrete blueprint
 		
 		//if it is not set create a collection of appl.s requirements
 		Vector<VDC> VDCs;

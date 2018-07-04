@@ -4,21 +4,33 @@ import java.util.Vector;
 
 public class DataManagement 
 {
-	Vector<Method> methods;
-
-
+	String method_id;
+	Attributes attributes;
 	/**
-	 * @return the methods
+	 * @return the method_id
 	 */
-	public Vector<Method> getMethods() {
-		return methods;
+	public String getMethod_id() {
+		return method_id;
 	}
 	/**
-	 * @param methods the methods to set
+	 * @param method_id the method_id to set
 	 */
-	public void setMethods(Vector<Method> methods) {
-		this.methods = methods;
+	public void setMethod_id(String method_id) {
+		this.method_id = method_id;
 	}
+	/**
+	 * @return the attributes
+	 */
+	public Attributes getAttributes() {
+		return attributes;
+	}
+	/**
+	 * @param attributes the attributes to set
+	 */
+	public void setAttributes(Attributes attributes) {
+		this.attributes = attributes;
+	}
+
 
 
 }

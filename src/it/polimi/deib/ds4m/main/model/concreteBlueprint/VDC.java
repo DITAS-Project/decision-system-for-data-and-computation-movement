@@ -1,5 +1,6 @@
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -8,7 +9,7 @@ import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 public class VDC 
 {	
 	//vector of requirements
-	private DataManagement dataManagement;
+	private ArrayList<DataManagement> dataManagement;
 	private Vector<DataSource> DataSources;
 	private String id;
 	
@@ -41,25 +42,20 @@ public class VDC
 		this.id = id;
 	}
 
-
-
-
 	/**
 	 * @return the dataManagement
 	 */
-	public DataManagement getDataManagement() {
+	public ArrayList<DataManagement> getDataManagement() {
 		return dataManagement;
 	}
-
-
-
 
 	/**
 	 * @param dataManagement the dataManagement to set
 	 */
-	public void setDataManagement(DataManagement dataManagement) {
+	public void setDataManagement(ArrayList<DataManagement> dataManagement) {
 		this.dataManagement = dataManagement;
 	}
+
 
 	
 	

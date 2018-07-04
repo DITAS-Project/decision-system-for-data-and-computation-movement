@@ -10,7 +10,7 @@
   <build>
   	<finalName>ROOT</finalName>
     <sourceDirectory>src</sourceDirectory>
-    <testSourceDirectory>src/it/polimi/deib/ds4m/test/management</testSourceDirectory>
+    <testSourceDirectory>src/it/polimi/deib/ds4m/test/api</testSourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

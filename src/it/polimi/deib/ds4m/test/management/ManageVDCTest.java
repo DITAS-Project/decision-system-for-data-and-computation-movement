@@ -34,7 +34,7 @@ public class ManageVDCTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
     public void findViolatedVDC_Correct_find() throws IOException 
 	{
 		//create violation		
@@ -73,7 +73,7 @@ public class ManageVDCTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
     public void findViolatedVDC_Correct_noResults() throws IOException 
 	{
 		//create violation		
@@ -112,7 +112,7 @@ public class ManageVDCTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
     public void chechOtherVDC_Correct_noMovementsCommon() throws IOException 
 	{
 		
@@ -219,7 +219,7 @@ public class ManageVDCTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
     public void chechOtherVDC_CorrectFirstPosition() throws IOException 
 	{
 		
@@ -337,7 +337,7 @@ public class ManageVDCTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
     public void chechOtherVDC_CorrectMiddlePosiotion() throws IOException 
 	{
 		

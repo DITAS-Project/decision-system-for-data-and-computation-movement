@@ -29,7 +29,7 @@ public class ManageGoalTreeTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
     public void findViolatedVDC_Correct_find_below_range() throws IOException 
 	{
 		//create violation		
@@ -90,7 +90,7 @@ public class ManageGoalTreeTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
     public void findViolatedVDC_Correct_find_above_range() throws IOException 
 	{
 		//create violation		
@@ -151,7 +151,7 @@ public class ManageGoalTreeTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
     public void findViolatedVDC_Correct_find_minimum() throws IOException 
 	{
 		//create violation		
@@ -211,7 +211,7 @@ public class ManageGoalTreeTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
     public void findViolatedVDC_Correct_find_maximum() throws IOException 
 	{
 		//create violation		
@@ -273,7 +273,7 @@ public class ManageGoalTreeTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
     public void findViolatedVDC_Correct_find_complex_metric_1Property() throws IOException 
 	{
 		//create violation		
@@ -333,7 +333,7 @@ public class ManageGoalTreeTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
     public void findViolatedVDC_Correct_find_complex_metric_2Goals() throws IOException 
 	{
 		//create violation		

@@ -32,7 +32,7 @@ public class ManageMovementsActionsTest
 	 *  
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
 	public void instantiateMovementActions_correct_checkSize() throws IOException
 	{
 		//parse blueprint
@@ -77,7 +77,7 @@ public class ManageMovementsActionsTest
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
 	public void instantiateMovementActions_correct_checkContent () throws IOException
 	{
 		//parse blueprint
@@ -133,7 +133,7 @@ public class ManageMovementsActionsTest
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
 	public void findMovementAction_correct_checkSize () throws IOException
 	{
 		//parse blueprint
@@ -194,7 +194,7 @@ public class ManageMovementsActionsTest
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
 	public void findMovementAction_correct_checkContent () throws IOException
 	{
 		//parse blueprint
@@ -255,7 +255,7 @@ public class ManageMovementsActionsTest
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
 	public void orderMovementAction_correct_monetary () throws IOException
 	{
 		//parse blueprint
@@ -349,7 +349,7 @@ public class ManageMovementsActionsTest
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	//@Test
 	public void orderMovementAction_correct_time () throws IOException
 	{
 		//parse blueprint

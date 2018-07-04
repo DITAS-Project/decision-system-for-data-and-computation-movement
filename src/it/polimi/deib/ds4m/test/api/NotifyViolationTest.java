@@ -98,7 +98,8 @@ public class NotifyViolationTest
 		try 
 		{
 			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprint=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
+			//concreteBlueprint=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));//before change
+			concreteBlueprint=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
