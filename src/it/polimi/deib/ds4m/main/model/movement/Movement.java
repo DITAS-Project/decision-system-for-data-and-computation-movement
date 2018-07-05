@@ -11,8 +11,8 @@ public class Movement
 	private String to;
 	private double restTime;
 	
-	private Vector<String> positiveImpacts;
-	private Vector<String> negativeImpacts;
+	private Vector<String> positiveImpacts; //list of IDs of goals with a positive impact
+	private Vector<String> negativeImpacts; //list of IDs of goals with a negative impact
 	
 	private Vector<Transformation> transformations;
 	

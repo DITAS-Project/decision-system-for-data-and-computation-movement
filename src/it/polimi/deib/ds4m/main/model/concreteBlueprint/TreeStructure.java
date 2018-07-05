@@ -1,5 +1,6 @@
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -16,16 +17,38 @@ public class TreeStructure
 	 * recursive function that returns all leaf goals
 	 * 
 	 * @param treeStructure
-	 * @param attributes
+	 * @param leaves the returnes set of leaves. a array list ( empty must be passed)
 	 */
-	public static void getAllLeaves(TreeStructure treeStructure, Vector<Goal> leaves)
+	public static void getAllLeaves(TreeStructure treeStructure, ArrayList<Goal> leaves)
 	{
+		
 		if (treeStructure.getLeaves()==null)
 			for (TreeStructure cildren : treeStructure.getChildern())
 				getAllLeaves(cildren, leaves);
 		else
 			leaves.addAll(treeStructure.getLeaves());
 				
+	}
+	
+	public static Goal getLeafByID(TreeStructure treeStructure, String ID)
+	{
+		if (treeStructure== null)
+				return null;
+		
+		//retrieve all leaves
+		ArrayList<Goal> leaves = new ArrayList<Goal>();
+		TreeStructure.getAllLeaves(treeStructure, leaves);
+		
+		//search for the id
+		for(Goal leaf: leaves )
+		{
+			if (leaf.getID().equals(ID))
+				return leaf;
+		}
+		
+		
+		//if this point is reached it means no goal has been found. 
+		return null;
 	}
 	
 	

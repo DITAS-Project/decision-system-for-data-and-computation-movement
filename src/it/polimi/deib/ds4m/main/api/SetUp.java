@@ -142,13 +142,27 @@ public class SetUp extends HttpServlet {
 			return;
 	    }
 	    
+	    
+	    //retrieve VDC name
+		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
+		String vdcName;
+		try {
+			vdcName = mapper.treeToValue(vdcNameJSON, String.class);
+		}
+		catch (JsonProcessingException e) 
+		{
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;			
+		}
+		
+		
 		//set up vdc
 		VDC vdc = new VDC();
 		vdc.setDataManagement(dataManagement);
 		vdc.setAbstractProperties(abstractProperties);
 		vdc.setDataSources(dataSources);
 		vdc.connectAbstractProperties();
-		vdc.setId("01");//TODO insert VDC ID in concrete blueprint
+		vdc.setId(vdcName);
 		
 		//if it is not set create a collection of appl.s requirements
 		Vector<VDC> VDCs;

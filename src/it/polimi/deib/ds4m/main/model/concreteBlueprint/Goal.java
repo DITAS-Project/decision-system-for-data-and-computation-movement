@@ -116,7 +116,11 @@ public class Goal
 	/**
 	 * @return the attributesLinked
 	 */
-	public ArrayList<Attribute> getAttributesLinked() {
+	public ArrayList<Attribute> getAttributesLinked() 
+	{
+		if (attributesLinked==null)
+			attributesLinked = new ArrayList<Attribute>();
+		
 		return attributesLinked;
 	}
 	/**
