@@ -114,6 +114,7 @@ public class SetUp extends HttpServlet {
 		}
 		catch (JsonProcessingException e) 
 		{
+			e.printStackTrace();
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 			return;			
 		}

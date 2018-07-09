@@ -248,7 +248,7 @@ public class NotifyViolationTest
             //check the answer to the mocked server
             verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withHeader("Content-Type", equalTo("application/x-www-form-urlencoded")));
             
-            verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withRequestBody(containing("movementsEnaction=%7B%22movementsEnaction%22%3A%5B%7B%22from%22%3A%22Edge%22%2C%22to%22%3A%22Cloud%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%2C%7B%22from%22%3A%22Cloud%22%2C%22to%22%3A%22Edge%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%2C%7B%22from%22%3A%22Edge%22%2C%22to%22%3A%22Cloud%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%2C%7B%22from%22%3A%22Cloud%22%2C%22to%22%3A%22Edge%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%5D%7D")));
+            verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withRequestBody(containing("movementsEnaction=%7B%22movementsEnaction%22%3A%5B%7B%22from%22%3A%22Cloud%22%2C%22to%22%3A%22Edge%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%2C%7B%22from%22%3A%22Cloud%22%2C%22to%22%3A%22Edge%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%5D%7D")));
             
             	
         } catch (IOException e) {

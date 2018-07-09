@@ -2,14 +2,20 @@ package it.polimi.deib.ds4m.test.management;
 
 import static org.junit.Assert.assertTrue;
 
-
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
+import org.apache.http.HttpStatus;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,6 +24,7 @@ import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.GoalTree;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Attribute;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Property;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
@@ -34,7 +41,7 @@ public class ManageVDCTest {
 	 * 
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
     public void findViolatedVDC_Correct_find() throws IOException 
 	{
 		//create violation		
@@ -73,7 +80,7 @@ public class ManageVDCTest {
 	 * 
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
     public void findViolatedVDC_Correct_noResults() throws IOException 
 	{
 		//create violation		
@@ -112,17 +119,17 @@ public class ManageVDCTest {
 	 * 
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
     public void chechOtherVDC_Correct_noMovementsCommon() throws IOException 
 	{
-		
+		//*** set up other VDC ( it takes the complete one, not necessary)
 		//parse blueprint
 		String concreteBlueprintJSON;
 		
 		try 
 		{
 			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
+			concreteBlueprintJSON=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -136,24 +143,77 @@ public class ManageVDCTest {
 		
 		//retrieve DATA MANAGEMENT
 		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		DataManagement dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
+		ArrayList<DataManagement> dataManagement; 
+		try {
+			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+			dataManagement = new ArrayList<DataManagement>(Arrays.asList(mapper.treeToValue(dataManagementJson, DataManagement[].class)));
+		}
+		
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}
+		
+		//retrieve ABSTRACT_PROPERTIES
+		JsonNode abstractPropertiesJson = root.get("ABSTRACT_PROPERTIES");
+		ArrayList<AbstractProperty> abstractProperties; 
+		try {
+			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+			abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
+		}
+		
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}		
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		Vector<DataSource> dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+		Vector<DataSource> dataSources;
+		try {
+			dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+		}
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}
 		
 		//retrieve movement classes
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
+
+	    //instantiate movement classes for each data source
+		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString()); 
+	    if (instantiatedMovements==null)
+	    {
+			return;
+	    }
 	    
-	    //instantiate movement classes for each data source 
-	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON);
+	    
+	    //retrieve VDC name
+		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
+		String vdcName;
+		try {
+			vdcName = mapper.treeToValue(vdcNameJSON, String.class);
+		}
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}
 		
 		
 		//set up vdc
 		VDC vdc = new VDC();
 		vdc.setDataManagement(dataManagement);
+		vdc.setAbstractProperties(abstractProperties);
 		vdc.setDataSources(dataSources);
-		vdc.setId("01");
+		vdc.setMovements(instantiatedMovements);
+		vdc.connectAbstractProperties();
+		vdc.setId(vdcName);
+		//*** end set up other VDC 
 
 		
 		//create a collection of vdcs
@@ -193,7 +253,7 @@ public class ManageVDCTest {
 		movement1.setCosts(costs);
 		//end set up movement
 		
-		//set up another movement (non matching to check only that the first one is moved back an empty data movement will not match any data movement in other VDC, meaning that it has no influence on other vdc goals])
+		//set up another movement (non matching to check only that the first one is moved back an empty data movement will not match any data movement in other VDC, meaning that it has no influence on other vdc goals)
 		Movement movement2 =  new Movement();
 		movement2.setFrom("AAA");//no movement with this parameter in other VDC
 		movement2.setTo("BBB");//no movement with this parameter in other VDC
@@ -222,14 +282,14 @@ public class ManageVDCTest {
 	//@Test
     public void chechOtherVDC_CorrectFirstPosition() throws IOException 
 	{
-		
+		//*** set up other VDC ( it takes the complete one, not necessary)
 		//parse blueprint
 		String concreteBlueprintJSON;
 		
 		try 
 		{
 			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
+			concreteBlueprintJSON=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -243,24 +303,77 @@ public class ManageVDCTest {
 		
 		//retrieve DATA MANAGEMENT
 		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		DataManagement dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
+		ArrayList<DataManagement> dataManagement; 
+		try {
+			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+			dataManagement = new ArrayList<DataManagement>(Arrays.asList(mapper.treeToValue(dataManagementJson, DataManagement[].class)));
+		}
+		
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}
+		
+		//retrieve ABSTRACT_PROPERTIES
+		JsonNode abstractPropertiesJson = root.get("ABSTRACT_PROPERTIES");
+		ArrayList<AbstractProperty> abstractProperties; 
+		try {
+			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+			abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
+		}
+		
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}		
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		Vector<DataSource> dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+		Vector<DataSource> dataSources;
+		try {
+			dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+		}
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}
 		
 		//retrieve movement classes
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
+
+	    //instantiate movement classes for each data source
+		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString()); 
+	    if (instantiatedMovements==null)
+	    {
+			return;
+	    }
 	    
-	    //instantiate movement classes for each data source 
-	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON);
+	    
+	    //retrieve VDC name
+		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
+		String vdcName;
+		try {
+			vdcName = mapper.treeToValue(vdcNameJSON, String.class);
+		}
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}
 		
 		
 		//set up vdc
 		VDC vdc = new VDC();
 		vdc.setDataManagement(dataManagement);
+		vdc.setAbstractProperties(abstractProperties);
 		vdc.setDataSources(dataSources);
-		vdc.setId("01");
+		vdc.setMovements(instantiatedMovements);
+		vdc.connectAbstractProperties();
+		vdc.setId(vdcName);
+		//*** end set up other VDC
 
 		
 		//create a collection of vdcs
@@ -279,20 +392,22 @@ public class ManageVDCTest {
 		Vector<Movement> movementsToBeEnacted = new Vector<Movement>();
 		
 		//set up the first movement
-		//the other VDC contain a movement similar to this one ( the same except the impacts) so this movement is selected on the other VDC (in set movementsToBeEnactedOtherVDC)
-		//the other movement as an impact on a goal (id=4) that has no positive linked associated, so this data movement will be moved back in the list
+		//the data movement selected (movements to be enacted) are two. 
+		//movement1 has a negative impact to "id=completeness" so the function "checkOtherVDC" checks if the movement action has impact on other vdc. in this case the set of "other VDC" is composed of
+		//the "complete VDC" set up in the beginning of this test. such VDC has a similar data movement with only negative impact in the goal "id=completeness". so the movement 1 should be moved behind.
+		//movemen2 should be left untouched since there is no similar data movement
 		
 		Vector<String> positiveImpacts1 = new Vector<String>();
-		positiveImpacts1.add("1");//positive impacts are not considered for the movement to be enacted 
+		positiveImpacts1.add("AAA");//positive impacts are not considered for the movement to be enacted 
 		
 		Vector<String> negativeImpacts1 = new Vector<String>();
-		negativeImpacts1.add("4");
+		negativeImpacts1.add("completeness");
 		
 		Vector<Cost> costs = new Vector<Cost>();
 		Cost cost1= new Cost();
 		cost1.setType("monetary");
 		cost1.setUnit("dollars/MB");
-		cost1.setValue(15.0);
+		cost1.setValue(50.0);
 		costs.add(cost1);
 		
 		Cost cost2= new Cost();
@@ -302,12 +417,12 @@ public class ManageVDCTest {
 		costs.add(cost2);
 		
 		Movement movement1 =  new Movement();
-		movement1.setPositiveImpacts(positiveImpacts1);
-		movement1.setNegativeImpacts(negativeImpacts1);
+		movement1.setPositiveImpacts(positiveImpacts1);//impacts are not considered in the comparison of data movement (extension of "equals" interface)
+		movement1.setNegativeImpacts(negativeImpacts1);//impacts are not considered in the comparison of data movement (extension of "equals" interface)
 		movement1.setFrom("Edge");
 		movement1.setTo("Cloud");
 		movement1.setRestTime(12.);
-		movement1.setType("ComputationMovement");
+		movement1.setType("DataMovement");
 		movement1.setCosts(costs);
 		//end set up movement
 		
@@ -320,7 +435,7 @@ public class ManageVDCTest {
 		movement2.setRestTime(12.);
 		movement2.setType("ComputationMovement");
 		movement2.setCosts(costs);
-		//end setup movment
+		//end setup movement
 		
 		movementsToBeEnacted.add(movement1);
 		movementsToBeEnacted.add(movement2);
@@ -337,17 +452,18 @@ public class ManageVDCTest {
 	 * 
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
     public void chechOtherVDC_CorrectMiddlePosiotion() throws IOException 
 	{
 		
+		//*** set up other VDC ( it takes the complete one, not necessary)
 		//parse blueprint
 		String concreteBlueprintJSON;
 		
 		try 
 		{
 			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
+			concreteBlueprintJSON=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -361,24 +477,77 @@ public class ManageVDCTest {
 		
 		//retrieve DATA MANAGEMENT
 		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		DataManagement dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
+		ArrayList<DataManagement> dataManagement; 
+		try {
+			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+			dataManagement = new ArrayList<DataManagement>(Arrays.asList(mapper.treeToValue(dataManagementJson, DataManagement[].class)));
+		}
+		
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}
+		
+		//retrieve ABSTRACT_PROPERTIES
+		JsonNode abstractPropertiesJson = root.get("ABSTRACT_PROPERTIES");
+		ArrayList<AbstractProperty> abstractProperties; 
+		try {
+			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+			abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
+		}
+		
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}		
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		Vector<DataSource> dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+		Vector<DataSource> dataSources;
+		try {
+			dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+		}
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}
 		
 		//retrieve movement classes
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
+
+	    //instantiate movement classes for each data source
+		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString()); 
+	    if (instantiatedMovements==null)
+	    {
+			return;
+	    }
 	    
-	    //instantiate movement classes for each data source 
-	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON);
+	    
+	    //retrieve VDC name
+		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
+		String vdcName;
+		try {
+			vdcName = mapper.treeToValue(vdcNameJSON, String.class);
+		}
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}
 		
 		
 		//set up vdc
 		VDC vdc = new VDC();
 		vdc.setDataManagement(dataManagement);
+		vdc.setAbstractProperties(abstractProperties);
 		vdc.setDataSources(dataSources);
-		vdc.setId("01");
+		vdc.setMovements(instantiatedMovements);
+		vdc.connectAbstractProperties();
+		vdc.setId(vdcName);
+		//*** end set up other VDC
 
 		
 		//create a collection of vdcs
@@ -397,20 +566,22 @@ public class ManageVDCTest {
 		Vector<Movement> movementsToBeEnacted = new Vector<Movement>();
 		
 		//set up the first movement
-		//the other VDC contain a movement similar to this one ( the same except the impacts) so this movement is selected on the other VDC (in set movementsToBeEnactedOtherVDC)
-		//the other movement as an impact on a goal (id=4) that has no positive linked associated, so this data movement will be moved back in the list
+		//the data movement selected (movements to be enacted) are two. 
+		//movement1 has a negative impact to "id=completeness" so the function "checkOtherVDC" checks if the movement action has impact on other vdc. in this case the set of "other VDC" is composed of
+		//the "complete VDC" set up in the beginning of this test. such VDC has a similar data movement with only negative impact in the goal "id=completeness". so the movement 1 should be moved behind.
+		//movemen2 should be left untouched since there is no similar data movement
 		
 		Vector<String> positiveImpacts1 = new Vector<String>();
-		positiveImpacts1.add("1");//positive impacts are not considered for the movement to be enacted 
+		positiveImpacts1.add("AAA");//positive impacts are not considered for the movement to be enacted 
 		
 		Vector<String> negativeImpacts1 = new Vector<String>();
-		negativeImpacts1.add("4");
+		negativeImpacts1.add("completeness");
 		
 		Vector<Cost> costs = new Vector<Cost>();
 		Cost cost1= new Cost();
 		cost1.setType("monetary");
 		cost1.setUnit("dollars/MB");
-		cost1.setValue(15.0);
+		cost1.setValue(50.0);
 		costs.add(cost1);
 		
 		Cost cost2= new Cost();
@@ -420,12 +591,12 @@ public class ManageVDCTest {
 		costs.add(cost2);
 		
 		Movement movement1 =  new Movement();
-		movement1.setPositiveImpacts(positiveImpacts1);
-		movement1.setNegativeImpacts(negativeImpacts1);
+		movement1.setPositiveImpacts(positiveImpacts1);//impacts are not considered in the comparison of data movement (extension of "equals" interface)
+		movement1.setNegativeImpacts(negativeImpacts1);//impacts are not considered in the comparison of data movement (extension of "equals" interface)
 		movement1.setFrom("Edge");
 		movement1.setTo("Cloud");
 		movement1.setRestTime(12.);
-		movement1.setType("ComputationMovement");
+		movement1.setType("DataMovement");
 		movement1.setCosts(costs);
 		//end set up movement
 		

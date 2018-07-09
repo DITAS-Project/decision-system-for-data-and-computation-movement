@@ -38,6 +38,8 @@ public class GoalTreeManager {
         
 		//retrieve the method that violated from the vdc
 		AbstractProperty abstractProperty = null;
+		
+		//find the method that violated the requirements
 		for (AbstractProperty abstractPropertyExamined : violatedVDC.getAbstractProperties())
 		{
 			if (abstractPropertyExamined.getMethod_id().equals(violation.getMethodID()))
@@ -100,7 +102,7 @@ public class GoalTreeManager {
 			{
 				for (Map.Entry<String, Property>  property : attribute.getProperties().entrySet())
 				{
-					if (property.getKey().equals(violation.getMetric()))//check the violation name is the same. TODO: when i will include multiple violation  before this i will need a "foreach" for each violation 
+					if (property.getKey().toString().toLowerCase().equals(violation.getMetric().toLowerCase()))//check the violation name is the same. TODO: when i will include multiple violation  before this i will need a "foreach" for each violation 
 						//i assume that if ""minimum or maximum are set then value is a number ( Double)
 						if (property.getValue().getMinimum()!=null && property.getValue().getMaximum()==null && property.getValue().getMinimum() >= Double.parseDouble(violation.getValue()))
 							violatedGoals.add(leaf);//skip duplicated goals, no problems for false positives since all properties are in AND.
