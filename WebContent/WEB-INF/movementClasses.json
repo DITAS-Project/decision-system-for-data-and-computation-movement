@@ -2,24 +2,24 @@
     "movements":
         [
             {
-                "type":"ComputationMovement",
+                "type":"DataMovement",
                 "from":"Edge",
                 "to":"Cloud",
                 "restTime":"12",
-                "positiveImpacts":["1","2","4"],
-                "negativeImpacts":["1","2","4"],
+                "positiveImpacts":["fastDataStreaming","dataVolume"],
+                "negativeImpacts":["completeness"],
                 "transformations":
                 [
                     {
                     "type":"Encryption",
-                    "positiveImpacts":["1","2","4"],
-                    "negativeImpacts":["1","2","4"],
+	                "positiveImpacts":["fastDataStreaming","dataVolume"],
+	                "negativeImpacts":["completeness"],
                     "costs":
                         [
                             {
                                 "type":"monetary",
                                 "unit":"dollars/MB",
-                                "value":12.0
+                                "value":50.0
                             },
                             {
                                 "type":"time",
@@ -30,8 +30,8 @@
                     },
                     {
                     "type":"Aggregation",
-                    "positiveImpacts":["1","2","4"],
-                    "negativeImpacts":["1","2","4"],
+	                "positiveImpacts":["fastDataStreaming","dataVolume"],
+	                "negativeImpacts":["completeness"],
                     "costs":
                         [
                             {
@@ -65,15 +65,15 @@
                 "type":"DataDuplication",
                 "from":"Cloud",
                 "to":"Edge",
-                "positiveImpacts":["1","2","4"],
-                "negativeImpacts":["1","2","4"],
+                "positiveImpacts":["serviceAvailable","fastDataProcess"],
+                "negativeImpacts":["fastDataStreaming","dataVolume"],
                 "restTime":"15",
                 "transformations":
                 [
                     {
                     "type":"Encryption",
-                    "positiveImpacts":["1","2","4"],
-                    "negativeImpacts":["1","2","4"],
+	                "positiveImpacts":["serviceAvailable","fastDataProcess"],
+	                "negativeImpacts":["fastDataStreaming","dataVolume"],
                     "costs":
                         [
                             {
@@ -90,8 +90,8 @@
                     },
                     {
                     "type":"Aggregation",
-                    "positiveImpacts":["1","2","4"],
-                    "negativeImpacts":["1","2","4"],
+	                "positiveImpacts":["serviceAvailable","fastDataProcess"],
+	                "negativeImpacts":["fastDataStreaming","dataVolume"],
                     "costs":
                         [
                             {

@@ -2,6 +2,9 @@ package it.polimi.deib.ds4m.main.model.movement;
 
 import java.util.Vector;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Movement 
@@ -10,6 +13,13 @@ public class Movement
 	private String from;
 	private String to;
 	private double restTime;
+	
+	
+	//linked to data source class, when the movement is instantiated
+	@JsonIgnore
+	private DataSource fromLinked;
+	@JsonIgnore
+	private DataSource toLinked;
 	
 	private Vector<String> positiveImpacts; //list of IDs of goals with a positive impact
 	private Vector<String> negativeImpacts; //list of IDs of goals with a negative impact
@@ -215,6 +225,34 @@ public class Movement
             append(costs).
             toHashCode();
     }
+
+	/**
+	 * @return the fromLinked
+	 */
+	public DataSource getFromLinked() {
+		return fromLinked;
+	}
+
+	/**
+	 * @param fromLinked the fromLinked to set
+	 */
+	public void setFromLinked(DataSource fromLinked) {
+		this.fromLinked = fromLinked;
+	}
+
+	/**
+	 * @return the toLinked
+	 */
+	public DataSource getToLinked() {
+		return toLinked;
+	}
+
+	/**
+	 * @param toLinked the toLinked to set
+	 */
+	public void setToLinked(DataSource toLinked) {
+		this.toLinked = toLinked;
+	}
 	
 
 }

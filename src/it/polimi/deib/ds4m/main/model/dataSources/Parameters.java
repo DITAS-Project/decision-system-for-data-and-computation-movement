@@ -1,6 +1,7 @@
 package it.polimi.deib.ds4m.main.model.dataSources;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Parameters {
 	
@@ -85,5 +86,62 @@ public class Parameters {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		//standard behavior of equals 
+	    if (obj == null) {
+	        return false;
+	    }
+	    
+	    if (!Parameters.class.isAssignableFrom(obj.getClass())) {
+	        return false;
+	    }
+	    
+	    //check all the fields
+	    final Parameters other = (Parameters) obj;	    
+	    if (!this.hostname.equals(other.getHostname()) ) {
+	        return false;
+	    }
+	    
+	    if (!this.port.equals(other.getPort()) ) {
+	        return false;
+	    }
+	    
+	    if (!this.proxy_hostname.equals(other.getProxy_hostname()) ) {
+	        return false;
+	    }
+	    
+	    if (!this.proxy_port.equals(other.getProxy_port()) ) {
+	        return false;
+	    }
+	    
+	    if (!this.username.equals(other.getUsername()) ) {
+	        return false;
+	    }
+	    
+	    if (!this.password.equals(other.getPassword()) ) {
+	        return false;
+	    }
+	    
+	    
+	    
+	    return true;
+	}
+	
+	//Whenever equals is modified, also hasCode has to be modified
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+            // if deriving: appendSuper(super.hashCode()).
+            append(hostname).
+            append(port).
+            append(proxy_hostname).
+            append(proxy_port).
+            append(username).
+            append(password).
+            toHashCode();
+    }	
+    
 }

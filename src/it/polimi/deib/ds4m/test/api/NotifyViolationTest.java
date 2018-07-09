@@ -68,7 +68,7 @@ public class NotifyViolationTest
 		violation1.setMetric("Availability");
 		violation1.setValue("90.0");
 		violation1.setMethodID("GetAllBloodTests");
-		violation1.setVdcID("01");
+		violation1.setVdcID("VDC_2");
 		
 		violationsVector.add(violation1);
 		
@@ -77,10 +77,10 @@ public class NotifyViolationTest
 		violation2.setAgreementid(2);
 		violation2.setGuaranteename("guarantee name");
 		violation2.setDate("12/01");
-		violation2.setMetric("ResponseTime");
-		violation2.setValue("5.0");
+		violation2.setMetric("volume");
+		violation2.setValue("200");
 		violation2.setMethodID("GetAllBloodTests");
-		violation2.setVdcID("01");
+		violation2.setVdcID("VDC_2");
 		
 		violationsVector.add(violation2);
 	

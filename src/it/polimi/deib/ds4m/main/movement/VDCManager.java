@@ -66,30 +66,19 @@ public class VDCManager
 				//set of movement ( hash set since i need only 1 movement per type in 1 method ( if the input is well formed, there shouldn't be more then 1)
 				HashSet <Movement> movementsToBeEnactedOtherVDC = new HashSet <>();
 				
-				//set of all movement for all the data sources
-				ArrayList<Movement> allMovements = new ArrayList<Movement>();
-				
 				//select all possible data movements ( which are stored in the data sources objects)
-				for (DataSource dataSource : vdc.getDataSources())
+				
+				//remove, from all possible movement of the data source, of the VDC, all movements that will not be enacted (vhecking if the name)
+				//iterate over the names and check if the selected movement is equal to the movement to be enacted 
+				for (Movement movement : vdc.getMovements())
 				{
-					Vector<Movement> movements = dataSource.getMovements();
-					
-					//add to the list of all movement
-					allMovements.addAll(movements);
-					
-					//remove, from all possible movement of the data source, of the VDC, all movements that will not be enacted (vhecking if the name)
-					//iterate over the names and check if the selected movement is equal to the movement to be enacted 
-					for (Movement movement : movements)
+					for (Movement movementToBeEnacted : movementsToBeEnacted )
 					{
-						for (Movement movementToBeEnacted : movementsToBeEnacted )
-						{
-							//if the movement of the data source of the other VDC correspond to a movement that will be enacted, then it will be considered 
-							if (movement.equals(movementToBeEnacted))
-								movementsToBeEnactedOtherVDC.add(movement);
-						}
+						//if the movement of the data source of the other VDC correspond to a movement that will be enacted, then it will be considered 
+						if (movement.equals(movementToBeEnacted))
+							movementsToBeEnactedOtherVDC.add(movement);
 					}
 				}
-					
 				//at this point all movements that corresponds to the ones that can be enacted in the original VDC, are selected.  
 				
 				//check if there is a goal that has only negative impact for a movement, if yes put the movement in the back
@@ -106,7 +95,7 @@ public class VDCManager
 					for (String negativeImpact : negativeImpacts)
 					{
 						//check if there is any data movement that has any positive impacts
-						for (Movement movementforPositiveImpact : allMovements)
+						for (Movement movementforPositiveImpact : vdc.getMovements())
 						{
 							//if there is a positive impact then remove the goal
 							if (movementforPositiveImpact.getPositiveImpacts().contains(negativeImpact))

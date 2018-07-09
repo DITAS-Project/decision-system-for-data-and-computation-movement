@@ -1,6 +1,7 @@
 package it.polimi.deib.ds4m.main.movement;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,39 +37,56 @@ public class MovementsActionsManager
 	
 	/**
 	 * The method instantiate the movement actions given a set of movement classes a set of data sources. 
-	 * In particular, it creates a deep copy, by de-serializing the JSON of the movement classes, and assigning it to eachdata source 
+	 * In particular, it creates a deep copy, by de-serializing the JSON of the movement classes, and assigning it to each data source 
 	 * 
 	 * @param dataSources set of data sources
 	 * @param movementsJSON JSON representing the movement action classes
-	 * @return true if the instantiation was correct, false otherwise
+	 * @return The array list of instantiated movements, null if problems arise
 	 */
-	public static Boolean instantiateMovementActions(List<DataSource> dataSources, String movementsJSON) 
+	public static ArrayList<Movement> instantiateMovementActions(List<DataSource> dataSources, String movementsJSON) 
 	{
+		//the container for the instantiated movement
+		ArrayList<Movement> movements = new ArrayList<Movement>();
+		
 		//deep copy movements, done be de-serializing time by time 
 		//convert the json in object
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode root;
+		
 		try {
 			root = mapper.readTree(movementsJSON);
 			
 			//retrieve movements
-			JsonNode movementNode = root.get("movements");		
-			Vector<Movement> movements;
+			JsonNode movementNode = root.get("movements");
 			
 			//assigned copied 
-			for(DataSource dataSource: dataSources)
+			for(DataSource dataSource_source: dataSources)
 			{
-				movements = new Vector<Movement> (Arrays.asList(mapper.treeToValue(movementNode, Movement[].class)));
-				dataSource.setMovements(movements);
-				movements = null;
+				for(DataSource dataSource_target: dataSources)
+				{
+					//if it is the same data source don't instantiate data movement action
+					if (dataSource_source.equals(dataSource_target))
+						continue;
+
+					ArrayList<Movement> newMovements = new ArrayList<Movement> (Arrays.asList(mapper.treeToValue(movementNode, Movement[].class)));
+					//set target and source
+					for (Movement movement: newMovements)
+					{
+						movement.setFromLinked(dataSource_source);
+						movement.setToLinked(dataSource_target);
+					}
+					
+					//add to list of data movement action 
+					movements.addAll(newMovements);
+				}
 			}
 			
-			return true;
+			return movements;
 			
 		} catch (IOException e) 
 		{
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 
 	}
@@ -85,28 +103,20 @@ public class MovementsActionsManager
 		//retrieve the data sources used by the method
 		//TODO: to insert binding in blueprint
 		//TODO: to consider transformations
-		Vector<DataSource> dataSources = vdc.getDataSources();
 		
 		//create vector of movements to be enacted 
 		Vector<Movement> movementsToBeEnacted = new Vector<Movement>();
 		
-		//for each data source involved in the method
-		for (DataSource dataSource : dataSources)
+		//for each movements check if it has a positive impact on the goal
+		for (Movement movement : vdc.getMovements())
 		{
-			//retrieve the movements
-			Vector<Movement> movements = dataSource.getMovements();
-			
-			//for each movements check if it has a positive impact on the goal
-			for (Movement movement : movements)
+			//for each impact, check if present in the list of violated goals
+			for (String impact : movement.getPositiveImpacts())
 			{
-				//for each impact, check if present in the list of violated goals
-				for (String impact : movement.getPositiveImpacts())
+				for(Goal goal: violatedGoals)
 				{
-					for(Goal goal: violatedGoals)
-					{
-						if (impact.equals(goal.getID()))
-							movementsToBeEnacted.add(movement);
-					}
+					if (impact.equals(goal.getID()))
+						movementsToBeEnacted.add(movement);
 				}
 			}
 		}
@@ -132,7 +142,7 @@ public class MovementsActionsManager
 				Collections.sort(movementsToBeEnacted, new MovementsActionsManager().new TimeCostComparator());
 				break;
 			case POSITIVEIMPACTS:
-				System.err.println("positive impact ordering non implemented yet");
+				System.err.println(" 'positive impact' ordering non implemented yet");
 				break;
 			default:
 				break;

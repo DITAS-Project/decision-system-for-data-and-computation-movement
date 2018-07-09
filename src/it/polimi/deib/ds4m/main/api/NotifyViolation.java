@@ -94,7 +94,7 @@ public class NotifyViolation extends HttpServlet {
 	        Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 	        if (violatedGoals==null)
 	        {
-	        	System.err.println("NotifyViolation: No violated goals found");
+	        	System.out.println("NotifyViolation: No violated goals found");
 	        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	        	return;
 	        }

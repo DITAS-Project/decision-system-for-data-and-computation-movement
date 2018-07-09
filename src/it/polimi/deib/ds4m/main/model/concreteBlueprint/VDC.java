@@ -3,7 +3,10 @@ package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
+import it.polimi.deib.ds4m.main.model.movement.Movement;
 
 public class VDC 
 {	
@@ -12,6 +15,9 @@ public class VDC
 	private ArrayList<AbstractProperty> abstractProperties;
 	private Vector<DataSource> DataSources;
 	private String id;
+	
+    @JsonIgnore
+    private ArrayList<Movement> movements;
 	
 	
 	/**
@@ -129,6 +135,19 @@ public class VDC
 				
 	}
 
+	
+	/**
+	 * @return the movements
+	 */
+	public ArrayList<Movement> getMovements() {
+		return movements;
+	}
+	/**
+	 * @param movements the movements to set
+	 */
+	public void setMovements(ArrayList<Movement> movements) {
+		this.movements = movements;
+	}
 	
 	
 	

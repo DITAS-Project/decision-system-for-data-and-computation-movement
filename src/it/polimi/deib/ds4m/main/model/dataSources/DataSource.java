@@ -1,19 +1,14 @@
 package it.polimi.deib.ds4m.main.model.dataSources;
 
-import java.util.Vector;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import it.polimi.deib.ds4m.main.model.movement.Movement;
+import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class DataSource 
 {
 	private String name;
 	private String type;
 	private Parameters parameters;
-    
-    @JsonIgnore
-    private Vector<Movement> movements;
+ 
     
 	/**
 	 * @return the name
@@ -51,17 +46,48 @@ public class DataSource
 	public void setParameters(Parameters parameters) {
 		this.parameters = parameters;
 	}
-	/**
-	 * @return the movements
-	 */
-	public Vector<Movement> getMovements() {
-		return movements;
+	
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		//standard behavior of equals 
+	    if (obj == null) {
+	        return false;
+	    }
+	    
+	    if (!DataSource.class.isAssignableFrom(obj.getClass())) {
+	        return false;
+	    }
+	    
+	    //check all the fields
+	    final DataSource other = (DataSource) obj;	  
+	    
+	    if (!this.name.equals(other.getName()) ) {
+	        return false;
+	    }
+	    
+	    if (!this.type.equals(other.getType()) ) {
+	        return false;
+	    }
+	    
+	    if (!this.parameters.equals(other.getParameters()) ) {
+	        return false;
+	    }
+
+	    
+	    return true;
 	}
-	/**
-	 * @param movements the movements to set
-	 */
-	public void setMovements(Vector<Movement> movements) {
-		this.movements = movements;
-	}
+	
+	//Whenever equals is modified, also hasCode has to be modified
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+            // if deriving: appendSuper(super.hashCode()).
+            append(name).
+            append(type).
+            append(parameters).
+            toHashCode();
+    }
 
 }

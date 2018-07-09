@@ -26,6 +26,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
+import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 
 /**
@@ -124,12 +125,14 @@ public class AddVDC extends HttpServlet {
 			return;
 		}
 		
-	    //instantiate movement classes for each data source 
-	    if (!MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString()))
+	    //instantiate movement classes for each data source
+		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString()); 
+	    if (instantiatedMovements==null)
 	    {
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			return;
 	    }
+	    
 	    
 	    //retrieve VDC name
 		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
@@ -148,6 +151,7 @@ public class AddVDC extends HttpServlet {
 		vdc.setDataManagement(dataManagement);
 		vdc.setAbstractProperties(abstractProperties);
 		vdc.setDataSources(dataSources);
+		vdc.setMovements(instantiatedMovements);
 		vdc.connectAbstractProperties();
 		vdc.setId(vdcName);
 		

@@ -216,7 +216,7 @@
 							"ramGain": 
 							{
 								"unit": "percentage",
-								"value": "50"
+								"value": "150"
 							},
 							"ramLimit": 
 							{
@@ -234,7 +234,7 @@
 							"spaceGain": 
 							{
 								"unit": "percentage",
-								"value": "10"
+								"value": "110"
 							},
 							"spaceLimit":     
 							{
