@@ -615,7 +615,7 @@ public class ManageVDCTest {
 		Movement movement0 =  new Movement();
 		movement0.setPositiveImpacts(positiveImpacts1);
 		movement0.setNegativeImpacts(negativeImpacts1);
-		movement0.setFrom("AAA");//no movement with this parameter in other VDC
+		movement0.setFrom("CCC");//no movement with this parameter in other VDC
 		movement0.setTo("BBB");//no movement with this parameter in other VDC
 		movement0.setRestTime(12.);
 		movement0.setType("ComputationMovement");

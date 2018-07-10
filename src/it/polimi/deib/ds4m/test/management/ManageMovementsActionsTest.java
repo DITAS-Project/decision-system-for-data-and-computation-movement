@@ -2,20 +2,27 @@ package it.polimi.deib.ds4m.test.management;
 
 import static org.junit.Assert.assertTrue;
 
-
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
+import org.apache.http.HttpStatus;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.Utility;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
@@ -32,7 +39,7 @@ public class ManageMovementsActionsTest
 	 *  
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
 	public void instantiateMovementActions_correct_checkSize() throws IOException
 	{
 		//parse blueprint
@@ -40,8 +47,7 @@ public class ManageMovementsActionsTest
 		
 		try 
 		{
-			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
+			concreteBlueprintJSON=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -62,70 +68,13 @@ public class ManageMovementsActionsTest
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
 	    
 	    //instantiate movement classes for each data source 
-	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON);
+	    ArrayList<Movement> movements = MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON);
 	    
-	    //2 data sources and 2 moment action classes so 4 data movement action instance 
- 	    assertTrue(dataSources.get(0).getMovements().size()==2);
- 	    assertTrue(dataSources.get(1).getMovements().size()==2);
+	    //2 data sources and 2 moment action classes so 4 data movement action instances 
+ 	    assertTrue(movements.size()==4);
 
  	    
  	    
-	}
-	
-	/**
-	 * Test if the movement action generated are correct
-	 * 
-	 * @throws IOException
-	 */
-	//@Test
-	public void instantiateMovementActions_correct_checkContent () throws IOException
-	{
-		//parse blueprint
-		String concreteBlueprintJSON;
-		
-		try 
-		{
-			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
-			
-		} catch (IOException e) 
-		{
-			System.err.println("error in reading file applicationRequiorements");
-			return;
-		}
-		
-		//convert the json in object
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(concreteBlueprintJSON);
-		
-		//retrieve data sources
-		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		Vector<DataSource> dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
-		
-		
-		//retrieve movement classes
-	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
-	    
-	    //instantiate movement classes for each data source 
-	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON);
-	    
- 	    
- 	    //data movement instance consists of copy  of movement classes
- 
-		try {
-			root = mapper.readTree(movementsJSON);
-			
-			//retrieve movements
-			JsonNode movementNode = root.get("movements");		
- 	    
-			Vector<Movement> movements = new Vector<Movement> (Arrays.asList(mapper.treeToValue(movementNode, Movement[].class)));
-			
-			assertTrue(dataSources.get(0).getMovements().equals(movements));
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
 	}
 	
 	/**
@@ -133,7 +82,7 @@ public class ManageMovementsActionsTest
 	 * 
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
 	public void findMovementAction_correct_checkSize () throws IOException
 	{
 		//parse blueprint
@@ -142,7 +91,7 @@ public class ManageMovementsActionsTest
 		try 
 		{
 			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
+			concreteBlueprintJSON=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -156,36 +105,89 @@ public class ManageMovementsActionsTest
 		
 		//retrieve DATA MANAGEMENT
 		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		DataManagement dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
+		ArrayList<DataManagement> dataManagement; 
+		try {
+			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+			dataManagement = new ArrayList<DataManagement>(Arrays.asList(mapper.treeToValue(dataManagementJson, DataManagement[].class)));
+		}
+		
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}
+		
+		//retrieve ABSTRACT_PROPERTIES
+		JsonNode abstractPropertiesJson = root.get("ABSTRACT_PROPERTIES");
+		ArrayList<AbstractProperty> abstractProperties; 
+		try {
+			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+			abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
+		}
+		
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}		
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		Vector<DataSource> dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+		Vector<DataSource> dataSources;
+		try {
+			dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+		}
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}
 		
 		//retrieve movement classes
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
 		
-	    //instantiate movement classes for each data source 
-	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString() );
+	    //instantiate movement classes for each data source
+		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString()); 
+	    if (instantiatedMovements==null)
+	    {
+			return;
+	    }
 	    
+	    
+	    //retrieve VDC name
+		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
+		String vdcName;
+		try {
+			vdcName = mapper.treeToValue(vdcNameJSON, String.class);
+		}
+		catch (JsonProcessingException e) 
+		{
+			return;			
+		}
+		
+		
 		//set up vdc
 		VDC vdc = new VDC();
 		vdc.setDataManagement(dataManagement);
+		vdc.setAbstractProperties(abstractProperties);
 		vdc.setDataSources(dataSources);
-		vdc.setId("ID");
-		
+		vdc.setMovements(instantiatedMovements);
+		vdc.connectAbstractProperties();
+		vdc.setId(vdcName);
+	    
+
 		//set violated goals
 		
 		Set<Goal> violatedGoals = new HashSet<Goal>();
 		Goal g1 = new Goal();
-		g1.setID("1");
+		g1.setID("dataVolume");
 
 		violatedGoals.add(g1);
 		
 
 		Vector<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals,  vdc);
 
-		//TODO: important: not i don't filter data sources so I got 4, with the filtering this might change.
+		//TODO: important: data sources are not filtered by capabilities, so I got 4, with the filtering this might change.
 		assertTrue(movementsToBeEnacted.size()==4);
 	}
 	
@@ -194,7 +196,7 @@ public class ManageMovementsActionsTest
 	 * 
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
 	public void findMovementAction_correct_checkContent () throws IOException
 	{
 		//parse blueprint
@@ -203,7 +205,7 @@ public class ManageMovementsActionsTest
 		try 
 		{
 			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
+			concreteBlueprintJSON=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -217,23 +219,76 @@ public class ManageMovementsActionsTest
 		
 		//retrieve DATA MANAGEMENT
 		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		DataManagement dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
+		ArrayList<DataManagement> dataManagement; 
+		try {
+			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+			dataManagement = new ArrayList<DataManagement>(Arrays.asList(mapper.treeToValue(dataManagementJson, DataManagement[].class)));
+		}
+		
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}
+		
+		//retrieve ABSTRACT_PROPERTIES
+		JsonNode abstractPropertiesJson = root.get("ABSTRACT_PROPERTIES");
+		ArrayList<AbstractProperty> abstractProperties; 
+		try {
+			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+			abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
+		}
+		
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}		
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		Vector<DataSource> dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+		Vector<DataSource> dataSources;
+		try {
+			dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+		}
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}
 		
 		//retrieve movement classes
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
 		
-	    //instantiate movement classes for each data source 
-	    MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString() );
+	    //instantiate movement classes for each data source
+		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString()); 
+	    if (instantiatedMovements==null)
+	    {
+			return;
+	    }
 	    
+	    
+	    //retrieve VDC name
+		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
+		String vdcName;
+		try {
+			vdcName = mapper.treeToValue(vdcNameJSON, String.class);
+		}
+		catch (JsonProcessingException e) 
+		{
+			return;			
+		}
+		
+		
 		//set up vdc
 		VDC vdc = new VDC();
 		vdc.setDataManagement(dataManagement);
+		vdc.setAbstractProperties(abstractProperties);
 		vdc.setDataSources(dataSources);
-		vdc.setId("ID");
+		vdc.setMovements(instantiatedMovements);
+		vdc.connectAbstractProperties();
+		vdc.setId(vdcName);
+	
 		
 		//set violated goals
 		
@@ -264,7 +319,7 @@ public class ManageMovementsActionsTest
 		try 
 		{
 			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
+			concreteBlueprintJSON=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -358,7 +413,7 @@ public class ManageMovementsActionsTest
 		try 
 		{
 			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
+			concreteBlueprintJSON=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
