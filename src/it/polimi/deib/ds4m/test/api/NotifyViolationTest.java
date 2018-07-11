@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -58,7 +57,7 @@ public class NotifyViolationTest
 		//set up violations
 		violations = new Violations();
 		
-		Vector<Violation> violationsVector = new Vector<Violation>();
+		ArrayList<Violation> violationsArrayList = new ArrayList<Violation>();
 		
 		Violation violation1 = new Violation();
 		violation1.setType("violation type");
@@ -70,7 +69,7 @@ public class NotifyViolationTest
 		violation1.setMethodID("GetAllBloodTests");
 		violation1.setVdcID("VDC_2");
 		
-		violationsVector.add(violation1);
+		violationsArrayList.add(violation1);
 		
 		Violation violation2 = new Violation();
 		violation2.setType("violation type");
@@ -82,10 +81,10 @@ public class NotifyViolationTest
 		violation2.setMethodID("GetAllBloodTests");
 		violation2.setVdcID("VDC_2");
 		
-		violationsVector.add(violation2);
+		violationsArrayList.add(violation2);
 	
 		
-		violations.setViolations(violationsVector);
+		violations.setViolations(violationsArrayList);
 		
 	} 
     

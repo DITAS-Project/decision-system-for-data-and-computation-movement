@@ -1,6 +1,5 @@
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
-import java.util.Vector;
 
 public class DataManagement 
 {

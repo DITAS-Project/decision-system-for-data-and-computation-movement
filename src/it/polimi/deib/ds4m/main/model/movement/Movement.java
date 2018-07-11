@@ -1,6 +1,6 @@
 package it.polimi.deib.ds4m.main.model.movement;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -21,24 +21,24 @@ public class Movement
 	@JsonIgnore
 	private DataSource toLinked;
 	
-	private Vector<String> positiveImpacts; //list of IDs of goals with a positive impact
-	private Vector<String> negativeImpacts; //list of IDs of goals with a negative impact
+	private ArrayList<String> positiveImpacts; //list of IDs of goals with a positive impact
+	private ArrayList<String> negativeImpacts; //list of IDs of goals with a negative impact
 	
-	private Vector<Transformation> transformations;
+	private ArrayList<Transformation> transformations;
 	
-	private Vector<Cost> costs;
+	private ArrayList<Cost> costs;
 
 	//default creator
 	public Movement()
 	{
-		positiveImpacts = new Vector<String>();
-		negativeImpacts = new Vector<String>();
+		positiveImpacts = new ArrayList<String>();
+		negativeImpacts = new ArrayList<String>();
 		
-		transformations = new Vector<Transformation>();
+		transformations = new ArrayList<Transformation>();
 		
 	}
 	
-	public Movement(String type, String from, String to, Vector<String> positiveImpacts, Vector<String> negativeImpacts, Vector<Transformation> transformations, Vector<Cost> costs, double restTime ) 
+	public Movement(String type, String from, String to, ArrayList<String> positiveImpacts, ArrayList<String> negativeImpacts, ArrayList<Transformation> transformations, ArrayList<Cost> costs, double restTime ) 
 	{
 		this.type=type;
 		this.from=from;
@@ -81,56 +81,56 @@ public class Movement
 	/**
 	 * @return the positiveImpacts
 	 */
-	public Vector<String> getPositiveImpacts() {
+	public ArrayList<String> getPositiveImpacts() {
 		return positiveImpacts;
 	}
 
 	/**
 	 * @param positiveImpacts the positiveImpacts to set
 	 */
-	public void setPositiveImpacts(Vector<String> positiveImpacts) {
+	public void setPositiveImpacts(ArrayList<String> positiveImpacts) {
 		this.positiveImpacts = positiveImpacts;
 	}
 
 	/**
 	 * @return the negativeImpacts
 	 */
-	public Vector<String> getNegativeImpacts() {
+	public ArrayList<String> getNegativeImpacts() {
 		return negativeImpacts;
 	}
 
 	/**
 	 * @param negativeImpacts the negativeImpacts to set
 	 */
-	public void setNegativeImpacts(Vector<String> negativeImpacts) {
+	public void setNegativeImpacts(ArrayList<String> negativeImpacts) {
 		this.negativeImpacts = negativeImpacts;
 	}
 
 	/**
 	 * @return the transformations
 	 */
-	public Vector<Transformation> getTransformations() {
+	public ArrayList<Transformation> getTransformations() {
 		return transformations;
 	}
 
 	/**
 	 * @param transformations the transformations to set
 	 */
-	public void setTransformations(Vector<Transformation> transformations) {
+	public void setTransformations(ArrayList<Transformation> transformations) {
 		this.transformations = transformations;
 	}
 
 	/**
 	 * @return the costs
 	 */
-	public Vector<Cost> getCosts() {
+	public ArrayList<Cost> getCosts() {
 		return costs;
 	}
 
 	/**
 	 * @param costs the costs to set
 	 */
-	public void setCosts(Vector<Cost> costs) {
+	public void setCosts(ArrayList<Cost> costs) {
 		this.costs = costs;
 	}
 

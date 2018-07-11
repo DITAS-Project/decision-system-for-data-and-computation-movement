@@ -2,36 +2,16 @@ package it.polimi.deib.ds4m.test.management;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Vector;
 
-import org.apache.http.HttpStatus;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import it.polimi.deib.ds4m.main.Utility;
 import it.polimi.deib.ds4m.main.model.Violation;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.GoalTree;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.Attribute;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.Property;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
-import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Cost;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
-import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 import it.polimi.deib.ds4m.main.movement.VDCManager;
 
 public class ManageVDCTest {
@@ -61,10 +41,10 @@ public class ManageVDCTest {
 		vdc.setId("01");
 		
 		//if it is not set create a collection of appl.s requirements
-		Vector<VDC> VDCs = new Vector<VDC>();
+		ArrayList<VDC> VDCs = new ArrayList<VDC>();
 		
 		//add the application requirements 
-		VDCs.addElement(vdc);
+		VDCs.add(vdc);
 		
 		
 		//identify VDC
@@ -100,10 +80,10 @@ public class ManageVDCTest {
 		vdc.setId("01");
 		
 		//if it is not set create a collection of appl.s requirements
-		Vector<VDC> VDCs = new Vector<VDC>();
+		ArrayList<VDC> VDCs = new ArrayList<VDC>();
 		
 		//add the application requirements 
-		VDCs.addElement(vdc);
+		VDCs.add(vdc);
 		
 		
 		//identify VDC
@@ -127,10 +107,10 @@ public class ManageVDCTest {
 
 		
 		//create a collection of vdcs
-		Vector<VDC> VDCs = new Vector<VDC>();
+		ArrayList<VDC> VDCs = new ArrayList<VDC>();
 		
 		//add the application requirements 
-		VDCs.addElement(vdc);
+		VDCs.add(vdc);
 	    
         
 		//set up the vdc selected ( it needs only the id)
@@ -142,7 +122,7 @@ public class ManageVDCTest {
 		ArrayList<Movement> movementsToBeEnacted = new ArrayList<Movement>();
 		
 		//set up the first movement
-		Vector<Cost> costs = new Vector<Cost>();
+		ArrayList<Cost> costs = new ArrayList<Cost>();
 		Cost cost1= new Cost();
 		cost1.setType("monetary");
 		cost1.setUnit("dollars/MB");
@@ -199,10 +179,10 @@ public class ManageVDCTest {
 
 		
 		//create a collection of vdcs
-		Vector<VDC> VDCs = new Vector<VDC>();
+		ArrayList<VDC> VDCs = new ArrayList<VDC>();
 		
 		//add the application requirements 
-		VDCs.addElement(vdc);
+		VDCs.add(vdc);
 	    
         
 		//set up the vdc selected ( it needs only the id)
@@ -219,13 +199,13 @@ public class ManageVDCTest {
 		//the "complete VDC" set up in the beginning of this test. such VDC has a similar data movement with only negative impact in the goal "id=completeness". so the movement 1 should be moved behind.
 		//movemen2 should be left untouched since there is no similar data movement
 		
-		Vector<String> positiveImpacts1 = new Vector<String>();
+		ArrayList<String> positiveImpacts1 = new ArrayList<String>();
 		positiveImpacts1.add("AAA");//positive impacts are not considered for the movement to be enacted 
 		
-		Vector<String> negativeImpacts1 = new Vector<String>();
+		ArrayList<String> negativeImpacts1 = new ArrayList<String>();
 		negativeImpacts1.add("completeness");
 		
-		Vector<Cost> costs = new Vector<Cost>();
+		ArrayList<Cost> costs = new ArrayList<Cost>();
 		Cost cost1= new Cost();
 		cost1.setType("monetary");
 		cost1.setUnit("dollars/MB");
@@ -283,10 +263,10 @@ public class ManageVDCTest {
 
 		
 		//create a collection of vdcs
-		Vector<VDC> VDCs = new Vector<VDC>();
+		ArrayList<VDC> VDCs = new ArrayList<VDC>();
 		
 		//add the application requirements 
-		VDCs.addElement(vdc);
+		VDCs.add(vdc);
 	    
         
 		//set up the vdc selected ( it needs only the id)
@@ -303,13 +283,13 @@ public class ManageVDCTest {
 		//the "complete VDC" set up in the beginning of this test. such VDC has a similar data movement with only negative impact in the goal "id=completeness". so the movement 1 should be moved behind.
 		//movemen2 should be left untouched since there is no similar data movement
 		
-		Vector<String> positiveImpacts1 = new Vector<String>();
+		ArrayList<String> positiveImpacts1 = new ArrayList<String>();
 		positiveImpacts1.add("AAA");//positive impacts are not considered for the movement to be enacted 
 		
-		Vector<String> negativeImpacts1 = new Vector<String>();
+		ArrayList<String> negativeImpacts1 = new ArrayList<String>();
 		negativeImpacts1.add("completeness");
 		
-		Vector<Cost> costs = new Vector<Cost>();
+		ArrayList<Cost> costs = new ArrayList<Cost>();
 		Cost cost1= new Cost();
 		cost1.setType("monetary");
 		cost1.setUnit("dollars/MB");

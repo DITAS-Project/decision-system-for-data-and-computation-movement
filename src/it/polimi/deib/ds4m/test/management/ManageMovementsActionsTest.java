@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Vector;
 
 import org.junit.Test;
 
@@ -57,7 +56,7 @@ public class ManageMovementsActionsTest
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		Vector<DataSource> dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+		ArrayList<DataSource> dataSources = new ArrayList<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
 		
 		
 		//retrieve movement classes
@@ -161,7 +160,7 @@ public class ManageMovementsActionsTest
 			//for the first iteration only inspect the cost and find the right element
 			if (i==0)
 			{
-				Vector<Cost> costs= movementsToBeEnacted.get(i).getCosts();
+				ArrayList<Cost> costs= movementsToBeEnacted.get(i).getCosts();
 				for (int j =0; j < costs.size(); j++ )
 				{
 					if (costs.get(j).getType().equals("monetary"))
@@ -173,7 +172,7 @@ public class ManageMovementsActionsTest
 			}//if only one, automatically true
 			else//from the second iteration
 			{	
-				Vector<Cost> costs= movementsToBeEnacted.get(i).getCosts();
+				ArrayList<Cost> costs= movementsToBeEnacted.get(i).getCosts();
 				for (int j =0; j < costs.size(); j++ )
 				{
 					if (costs.get(j).getType().equals("monetary"))
@@ -222,7 +221,7 @@ public class ManageMovementsActionsTest
 			//for the first iteration only inspect the cost and find the right element
 			if (i==0)
 			{
-				Vector<Cost> costs= movementsToBeEnacted.get(i).getCosts();
+				ArrayList<Cost> costs= movementsToBeEnacted.get(i).getCosts();
 				for (int j =0; j < costs.size(); j++ )
 				{
 					if (costs.get(j).getType().equals("time"))
@@ -234,7 +233,7 @@ public class ManageMovementsActionsTest
 			}//if inly one, automatically true
 			else//from the second iteration
 			{	
-				Vector<Cost> costs= movementsToBeEnacted.get(i).getCosts();
+				ArrayList<Cost> costs= movementsToBeEnacted.get(i).getCosts();
 				for (int j =0; j < costs.size(); j++ )
 				{
 					if (costs.get(j).getType().equals("time"))
@@ -308,9 +307,9 @@ public class ManageMovementsActionsTest
 				
 				//retrieve data sources
 				JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-				Vector<DataSource> dataSources;
+				ArrayList<DataSource> dataSources;
 				try {
-					dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+					dataSources = new ArrayList<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
 				}
 				catch (JsonProcessingException e) 
 				{

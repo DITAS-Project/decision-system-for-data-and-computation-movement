@@ -13,7 +13,7 @@ public class VDC
 	//vector of requirements
 	private ArrayList<DataManagement> dataManagement;
 	private ArrayList<AbstractProperty> abstractProperties;
-	private Vector<DataSource> DataSources;
+	private ArrayList<DataSource> DataSources;
 	private String id;
 	
     @JsonIgnore
@@ -23,14 +23,14 @@ public class VDC
 	/**
 	 * @return the dataSources
 	 */
-	public Vector<DataSource> getDataSources() {
+	public ArrayList<DataSource> getDataSources() {
 		return DataSources;
 	}
 
 	/**
 	 * @param dataSources the dataSources to set
 	 */
-	public void setDataSources(Vector<DataSource> dataSources) {
+	public void setDataSources(ArrayList<DataSource> dataSources) {
 		DataSources = dataSources;
 	}
 
@@ -120,7 +120,7 @@ public class VDC
 	 * @param treeStructure
 	 * @param attributes
 	 */
-	private void connect(TreeStructure treeStructure, Vector<Attribute> attributes)
+	private void connect(TreeStructure treeStructure, ArrayList<Attribute> attributes)
 	{
 		if (treeStructure.getLeaves()==null)
 			for (TreeStructure cildren : treeStructure.getChildern())

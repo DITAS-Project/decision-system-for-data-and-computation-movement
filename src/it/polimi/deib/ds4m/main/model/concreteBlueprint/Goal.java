@@ -10,7 +10,7 @@ import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 @JsonIgnoreProperties(value = { "attributesLinked" })
 public class Goal 
 {
-	Vector<String> attributes;
+	ArrayList<String> attributes;
 	ArrayList<Attribute> attributesLinked;
 	String ID;
 	String description;
@@ -92,13 +92,13 @@ public class Goal
 	/**
 	 * @return the attributes
 	 */
-	public Vector<String> getAttributes() {
+	public ArrayList<String> getAttributes() {
 		return attributes;
 	}
 	/**
 	 * @param attributes the attributes to set
 	 */
-	public void setAttributes(Vector<String> attributes) {
+	public void setAttributes(ArrayList<String> attributes) {
 		this.attributes = attributes;
 	}
 	/**

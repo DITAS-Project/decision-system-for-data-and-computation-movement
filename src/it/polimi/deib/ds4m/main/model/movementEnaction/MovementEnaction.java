@@ -1,6 +1,6 @@
 package it.polimi.deib.ds4m.main.model.movementEnaction;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movement.Transformation;
@@ -9,7 +9,7 @@ public class MovementEnaction
 {
 	String from;
 	String to;
-	Vector<String> transformations;
+	ArrayList<String> transformations;
 	
 	/**
 	 * @return the from
@@ -38,13 +38,13 @@ public class MovementEnaction
 	/**
 	 * @return the transformations
 	 */
-	public Vector<String> getTransformations() {
+	public ArrayList<String> getTransformations() {
 		return transformations;
 	}
 	/**
 	 * @param transformations the transformations to set
 	 */
-	public void setTransformations(Vector<String> transformations) {
+	public void setTransformations(ArrayList<String> transformations) {
 		this.transformations = transformations;
 	}
 	
@@ -55,12 +55,12 @@ public class MovementEnaction
 		
 		
 		if (transformations==null)
-			transformations = new Vector<String>();
+			transformations = new ArrayList<String>();
 		
 		if (movement.getTransformations()!=null)	
 			for(Transformation transformationMovement : movement.getTransformations())
 			{
-				transformations.addElement(transformationMovement.getType());
+				transformations.add(transformationMovement.getType());
 			}
 	}
 

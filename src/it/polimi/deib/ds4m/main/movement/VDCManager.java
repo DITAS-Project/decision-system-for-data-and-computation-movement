@@ -3,14 +3,12 @@ package it.polimi.deib.ds4m.main.movement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Vector;
 
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
-import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 
 public class VDCManager 
@@ -23,7 +21,7 @@ public class VDCManager
 	 * @param VDCs the list of VDC
 	 * @return the violated VDC or null, if it is not found
 	 */
-	public static VDC findViolatedVDC(Violation violation, Vector<VDC> VDCs)
+	public static VDC findViolatedVDC(Violation violation, ArrayList<VDC> VDCs)
 	{
         
         for(VDC vdcExamined : VDCs)
@@ -47,7 +45,7 @@ public class VDCManager
 	 * @param VDCselected the VDC selected (and that violated the requirements)
 	 * @return the movement to be enacted but with the movements that negatively impact goal with no other positive impact, back behind in the list 
 	 */
-	public static ArrayList<Movement> chechOtherVDC(ArrayList<Movement> movementsToBeEnacted, Vector<VDC> VDCs, VDC VDCselected)
+	public static ArrayList<Movement> chechOtherVDC(ArrayList<Movement> movementsToBeEnacted, ArrayList<VDC> VDCs, VDC VDCselected)
 	{
 		//create an hasSet to collect movement to be moved behind in the
 		Set<Movement> movementsToBeMovedBehind = new HashSet<Movement>();
@@ -89,7 +87,7 @@ public class VDCManager
 					TreeStructure.getAllLeaves(abstractProperty.getGoalTrees().getDataUtility(), leaves);
 					
 					//suppose a movement does not have both a positive and negative impact on the same goal
-					Vector<String> negativeImpacts = movement.getNegativeImpacts();
+					ArrayList<String> negativeImpacts = movement.getNegativeImpacts();
 					
 					//follow the negative impact of the data movement to be enacted in the other VDC
 					for (String negativeImpact : negativeImpacts)
@@ -121,9 +119,9 @@ public class VDCManager
 		}
 		
 		//here i collect all movement of all method of all VDCs that have a negative impact on goals that have no positive impact.
-		//i move such movements behind in the vector of movements to be enacted.
+		//i move such movements behind in the set of movements to be enacted.
 		//if i move all of them, the initial order is given back
-		//move element at the end of the vector
+		//move element at the end of the set
 		for (Movement movement : movementsToBeMovedBehind)
 		{
 			int posMovement = movementsToBeEnacted.lastIndexOf(movement);//movement derive from the list of do, while movement to be enacted is a parameter//use equals (overridden method)

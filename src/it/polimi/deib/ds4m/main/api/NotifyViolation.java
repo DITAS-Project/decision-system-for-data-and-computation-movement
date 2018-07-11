@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -68,7 +67,7 @@ public class NotifyViolation extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		//retrieve the application requirements
-		Vector<VDC> VDCs = (Vector<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
+		ArrayList<VDC> VDCs = (ArrayList<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
 		
 		//retrieve parameter (the list of violations)
 		String violationsJSON = request.getParameter("violations");
@@ -79,7 +78,7 @@ public class NotifyViolation extends HttpServlet {
 	        Violations violations = mapper.readValue(violationsJSON, Violations.class);
 	        
 	        //TODO: one single violation implemented
-	        Violation violation = violations.getViolations().firstElement();//for the time being take the first one
+	        Violation violation = violations.getViolations().get(0) ;//for the time being take the first one
 	        
 	        //identify VDC
 	        VDC violatedVDC = VDCManager.findViolatedVDC(violation, VDCs);
@@ -131,7 +130,7 @@ public class NotifyViolation extends HttpServlet {
 	        
 	       //transform the selected movement actions in element to be sent
 	       MovementsEnaction movementsEnaction = new MovementsEnaction();//container of movements  
-	       Vector<MovementEnaction> movementEnactions = new Vector<MovementEnaction>();// vector to be dded to the container
+	       ArrayList<MovementEnaction> movementEnactions = new ArrayList<MovementEnaction>();// vector to be dded to the container
 	       
 	       for (Movement movement : movementsToBeEnacted)//for each movement to be enacted selected, add it to the vector to be sent
 	       {

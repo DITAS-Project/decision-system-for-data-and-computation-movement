@@ -1,17 +1,17 @@
 package it.polimi.deib.ds4m.main.model;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class Violations 
 {	
 	//define a set of violations
-	private Vector<Violation> violations;
+	private ArrayList<Violation> violations;
 
 
 	/**
 	 * @return the violations
 	 */
-	public Vector<Violation> getViolations() {
+	public ArrayList<Violation> getViolations() {
 		return violations;
 	}
 
@@ -20,7 +20,7 @@ public class Violations
 	/**
 	 * @param violations the violations to set
 	 */
-	public void setViolations(Vector<Violation> violations) {
+	public void setViolations(ArrayList<Violation> violations) {
 		this.violations = violations;
 	}
 

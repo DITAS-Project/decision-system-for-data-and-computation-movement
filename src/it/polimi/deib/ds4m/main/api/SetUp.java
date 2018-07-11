@@ -1,15 +1,11 @@
 package it.polimi.deib.ds4m.main.api;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,10 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpStatus;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -108,9 +102,9 @@ public class SetUp extends HttpServlet {
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		Vector<DataSource> dataSources;
+		ArrayList<DataSource> dataSources;
 		try {
-			dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+			dataSources = new ArrayList<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
 		}
 		catch (JsonProcessingException e) 
 		{
@@ -169,17 +163,17 @@ public class SetUp extends HttpServlet {
 		vdc.setId(vdcName);
 		
 		//if it is not set create a collection of appl.s requirements
-		Vector<VDC> VDCs;
+		ArrayList<VDC> VDCs;
 		if  (this.getServletConfig().getServletContext().getAttribute("VDCs") == null)
 		{
-			VDCs = new Vector<VDC>();
+			VDCs = new ArrayList<VDC>();
 			this.getServletConfig().getServletContext().setAttribute("VDCs", VDCs);
 		}
 		else
-			VDCs = (Vector<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
+			VDCs = (ArrayList<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
 		
 		//add the application requirements 
-		VDCs.addElement(vdc);
+		VDCs.add(vdc);
 		
 		response.setStatus(HttpStatus.SC_OK);
 	

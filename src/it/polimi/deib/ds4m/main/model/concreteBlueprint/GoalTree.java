@@ -1,22 +1,22 @@
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class GoalTree 
 {
-	Vector<Goal> goals;
+	ArrayList<Goal> goals;
 	TreeStructure treeStructure;
 	
 	/**
 	 * @return the goals
 	 */
-	public Vector<Goal> getGoals() {
+	public ArrayList<Goal> getGoals() {
 		return goals;
 	}
 	/**
 	 * @param goals the goals to set
 	 */
-	public void setGoals(Vector<Goal> goals) {
+	public void setGoals(ArrayList<Goal> goals) {
 		this.goals = goals;
 	}
 	/**

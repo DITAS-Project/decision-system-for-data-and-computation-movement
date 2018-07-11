@@ -1,7 +1,6 @@
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class TreeStructure 
 {
 	String type;//type of decoposition
-	Vector<Goal> leaves; //the leaves of the goal
-	Vector<TreeStructure> childern;	//the children ( decomposed goals)
+	ArrayList<Goal> leaves; //the leaves of the goal
+	ArrayList<TreeStructure> childern;	//the children ( decomposed goals)
 	String goalRef; //to be removed?
 	
 	/**
@@ -54,7 +53,7 @@ public class TreeStructure
 	
 	//recursive declaration
 	@JsonCreator
-	public TreeStructure(@JsonProperty("children") Vector<TreeStructure> childern) {
+	public TreeStructure(@JsonProperty("children") ArrayList<TreeStructure> childern) {
 		this.childern=childern;
 	} 
 
@@ -75,14 +74,14 @@ public class TreeStructure
 	/**
 	 * @return the childern
 	 */
-	public Vector<TreeStructure> getChildern() {
+	public ArrayList<TreeStructure> getChildern() {
 		return childern;
 	}
 
 	/**
 	 * @param childern the childern to set
 	 */
-	public void setChildern(Vector<TreeStructure> childern) {
+	public void setChildern(ArrayList<TreeStructure> childern) {
 		this.childern = childern;
 	}
 
@@ -103,14 +102,14 @@ public class TreeStructure
 	/**
 	 * @return the leaves
 	 */
-	public Vector<Goal> getLeaves() {
+	public ArrayList<Goal> getLeaves() {
 		return leaves;
 	}
 
 	/**
 	 * @param leaves the leaves to set
 	 */
-	public void setLeaves(Vector<Goal> leaves) {
+	public void setLeaves(ArrayList<Goal> leaves) {
 		this.leaves = leaves;
 	}
 	

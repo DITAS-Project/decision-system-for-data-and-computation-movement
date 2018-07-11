@@ -1,7 +1,6 @@
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
 import java.util.Map;
-import java.util.Vector;
 
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 

@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -104,7 +103,7 @@ public class MovementsActionsManager
 		//TODO: to insert binding in blueprint
 		//TODO: to consider transformations
 		
-		//create vector of movements to be enacted 
+		//create arrayList of movements to be enacted 
 		ArrayList<Movement> movementsToBeEnacted = new ArrayList<Movement>();
 		
 		//for each movements check if it has a positive impact on the goal
@@ -165,13 +164,13 @@ public class MovementsActionsManager
 	    @Override
 	    public int compare(Movement a, Movement b) 
 	    {
-	    	Vector<Cost> costsA = a.getCosts();
+	    	ArrayList<Cost> costsA = a.getCosts();
 	    	Cost costA=null; 
 	    	for (Cost cost: costsA)
 	    		if (cost.getType().equals("monetary"))
 	    			costA=cost;
 	    	
-	    	Vector<Cost> costsB = b.getCosts();
+	    	ArrayList<Cost> costsB = b.getCosts();
 	    	Cost costB=null; 
 	    	for (Cost cost: costsB)
 	    		if (cost.getType().equals("monetary"))
@@ -197,13 +196,13 @@ public class MovementsActionsManager
 	    @Override
 	    public int compare(Movement a, Movement b) 
 	    {
-	    	Vector<Cost> costsA = a.getCosts();
+	    	ArrayList<Cost> costsA = a.getCosts();
 	    	Cost costA=null; 
 	    	for (Cost cost: costsA)
 	    		if (cost.getType().equals("time"))
 	    			costA=cost;
 	    	
-	    	Vector<Cost> costsB = b.getCosts();
+	    	ArrayList<Cost> costsB = b.getCosts();
 	    	Cost costB=null; 
 	    	for (Cost cost: costsB)
 	    		if (cost.getType().equals("time"))

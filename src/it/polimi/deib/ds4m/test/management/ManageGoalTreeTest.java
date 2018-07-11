@@ -3,23 +3,14 @@ package it.polimi.deib.ds4m.test.management;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import org.junit.Test;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import it.polimi.deib.ds4m.main.Utility;
 import it.polimi.deib.ds4m.main.model.Violation;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.GoalTree;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Attribute;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Property;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
@@ -261,7 +252,7 @@ public class ManageGoalTreeTest {
 		//end creation goal
 		
 		//insert the goal in the leaves
-		dataUtilityTS.getChildern().get(0).getChildern().get(0).getLeaves().addElement(newGoal);
+		dataUtilityTS.getChildern().get(0).getChildern().get(0).getLeaves().add(newGoal);
 	
 		
 		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);

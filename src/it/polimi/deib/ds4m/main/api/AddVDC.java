@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -97,9 +96,9 @@ public class AddVDC extends HttpServlet {
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		Vector<DataSource> dataSources;
+		ArrayList<DataSource> dataSources;
 		try {
-			dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+			dataSources = new ArrayList<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
 		}
 		catch (JsonProcessingException e) 
 		{
@@ -156,17 +155,17 @@ public class AddVDC extends HttpServlet {
 		vdc.setId(vdcName);
 		
 		//if it is not set create a collection of appl.s requirements
-		Vector<VDC> VDCs;
+		ArrayList<VDC> VDCs;
 		if  (this.getServletConfig().getServletContext().getAttribute("VDCs") == null)
 		{
-			VDCs = new Vector<VDC>();
+			VDCs = new ArrayList<VDC>();
 			this.getServletConfig().getServletContext().setAttribute("VDCs", VDCs);
 		}
 		else
-			VDCs = (Vector<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
+			VDCs = (ArrayList<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
 		
 		//add the application requirements 
-		VDCs.addElement(vdc);
+		VDCs.add(vdc);
 		
 		response.setStatus(HttpStatus.SC_OK);
 	
