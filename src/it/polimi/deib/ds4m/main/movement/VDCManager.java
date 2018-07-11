@@ -47,7 +47,7 @@ public class VDCManager
 	 * @param VDCselected the VDC selected (and that violated the requirements)
 	 * @return the movement to be enacted but with the movements that negatively impact goal with no other positive impact, back behind in the list 
 	 */
-	public static Vector<Movement> chechOtherVDC(Vector<Movement> movementsToBeEnacted, Vector<VDC> VDCs, VDC VDCselected)
+	public static ArrayList<Movement> chechOtherVDC(ArrayList<Movement> movementsToBeEnacted, Vector<VDC> VDCs, VDC VDCselected)
 	{
 		//create an hasSet to collect movement to be moved behind in the
 		Set<Movement> movementsToBeMovedBehind = new HashSet<Movement>();

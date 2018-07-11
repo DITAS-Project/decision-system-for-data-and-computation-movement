@@ -98,14 +98,14 @@ public class MovementsActionsManager
 	 * @param vdc the VDC that contains the method that violated the goals 
 	 * @return the movements to be enacted that impact positively on the violated goals. a movement might impact on a subset of goals
 	 */
-	public static Vector<Movement> findMovementAction(Set<Goal> violatedGoals, VDC vdc)
+	public static ArrayList<Movement> findMovementAction(Set<Goal> violatedGoals, VDC vdc)
 	{
 		//retrieve the data sources used by the method
 		//TODO: to insert binding in blueprint
 		//TODO: to consider transformations
 		
 		//create vector of movements to be enacted 
-		Vector<Movement> movementsToBeEnacted = new Vector<Movement>();
+		ArrayList<Movement> movementsToBeEnacted = new ArrayList<Movement>();
 		
 		//for each movements check if it has a positive impact on the goal
 		for (Movement movement : vdc.getMovements())
@@ -131,7 +131,7 @@ public class MovementsActionsManager
 	 * @param strategy the ordering strategy
 	 * @return the ordered movement actions
 	 */
-	public static Vector<Movement> orderMovementAction(Vector<Movement> movementsToBeEnacted, Strategy strategy)
+	public static ArrayList<Movement> orderMovementAction(ArrayList<Movement> movementsToBeEnacted, Strategy strategy)
 	{
 		
 		switch(strategy) {

@@ -123,97 +123,7 @@ public class ManageVDCTest {
     public void chechOtherVDC_Correct_noMovementsCommon() throws IOException 
 	{
 		//*** set up other VDC ( it takes the complete one, not necessary)
-		//parse blueprint
-		String concreteBlueprintJSON;
-		
-		try 
-		{
-			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
-			
-		} catch (IOException e) 
-		{
-			System.err.println("error in reading file applicationRequiorements");
-			return;
-		}
-		
-		//convert the json in object
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(concreteBlueprintJSON);
-		
-		//retrieve DATA MANAGEMENT
-		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		ArrayList<DataManagement> dataManagement; 
-		try {
-			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
-			dataManagement = new ArrayList<DataManagement>(Arrays.asList(mapper.treeToValue(dataManagementJson, DataManagement[].class)));
-		}
-		
-		catch (JsonProcessingException e) 
-		{
-			e.printStackTrace();
-			return;			
-		}
-		
-		//retrieve ABSTRACT_PROPERTIES
-		JsonNode abstractPropertiesJson = root.get("ABSTRACT_PROPERTIES");
-		ArrayList<AbstractProperty> abstractProperties; 
-		try {
-			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
-			abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
-		}
-		
-		catch (JsonProcessingException e) 
-		{
-			e.printStackTrace();
-			return;			
-		}		
-		
-		//retrieve data sources
-		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		Vector<DataSource> dataSources;
-		try {
-			dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
-		}
-		catch (JsonProcessingException e) 
-		{
-			e.printStackTrace();
-			return;			
-		}
-		
-		//retrieve movement classes
-	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
-
-	    //instantiate movement classes for each data source
-		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString()); 
-	    if (instantiatedMovements==null)
-	    {
-			return;
-	    }
-	    
-	    
-	    //retrieve VDC name
-		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
-		String vdcName;
-		try {
-			vdcName = mapper.treeToValue(vdcNameJSON, String.class);
-		}
-		catch (JsonProcessingException e) 
-		{
-			e.printStackTrace();
-			return;			
-		}
-		
-		
-		//set up vdc
-		VDC vdc = new VDC();
-		vdc.setDataManagement(dataManagement);
-		vdc.setAbstractProperties(abstractProperties);
-		vdc.setDataSources(dataSources);
-		vdc.setMovements(instantiatedMovements);
-		vdc.connectAbstractProperties();
-		vdc.setId(vdcName);
-		//*** end set up other VDC 
+		VDC vdc = ManageMovementsActionsTest.setUpVDC();
 
 		
 		//create a collection of vdcs
@@ -229,7 +139,7 @@ public class ManageVDCTest {
 		
 		
 		//setup the list of movement to be enacted
-		Vector<Movement> movementsToBeEnacted = new Vector<Movement>();
+		ArrayList<Movement> movementsToBeEnacted = new ArrayList<Movement>();
 		
 		//set up the first movement
 		Vector<Cost> costs = new Vector<Cost>();
@@ -279,101 +189,13 @@ public class ManageVDCTest {
 	 * 
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
     public void chechOtherVDC_CorrectFirstPosition() throws IOException 
 	{
 		//*** set up other VDC ( it takes the complete one, not necessary)
-		//parse blueprint
-		String concreteBlueprintJSON;
-		
-		try 
-		{
-			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
-			
-		} catch (IOException e) 
-		{
-			System.err.println("error in reading file applicationRequiorements");
-			return;
-		}
-		
-		//convert the json in object
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(concreteBlueprintJSON);
-		
-		//retrieve DATA MANAGEMENT
-		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		ArrayList<DataManagement> dataManagement; 
-		try {
-			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
-			dataManagement = new ArrayList<DataManagement>(Arrays.asList(mapper.treeToValue(dataManagementJson, DataManagement[].class)));
-		}
-		
-		catch (JsonProcessingException e) 
-		{
-			e.printStackTrace();
-			return;			
-		}
-		
-		//retrieve ABSTRACT_PROPERTIES
-		JsonNode abstractPropertiesJson = root.get("ABSTRACT_PROPERTIES");
-		ArrayList<AbstractProperty> abstractProperties; 
-		try {
-			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
-			abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
-		}
-		
-		catch (JsonProcessingException e) 
-		{
-			e.printStackTrace();
-			return;			
-		}		
-		
-		//retrieve data sources
-		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		Vector<DataSource> dataSources;
-		try {
-			dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
-		}
-		catch (JsonProcessingException e) 
-		{
-			e.printStackTrace();
-			return;			
-		}
-		
-		//retrieve movement classes
-	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
-
-	    //instantiate movement classes for each data source
-		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString()); 
-	    if (instantiatedMovements==null)
-	    {
-			return;
-	    }
-	    
-	    
-	    //retrieve VDC name
-		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
-		String vdcName;
-		try {
-			vdcName = mapper.treeToValue(vdcNameJSON, String.class);
-		}
-		catch (JsonProcessingException e) 
-		{
-			e.printStackTrace();
-			return;			
-		}
-		
 		
 		//set up vdc
-		VDC vdc = new VDC();
-		vdc.setDataManagement(dataManagement);
-		vdc.setAbstractProperties(abstractProperties);
-		vdc.setDataSources(dataSources);
-		vdc.setMovements(instantiatedMovements);
-		vdc.connectAbstractProperties();
-		vdc.setId(vdcName);
-		//*** end set up other VDC
+		VDC vdc = ManageMovementsActionsTest.setUpVDC();
 
 		
 		//create a collection of vdcs
@@ -389,7 +211,7 @@ public class ManageVDCTest {
 		
 		
 		//setup the list of movement to be enacted
-		Vector<Movement> movementsToBeEnacted = new Vector<Movement>();
+		ArrayList<Movement> movementsToBeEnacted = new ArrayList<Movement>();
 		
 		//set up the first movement
 		//the data movement selected (movements to be enacted) are two. 
@@ -457,97 +279,7 @@ public class ManageVDCTest {
 	{
 		
 		//*** set up other VDC ( it takes the complete one, not necessary)
-		//parse blueprint
-		String concreteBlueprintJSON;
-		
-		try 
-		{
-			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
-			
-		} catch (IOException e) 
-		{
-			System.err.println("error in reading file applicationRequiorements");
-			return;
-		}
-		
-		//convert the json in object
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(concreteBlueprintJSON);
-		
-		//retrieve DATA MANAGEMENT
-		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		ArrayList<DataManagement> dataManagement; 
-		try {
-			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
-			dataManagement = new ArrayList<DataManagement>(Arrays.asList(mapper.treeToValue(dataManagementJson, DataManagement[].class)));
-		}
-		
-		catch (JsonProcessingException e) 
-		{
-			e.printStackTrace();
-			return;			
-		}
-		
-		//retrieve ABSTRACT_PROPERTIES
-		JsonNode abstractPropertiesJson = root.get("ABSTRACT_PROPERTIES");
-		ArrayList<AbstractProperty> abstractProperties; 
-		try {
-			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
-			abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
-		}
-		
-		catch (JsonProcessingException e) 
-		{
-			e.printStackTrace();
-			return;			
-		}		
-		
-		//retrieve data sources
-		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		Vector<DataSource> dataSources;
-		try {
-			dataSources = new Vector<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
-		}
-		catch (JsonProcessingException e) 
-		{
-			e.printStackTrace();
-			return;			
-		}
-		
-		//retrieve movement classes
-	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
-
-	    //instantiate movement classes for each data source
-		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString()); 
-	    if (instantiatedMovements==null)
-	    {
-			return;
-	    }
-	    
-	    
-	    //retrieve VDC name
-		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
-		String vdcName;
-		try {
-			vdcName = mapper.treeToValue(vdcNameJSON, String.class);
-		}
-		catch (JsonProcessingException e) 
-		{
-			e.printStackTrace();
-			return;			
-		}
-		
-		
-		//set up vdc
-		VDC vdc = new VDC();
-		vdc.setDataManagement(dataManagement);
-		vdc.setAbstractProperties(abstractProperties);
-		vdc.setDataSources(dataSources);
-		vdc.setMovements(instantiatedMovements);
-		vdc.connectAbstractProperties();
-		vdc.setId(vdcName);
-		//*** end set up other VDC
+		VDC vdc = ManageMovementsActionsTest.setUpVDC();
 
 		
 		//create a collection of vdcs
@@ -563,7 +295,7 @@ public class ManageVDCTest {
 		
 		
 		//setup the list of movement to be enacted
-		Vector<Movement> movementsToBeEnacted = new Vector<Movement>();
+		ArrayList<Movement> movementsToBeEnacted = new ArrayList<Movement>();
 		
 		//set up the first movement
 		//the data movement selected (movements to be enacted) are two. 

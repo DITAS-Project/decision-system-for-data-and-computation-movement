@@ -101,7 +101,7 @@ public class NotifyViolation extends HttpServlet {
 	        
 	        
 	        //identify movement actions with positive effect on goal
-	        Vector<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals, violatedVDC);
+	        ArrayList<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals, violatedVDC);
 	        if (movementsToBeEnacted==null)
 	        {
 	        	System.err.println("NotifyViolation: No movements to be enacted found");

@@ -4,6 +4,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -19,6 +22,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.GoalTree;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Attribute;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Property;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.movement.GoalTreeManager;
 
@@ -29,7 +33,7 @@ public class ManageGoalTreeTest {
 	 * 
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
     public void findViolatedVDC_Correct_find_below_range() throws IOException 
 	{
 		//create violation		
@@ -44,33 +48,8 @@ public class ManageGoalTreeTest {
 		violation.setVdcID("01");
 		
 		
-		//parse blueprint
-		String concreteBlueprintJSON;
-		
-		try 
-		{
-			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
-			
-		} catch (IOException e) 
-		{
-			System.err.println("error in reading file applicationRequiorements");
-			return;
-		}
-		
-		//convert the json in object
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(concreteBlueprintJSON);
-		
-		//retrieve DATA MANAGEMENT
-		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		DataManagement dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
-
-	    
-		//set up vdc
-		VDC violatedVDC = new VDC();
-		violatedVDC.setDataManagement(dataManagement);
-		violatedVDC.setId("ID");
+		//*** set up other VDC ( it takes the complete one, not necessary)
+		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
 		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
@@ -79,7 +58,7 @@ public class ManageGoalTreeTest {
 		
 		for (Goal goal : violatedGoals)
 		{
-			assertTrue(goal.getID().equals("1"));
+			assertTrue(goal.getID().equals("serviceAvailable"));
 		}
 		
 		
@@ -90,7 +69,7 @@ public class ManageGoalTreeTest {
 	 * 
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
     public void findViolatedVDC_Correct_find_above_range() throws IOException 
 	{
 		//create violation		
@@ -102,36 +81,11 @@ public class ManageGoalTreeTest {
 		violation.setMetric("Availability");
 		violation.setValue("100.0");
 		violation.setMethodID("GetAllBloodTests");
-		violation.setVdcID("01");
+		violation.setVdcID("VDC_2");
 		
 		
-		//parse blueprint
-		String concreteBlueprintJSON;
-		
-		try 
-		{
-			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
-			
-		} catch (IOException e) 
-		{
-			System.err.println("error in reading file applicationRequiorements");
-			return;
-		}
-		
-		//convert the json in object
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(concreteBlueprintJSON);
-		
-		//retrieve DATA MANAGEMENT
-		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		DataManagement dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
-
-	    
-		//set up vdc
-		VDC violatedVDC = new VDC();
-		violatedVDC.setDataManagement(dataManagement);
-		violatedVDC.setId("ID");
+		//*** set up other VDC ( it takes the complete one, not necessary)
+		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
 		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
@@ -140,7 +94,7 @@ public class ManageGoalTreeTest {
 		
 		for (Goal goal : violatedGoals)
 		{
-			assertTrue(goal.getID().equals("1"));
+			assertTrue(goal.getID().equals("serviceAvailable"));
 		}
 		
 		
@@ -151,7 +105,7 @@ public class ManageGoalTreeTest {
 	 * 
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
     public void findViolatedVDC_Correct_find_minimum() throws IOException 
 	{
 		//create violation		
@@ -163,35 +117,10 @@ public class ManageGoalTreeTest {
 		violation.setMetric("Precision");
 		violation.setValue("0.5");
 		violation.setMethodID("GetAllBloodTests");
-		violation.setVdcID("01");
+		violation.setVdcID("VDC_2");
 		
-		//parse blueprint
-		String concreteBlueprintJSON;
-		
-		try 
-		{
-			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
-			
-		} catch (IOException e) 
-		{
-			System.err.println("error in reading file applicationRequiorements");
-			return;
-		}
-		
-		//convert the json in object
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(concreteBlueprintJSON);
-		
-		//retrieve DATA MANAGEMENT
-		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		DataManagement dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
-
-	    
-		//set up vdc
-		VDC violatedVDC = new VDC();
-		violatedVDC.setDataManagement(dataManagement);
-		violatedVDC.setId("ID");
+		//*** set up other VDC ( it takes the complete one, not necessary)
+		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
 		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
@@ -200,7 +129,7 @@ public class ManageGoalTreeTest {
 		
 		for (Goal goal : violatedGoals)
 		{
-			assertTrue(goal.getID().equals("10"));
+			assertTrue(goal.getID().equals("consistency"));
 		}
 		
 		
@@ -211,7 +140,7 @@ public class ManageGoalTreeTest {
 	 * 
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
     public void findViolatedVDC_Correct_find_maximum() throws IOException 
 	{
 		//create violation		
@@ -223,36 +152,11 @@ public class ManageGoalTreeTest {
 		violation.setMetric("ResponseTime");
 		violation.setValue("2.");
 		violation.setMethodID("GetAllBloodTests");
-		violation.setVdcID("01");
+		violation.setVdcID("VDC_2");
 
 		
-		//parse blueprint
-		String concreteBlueprintJSON;
-		
-		try 
-		{
-			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
-			
-		} catch (IOException e) 
-		{
-			System.err.println("error in reading file applicationRequiorements");
-			return;
-		}
-		
-		//convert the json in object
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(concreteBlueprintJSON);
-		
-		//retrieve DATA MANAGEMENT
-		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		DataManagement dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
-
-	    
-		//set up vdc
-		VDC violatedVDC = new VDC();
-		violatedVDC.setDataManagement(dataManagement);
-		violatedVDC.setId("ID");
+		//*** set up other VDC ( it takes the complete one, not necessary)
+		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
 		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
@@ -261,7 +165,7 @@ public class ManageGoalTreeTest {
 		
 		for (Goal goal : violatedGoals)
 		{
-			assertTrue(goal.getID().equals("2"));
+			assertTrue(goal.getID().equals("fastDataProcess"));
 		}
 		
 		
@@ -273,7 +177,7 @@ public class ManageGoalTreeTest {
 	 * 
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
     public void findViolatedVDC_Correct_find_complex_metric_1Property() throws IOException 
 	{
 		//create violation		
@@ -282,39 +186,14 @@ public class ManageGoalTreeTest {
 		violation.setAgreementid(1);
 		violation.setGuaranteename("guarantee name");
 		violation.setDate("12/01");
-		violation.setMetric("RAM gain");
+		violation.setMetric("ramGain");
 		violation.setValue("40.0");
 		violation.setMethodID("GetAllBloodTests");
-		violation.setVdcID("01");
+		violation.setVdcID("VDC_2");
 		
 		
-		//parse blueprint
-		String concreteBlueprintJSON;
-		
-		try 
-		{
-			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
-			
-		} catch (IOException e) 
-		{
-			System.err.println("error in reading file applicationRequiorements");
-			return;
-		}
-		
-		//convert the json in object
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(concreteBlueprintJSON);
-		
-		//retrieve DATA MANAGEMENT
-		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		DataManagement dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
-
-	    
-		//set up vdc
-		VDC violatedVDC = new VDC();
-		violatedVDC.setDataManagement(dataManagement);
-		violatedVDC.setId("ID");
+		//*** set up other VDC ( it takes the complete one, not necessary)
+		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
 		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
@@ -323,7 +202,7 @@ public class ManageGoalTreeTest {
 		
 		for (Goal goal : violatedGoals)
 		{
-			assertTrue(goal.getID().equals("6"));
+			assertTrue(goal.getID().equals("serviceScalable"));
 		}	
 	}
 	
@@ -333,7 +212,7 @@ public class ManageGoalTreeTest {
 	 * 
 	 * @throws IOException
 	 */
-	//@Test
+	@Test
     public void findViolatedVDC_Correct_find_complex_metric_2Goals() throws IOException 
 	{
 		//create violation		
@@ -345,36 +224,18 @@ public class ManageGoalTreeTest {
 		violation.setMetric("Availability");
 		violation.setValue("90.0");
 		violation.setMethodID("GetAllBloodTests");
-		violation.setVdcID("01");
+		violation.setVdcID("VDC_2");
 		
 		
-		//parse blueprint
-		String concreteBlueprintJSON;
-		
-		try 
-		{
-			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));
-			
-		} catch (IOException e) 
-		{
-			System.err.println("error in reading file applicationRequiorements");
-			return;
-		}
-		
-		//convert the json in object
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(concreteBlueprintJSON);
-		
-		//retrieve DATA MANAGEMENT
-		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
-		DataManagement dataManagement = mapper.treeToValue(dataManagementJson, DataManagement.class);
+		//*** set up other VDC ( it takes the complete one, not necessary)
+		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 
 		//add another goal to data utility
-		GoalTree dataUtilityGT = dataManagement.getMethods().firstElement().getConstraints().getDataUtility();
+		//getAbstractProperties().get(0) -> selects the fist method ( there is only one)
+		TreeStructure dataUtilityTS =violatedVDC.getAbstractProperties().get(0).getGoalTrees().getDataUtility();  
 
 		//create a new goal
-		String goalID="15";
+		String goalID="newGoal";
 		
 		Property property = new Property();		
 		property.setMaximum(99.);
@@ -382,37 +243,26 @@ public class ManageGoalTreeTest {
 		property.setName("Availability");
 		property.setUnit("percentage");
 		
-		Attribute metric = new Attribute();
-		metric.setId("11");
-		metric.setName("Availability2");
-		metric.setType("Availability");
-		metric.setProperties(new Vector<Property>());
-		metric.getProperties().addElement(property);
+		Attribute attribute = new Attribute();
+		attribute.setId("Availability2");
+		attribute.setDescription("Availability2");
+		attribute.setType("Availability");
+		attribute.setProperties(new HashMap<String, Property>());
+		attribute.getProperties().put("Availability", property);
 		
-		Vector<Attribute> metrics = new Vector<Attribute>();
-		metrics.add(metric);
+		ArrayList<Attribute> attributes = new ArrayList<Attribute>();
+		attributes.add(attribute);
 		
 		Goal newGoal = new Goal();
 		newGoal.setID(goalID);
-		newGoal.setName("new goal");
+		newGoal.setDescription("new goal");
 		newGoal.setWeight(1.0);
-		newGoal.setMetrics(metrics);
+		newGoal.setAttributesLinked(attributes);
 		//end creation goal
-			
 		
-		//insert the goal in the goal list
-		dataUtilityGT.getGoals().addElement(newGoal);
-		
-		//insert the goal in the tree structure
-		//it takes the first element of the chiller, if doesn't mater where it puts the new goal
-		dataUtilityGT.getTreeStructure().getChildern().firstElement().getLeaves().addElement(goalID);
-		
-		
-		//set up vdc
-		VDC violatedVDC = new VDC();
-		violatedVDC.setDataManagement(dataManagement);
-		violatedVDC.setId("ID");
-		
+		//insert the goal in the leaves
+		dataUtilityTS.getChildern().get(0).getChildern().get(0).getLeaves().addElement(newGoal);
+	
 		
 		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		
@@ -420,7 +270,7 @@ public class ManageGoalTreeTest {
 		
 		for (Goal goal : violatedGoals)
 		{
-			assertTrue(goal.getID().equals("1") || goal.getID().equals("15"));
+			assertTrue(goal.getID().equals("serviceAvailable") || goal.getID().equals(goalID));
 		}	
 	}
 
