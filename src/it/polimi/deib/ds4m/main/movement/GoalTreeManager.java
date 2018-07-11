@@ -32,7 +32,7 @@ public class GoalTreeManager {
 	 * @param violatedVDC the violated VDC
 	 * @return the set of violated goals, null if method is not found
 	 */
-	public static Set<Goal> findViolatedGoals(Violation violation, VDC violatedVDC)
+	public static Set<Goal> findViolatedGoals(ArrayList<Violation> violations, VDC violatedVDC)
 	{
         
 		//retrieve the method that violated from the vdc
@@ -41,7 +41,7 @@ public class GoalTreeManager {
 		//find the method that violated the requirements
 		for (AbstractProperty abstractPropertyExamined : violatedVDC.getAbstractProperties())
 		{
-			if (abstractPropertyExamined.getMethod_id().equals(violation.getMethodID()))
+			if (abstractPropertyExamined.getMethod_id().equals(violations.get(0).getMethodID()))//I take the first item, all violations have the seame method ID for previous filtering 
 				abstractProperty = abstractPropertyExamined;
 		}
 		//if not found return null
@@ -49,13 +49,20 @@ public class GoalTreeManager {
 			return null;
 		
 		//create set of goal add all the violated ones
-		Set<Goal> violatedGoals = searchViolatedGoal(abstractProperty, violation, TreeType.DATAUTILITY);
-		violatedGoals.addAll(searchViolatedGoal(abstractProperty, violation, TreeType.SECURITY));		
-		violatedGoals.addAll(searchViolatedGoal(abstractProperty, violation, TreeType.PRIVACY));
+		Set<Goal> violatedGoals = new HashSet<Goal>();
+		
+		//retrieve the violated goals for all violations
+		for (Violation violation: violations)
+		{
+			violatedGoals.addAll(searchViolatedGoal(abstractProperty, violation, TreeType.DATAUTILITY));
+			violatedGoals.addAll(searchViolatedGoal(abstractProperty, violation, TreeType.SECURITY));		
+			violatedGoals.addAll(searchViolatedGoal(abstractProperty, violation, TreeType.PRIVACY));
+			
+			//TODO: check the goal tree
+			
+		}
 
 		//at this point the violatedGoals contains a set of violated goals
-		
-		//TODO: check the tree
 
 		
 		return violatedGoals;
@@ -69,6 +76,7 @@ public class GoalTreeManager {
 	 * @param treeType the type of three to inspect ( of type treeType, i.e., DataUtility, Security, Privacy)
 	 * @return the set of violated goal
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	private static Set<Goal> searchViolatedGoal(AbstractProperty abstractProperty, Violation violation, TreeType treeType)
 	{
 		

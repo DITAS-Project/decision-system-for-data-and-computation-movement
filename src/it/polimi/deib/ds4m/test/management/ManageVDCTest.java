@@ -35,6 +35,9 @@ public class ManageVDCTest {
 		violation.setMethodID("1");
 		violation.setVdcID("01");
 		
+		
+		ArrayList<Violation> violations = new ArrayList<Violation>();
+		violations.add(violation);
 
 		//set up vdc
 		VDC vdc = new VDC();
@@ -48,7 +51,7 @@ public class ManageVDCTest {
 		
 		
 		//identify VDC
-        VDC violatedVDC = VDCManager.findViolatedVDC(violation, VDCs);
+        VDC violatedVDC = VDCManager.findViolatedVDC(violations, VDCs);
         
         assertTrue(violatedVDC.getId().equals("01"));
 		
@@ -73,6 +76,9 @@ public class ManageVDCTest {
 		violation.setValue("90.0");
 		violation.setMethodID("1");
 		violation.setVdcID("10");
+		
+		ArrayList<Violation> violations = new ArrayList<Violation>();
+		violations.add(violation);
 
 		
 		//set up vdc
@@ -87,7 +93,7 @@ public class ManageVDCTest {
 		
 		
 		//identify VDC
-        VDC violatedVDC = VDCManager.findViolatedVDC(violation, VDCs);
+        VDC violatedVDC = VDCManager.findViolatedVDC(violations, VDCs);
         
         assertTrue(violatedVDC==null);
 		
@@ -136,8 +142,8 @@ public class ManageVDCTest {
 		costs.add(cost2);
 		
 		Movement movement1 =  new Movement();
-		movement1.setFrom("CCC");//no movement with this parameter in other VDC
-		movement1.setTo("DDD");//no movement with this parameter in other VDC
+		movement1.setFromType("CCC");//no movement with this parameter in other VDC
+		movement1.setToType("DDD");//no movement with this parameter in other VDC
 		movement1.setRestTime(12.);
 		movement1.setType("ComputationMovement");
 		movement1.setCosts(costs);
@@ -145,8 +151,8 @@ public class ManageVDCTest {
 		
 		//set up another movement (non matching to check only that the first one is moved back an empty data movement will not match any data movement in other VDC, meaning that it has no influence on other vdc goals)
 		Movement movement2 =  new Movement();
-		movement2.setFrom("AAA");//no movement with this parameter in other VDC
-		movement2.setTo("BBB");//no movement with this parameter in other VDC
+		movement2.setFromType("AAA");//no movement with this parameter in other VDC
+		movement2.setToType("BBB");//no movement with this parameter in other VDC
 		movement2.setRestTime(12.);
 		movement2.setType("ComputationMovement");
 		movement2.setCosts(costs);
@@ -221,8 +227,8 @@ public class ManageVDCTest {
 		Movement movement1 =  new Movement();
 		movement1.setPositiveImpacts(positiveImpacts1);//impacts are not considered in the comparison of data movement (extension of "equals" interface)
 		movement1.setNegativeImpacts(negativeImpacts1);//impacts are not considered in the comparison of data movement (extension of "equals" interface)
-		movement1.setFrom("Edge");
-		movement1.setTo("Cloud");
+		movement1.setFromType("Edge");
+		movement1.setToType("Cloud");
 		movement1.setRestTime(12.);
 		movement1.setType("DataMovement");
 		movement1.setCosts(costs);
@@ -232,8 +238,8 @@ public class ManageVDCTest {
 		Movement movement2 =  new Movement();
 		movement2.setPositiveImpacts(positiveImpacts1);
 		movement2.setNegativeImpacts(negativeImpacts1);
-		movement2.setFrom("AAA");//no movement with this parameter in other VDC
-		movement2.setTo("BBB");//no movement with this parameter in other VDC
+		movement2.setFromType("AAA");//no movement with this parameter in other VDC
+		movement2.setToType("BBB");//no movement with this parameter in other VDC
 		movement2.setRestTime(12.);
 		movement2.setType("ComputationMovement");
 		movement2.setCosts(costs);
@@ -305,8 +311,8 @@ public class ManageVDCTest {
 		Movement movement1 =  new Movement();
 		movement1.setPositiveImpacts(positiveImpacts1);//impacts are not considered in the comparison of data movement (extension of "equals" interface)
 		movement1.setNegativeImpacts(negativeImpacts1);//impacts are not considered in the comparison of data movement (extension of "equals" interface)
-		movement1.setFrom("Edge");
-		movement1.setTo("Cloud");
+		movement1.setFromType("Edge");
+		movement1.setToType("Cloud");
 		movement1.setRestTime(12.);
 		movement1.setType("DataMovement");
 		movement1.setCosts(costs);
@@ -316,8 +322,8 @@ public class ManageVDCTest {
 		Movement movement2 =  new Movement();
 		movement2.setPositiveImpacts(positiveImpacts1);
 		movement2.setNegativeImpacts(negativeImpacts1);
-		movement2.setFrom("AAA");//no movement with this parameter in other VDC
-		movement2.setTo("BBB");//no movement with this parameter in other VDC
+		movement2.setFromType("AAA");//no movement with this parameter in other VDC
+		movement2.setToType("BBB");//no movement with this parameter in other VDC
 		movement2.setRestTime(12.);
 		movement2.setType("ComputationMovement");
 		movement2.setCosts(costs);
@@ -327,8 +333,8 @@ public class ManageVDCTest {
 		Movement movement0 =  new Movement();
 		movement0.setPositiveImpacts(positiveImpacts1);
 		movement0.setNegativeImpacts(negativeImpacts1);
-		movement0.setFrom("CCC");//no movement with this parameter in other VDC
-		movement0.setTo("BBB");//no movement with this parameter in other VDC
+		movement0.setFromType("CCC");//no movement with this parameter in other VDC
+		movement0.setToType("BBB");//no movement with this parameter in other VDC
 		movement0.setRestTime(12.);
 		movement0.setType("ComputationMovement");
 		movement0.setCosts(costs);

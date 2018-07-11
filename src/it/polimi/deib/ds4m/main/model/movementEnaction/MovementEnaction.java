@@ -50,8 +50,8 @@ public class MovementEnaction
 	
 	public void importMovement (Movement movement) 
 	{
-		this.from = movement.getFrom();
-		this.to = movement.getTo();
+		this.from = movement.getFromLinked().getName();
+		this.to = movement.getToLinked().getName();
 		
 		
 		if (transformations==null)

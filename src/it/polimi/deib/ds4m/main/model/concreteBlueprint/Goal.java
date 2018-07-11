@@ -1,7 +1,6 @@
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

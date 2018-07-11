@@ -76,107 +76,123 @@ public class NotifyViolation extends HttpServlet {
 		{
 			//convert 
 	        Violations violations = mapper.readValue(violationsJSON, Violations.class);
-	        
-	        //TODO: one single violation implemented
-	        Violation violation = violations.getViolations().get(0) ;//for the time being take the first one
-	        
-	        //identify VDC
-	        VDC violatedVDC = VDCManager.findViolatedVDC(violation, VDCs);
-	        if (violatedVDC==null)
+	         
+	        //while the set of violations contain a violation, keep analysing them
+	        while (violations.getViolations().size()!=0)
 	        {
-	        	System.err.println("NotifyViolation: No violated VDC found");
-	        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-	        	return;
-	        }
+	        	ArrayList<Violation> violationToBeExamined = new ArrayList<Violation>();
+	        	
+	        	//collect all violations to the same VDC and method
+	        	String vdcViolated = null;
+	        	String methodViolated = null;
+	        	for (Violation violation : violations.getViolations())
+	        	{
+	        		//if it is the first violation, put it in the list of violation to be examined
+	        		if (vdcViolated==null)
+	        		{
+	        			vdcViolated=violation.getVdcID();
+	        			methodViolated = violation.getMethodID();
+	        			violationToBeExamined.add(violation);
+	        		}
+	        		//and collect similar (with same method and VDC IDs) violations
+	        		else if (vdcViolated.equals(violation.getVdcID()) & methodViolated.equals(violation.getMethodID()))
+	        		{
+	        			violationToBeExamined.add(violation);
+	        		}	
+	        	}
+	        	
+    			//if the violation is examined, then i remove it from the set of violation that have yet to be examined
+    			violations.getViolations().removeAll(violationToBeExamined);
+		        
+		        //identify VDC
+		        VDC violatedVDC = VDCManager.findViolatedVDC(violationToBeExamined, VDCs);
+		        if (violatedVDC==null)
+		        {
+		        	System.err.println("NotifyViolation: No violated VDC found");
+		        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		        	return;
+		        }
 
-	        //identify goal
-	        Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
-	        if (violatedGoals==null)
-	        {
-	        	System.out.println("NotifyViolation: No violated goals found");
-	        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-	        	return;
-	        }
-	        
-	        
-	        //identify movement actions with positive effect on goal
-	        ArrayList<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals, violatedVDC);
-	        if (movementsToBeEnacted==null)
-	        {
-	        	System.err.println("NotifyViolation: No movements to be enacted found");
-	        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-	        	return;
-	        }
-	        
-	        //filter dm actions that operates on data sources used by the method who generate the conflicts
-	        //NOT NEEDED?
-	        
-	        //order the dm action using a strategy
-	        MovementsActionsManager.orderMovementAction(movementsToBeEnacted, MovementsActionsManager.Strategy.MONETARY);
-	        
-	        //check other trees of other VDCs, for all method? 
-	        movementsToBeEnacted = VDCManager.chechOtherVDC(movementsToBeEnacted, VDCs, violatedVDC);
-	        if (movementsToBeEnacted==null)
-	        {
-	        	System.err.println("NotifyViolation: all movements to be enacted have been removed");
-	        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-	        	return;
-	        }
-	        
-	        //select first data movement action	        
-	       //Movement movement = movementsToBeEnacted.firstElement(); 
-	       
-	       //TODO differentiate between data and computation movements
-	        
-	       //transform the selected movement actions in element to be sent
-	       MovementsEnaction movementsEnaction = new MovementsEnaction();//container of movements  
-	       ArrayList<MovementEnaction> movementEnactions = new ArrayList<MovementEnaction>();// vector to be dded to the container
-	       
-	       for (Movement movement : movementsToBeEnacted)//for each movement to be enacted selected, add it to the vector to be sent
-	       {
-	    	   MovementEnaction movementEnaction = new MovementEnaction();
-	    	   movementEnaction.importMovement(movement);
-	    	   movementEnactions.add(movementEnaction);
-	       }
-	       movementsEnaction.setMovementsEnaction(movementEnactions);
-	        
-	        //call to movement enactors
-	        HttpClient client = HttpClientBuilder.create().build();
-	        HttpPost post = new HttpPost("http://localhost:8089/dataEnactor/action");
-	        
-	        //System.out.println(mapper.writeValueAsString(movementsEnaction));
-	        
-	        // Create some NameValuePair for HttpPost parameters
-	        List<NameValuePair> arguments = new ArrayList<>(3);
-	        arguments.add(new BasicNameValuePair("movementsEnaction", mapper.writeValueAsString(movementsEnaction)));
-	        try {
-	            post.setEntity(new UrlEncodedFormEntity(arguments));
-	            HttpResponse responseDE = client.execute(post);//response empty
+		        //identify goal
+		        Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violationToBeExamined, violatedVDC);
+		        if (violatedGoals==null)
+		        {
+		        	System.out.println("NotifyViolation: No violated goals found");
+		        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		        	return;
+		        }
+		        
+		        
+		        //identify movement actions with positive effect on goal
+		        ArrayList<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals, violatedVDC);
+		        if (movementsToBeEnacted==null)
+		        {
+		        	System.err.println("NotifyViolation: No movements to be enacted found");
+		        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		        	return;
+		        }
+		        
+		        //filter dm actions that operates on data sources used by the method who generate the conflicts
+		        //NOT NEEDED?
+		        
+		        //order the dm action using a strategy
+		        MovementsActionsManager.orderMovementAction(movementsToBeEnacted, MovementsActionsManager.Strategy.MONETARY);
+		        
+		        //check other trees of other VDCs, for all method? 
+		        movementsToBeEnacted = VDCManager.chechOtherVDC(movementsToBeEnacted, VDCs, violatedVDC);
+		        if (movementsToBeEnacted==null)
+		        {
+		        	System.err.println("NotifyViolation: all movements to be enacted have been removed");
+		        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		        	return;
+		        }
+		        
+		        //select first data movement action	        
+		       //Movement movement = movementsToBeEnacted.firstElement(); 
+		       
+		       //TODO differentiate between data and computation movements
+		        
+		       //transform the selected movement actions in element to be sent
+		       MovementsEnaction movementsEnaction = new MovementsEnaction();//container of movements  
+		       ArrayList<MovementEnaction> movementEnactions = new ArrayList<MovementEnaction>();// vector to be dded to the container
+		       
+		       for (Movement movement : movementsToBeEnacted)//for each movement to be enacted selected, add it to the vector to be sent
+		       {
+		    	   MovementEnaction movementEnaction = new MovementEnaction();
+		    	   movementEnaction.importMovement(movement);
+		    	   movementEnactions.add(movementEnaction);
+		       }
+		       movementsEnaction.setMovementsEnaction(movementEnactions);
+		        
+		        //call to movement enactors
+		        HttpClient client = HttpClientBuilder.create().build();
+		        HttpPost post = new HttpPost("http://localhost:8089/dataEnactor/action");
+		        
+		        //System.out.println(mapper.writeValueAsString(movementsEnaction));
+		        
+		        // Create some NameValuePair for HttpPost parameters
+		        List<NameValuePair> arguments = new ArrayList<>(3);
+		        arguments.add(new BasicNameValuePair("movementsEnaction", mapper.writeValueAsString(movementsEnaction)));
+		        try {
+		            post.setEntity(new UrlEncodedFormEntity(arguments));
+		            @SuppressWarnings("unused")
+					HttpResponse responseDE = client.execute(post);//response empty
 
-	            //Print out the response of the data movement
-	            //System.out.println(EntityUtils.toString(responseDE.getEntity()));
-	            
-	            
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-	        
-	       
+		            //Print out the response of the data movement
+		            //System.out.println(EntityUtils.toString(responseDE.getEntity()));
+		            
+		            
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+	        }	
 	        //set answer status
 	        response.setStatus(HttpStatus.SC_OK);
-
-        
 		}
 		catch (JsonParseException e)
 		{
+			e.printStackTrace();
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
-			
-			
 		}
-		
-		
 	}
-	
-	
-
 }

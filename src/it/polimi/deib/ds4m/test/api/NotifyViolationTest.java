@@ -76,7 +76,7 @@ public class NotifyViolationTest
 		violation2.setAgreementid(2);
 		violation2.setGuaranteename("guarantee name");
 		violation2.setDate("12/01");
-		violation2.setMetric("volume");
+		violation2.setMetric("Volume");
 		violation2.setValue("200");
 		violation2.setMethodID("GetAllBloodTests");
 		violation2.setVdcID("VDC_2");
@@ -239,7 +239,8 @@ public class NotifyViolationTest
         //connect to service
         try {
             post.setEntity(new UrlEncodedFormEntity(arguments));
-            HttpResponse response = client.execute(post);//response empty
+            @SuppressWarnings("unused")
+			HttpResponse response = client.execute(post);//response empty
 
             // Print out the response message
             //System.out.println("responce enactors" + EntityUtils.toString(response.getEntity()));
@@ -247,7 +248,7 @@ public class NotifyViolationTest
             //check the answer to the mocked server
             verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withHeader("Content-Type", equalTo("application/x-www-form-urlencoded")));
             
-            verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withRequestBody(containing("movementsEnaction=%7B%22movementsEnaction%22%3A%5B%7B%22from%22%3A%22Cloud%22%2C%22to%22%3A%22Edge%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%2C%7B%22from%22%3A%22Cloud%22%2C%22to%22%3A%22Edge%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%5D%7D")));
+            verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withRequestBody(containing("movementsEnaction=%7B%22movementsEnaction%22%3A%5B%7B%22from%22%3A%22MinioDS1%22%2C%22to%22%3A%22MinioDS2%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%2C%7B%22from%22%3A%22MinioDS2%22%2C%22to%22%3A%22MinioDS1%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%2C%7B%22from%22%3A%22MinioDS1%22%2C%22to%22%3A%22MinioDS2%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%2C%7B%22from%22%3A%22MinioDS2%22%2C%22to%22%3A%22MinioDS1%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%5D%7D")));
             
             	
         } catch (IOException e) {

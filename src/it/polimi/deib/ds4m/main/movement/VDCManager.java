@@ -21,12 +21,12 @@ public class VDCManager
 	 * @param VDCs the list of VDC
 	 * @return the violated VDC or null, if it is not found
 	 */
-	public static VDC findViolatedVDC(Violation violation, ArrayList<VDC> VDCs)
+	public static VDC findViolatedVDC(ArrayList<Violation> violations, ArrayList<VDC> VDCs)
 	{
-        
+        //find the first VDC (all violation at this stage will refer to the same VDC)
         for(VDC vdcExamined : VDCs)
         {
-    		if (vdcExamined.getId().equals(violation.getVdcID()))
+    		if (vdcExamined.getId().equals(violations.get(0).getVdcID()))
     			return vdcExamined;
         }
         

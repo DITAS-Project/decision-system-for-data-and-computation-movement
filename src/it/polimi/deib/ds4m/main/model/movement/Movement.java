@@ -10,10 +10,9 @@ import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 public class Movement 
 {
 	private String type;
-	private String from;
-	private String to;
+	private String fromType;
+	private String toType;
 	private double restTime;
-	
 	
 	//linked to data source class, when the movement is instantiated
 	@JsonIgnore
@@ -38,44 +37,16 @@ public class Movement
 		
 	}
 	
-	public Movement(String type, String from, String to, ArrayList<String> positiveImpacts, ArrayList<String> negativeImpacts, ArrayList<Transformation> transformations, ArrayList<Cost> costs, double restTime ) 
+	public Movement(String type, String fromType, String toType, ArrayList<String> positiveImpacts, ArrayList<String> negativeImpacts, ArrayList<Transformation> transformations, ArrayList<Cost> costs, double restTime ) 
 	{
 		this.type=type;
-		this.from=from;
-		this.to=to;;
+		this.fromType=fromType;
+		this.toType=toType;
 		this.positiveImpacts=positiveImpacts;
 		this.negativeImpacts=negativeImpacts;
 		this.transformations=transformations;
 		this.costs=costs;
 		this.restTime=restTime;
-	}
-	
-	/**
-	 * @return the from
-	 */
-	public String getFrom() {
-		return from;
-	}
-
-	/**
-	 * @param from the from to set
-	 */
-	public void setFrom(String from) {
-		this.from = from;
-	}
-
-	/**
-	 * @return the to
-	 */
-	public String getTo() {
-		return to;
-	}
-
-	/**
-	 * @param to the to to set
-	 */
-	public void setTo(String to) {
-		this.to = to;
 	}
 
 	/**
@@ -182,11 +153,11 @@ public class Movement
 	        return false;
 	    }
 	    
-	    if (!this.from.equals(other.getFrom()) ) {
+	    if (!this.fromType.equals(other.getFromType()) ) {
 	        return false;
 	    }
 	    
-	    if (!this.to.equals(other.getTo()) ) {
+	    if (!this.toType.equals(other.getToType()) ) {
 	        return false;
 	    }
 	    
@@ -217,8 +188,8 @@ public class Movement
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
             // if deriving: appendSuper(super.hashCode()).
             append(type).
-            append(to).
-            append(from).
+            append(toType).
+            append(fromType).
             append(restTime).
 //            append(positiveImpacts).
 //            append(negativeImpacts).
@@ -252,6 +223,34 @@ public class Movement
 	 */
 	public void setToLinked(DataSource toLinked) {
 		this.toLinked = toLinked;
+	}
+
+	/**
+	 * @return the fromType
+	 */
+	public String getFromType() {
+		return fromType;
+	}
+
+	/**
+	 * @param fromType the fromType to set
+	 */
+	public void setFromType(String fromType) {
+		this.fromType = fromType;
+	}
+
+	/**
+	 * @return the toType
+	 */
+	public String getToType() {
+		return toType;
+	}
+
+	/**
+	 * @param toType the toType to set
+	 */
+	public void setToType(String toType) {
+		this.toType = toType;
 	}
 	
 

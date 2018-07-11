@@ -38,12 +38,15 @@ public class ManageGoalTreeTest {
 		violation.setMethodID("GetAllBloodTests");
 		violation.setVdcID("01");
 		
+		ArrayList<Violation> violations = new ArrayList<Violation>();
+		violations.add(violation);
+		
 		
 		//*** set up other VDC ( it takes the complete one, not necessary)
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
+		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -74,12 +77,14 @@ public class ManageGoalTreeTest {
 		violation.setMethodID("GetAllBloodTests");
 		violation.setVdcID("VDC_2");
 		
+		ArrayList<Violation> violations = new ArrayList<Violation>();
+		violations.add(violation);
 		
 		//*** set up other VDC ( it takes the complete one, not necessary)
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
+		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -110,11 +115,14 @@ public class ManageGoalTreeTest {
 		violation.setMethodID("GetAllBloodTests");
 		violation.setVdcID("VDC_2");
 		
+		ArrayList<Violation> violations = new ArrayList<Violation>();
+		violations.add(violation);
+		
 		//*** set up other VDC ( it takes the complete one, not necessary)
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
+		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -144,13 +152,15 @@ public class ManageGoalTreeTest {
 		violation.setValue("2.");
 		violation.setMethodID("GetAllBloodTests");
 		violation.setVdcID("VDC_2");
-
+		
+		ArrayList<Violation> violations = new ArrayList<Violation>();
+		violations.add(violation);
 		
 		//*** set up other VDC ( it takes the complete one, not necessary)
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
+		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -182,12 +192,14 @@ public class ManageGoalTreeTest {
 		violation.setMethodID("GetAllBloodTests");
 		violation.setVdcID("VDC_2");
 		
+		ArrayList<Violation> violations = new ArrayList<Violation>();
+		violations.add(violation);
 		
 		//*** set up other VDC ( it takes the complete one, not necessary)
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
+		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -217,6 +229,8 @@ public class ManageGoalTreeTest {
 		violation.setMethodID("GetAllBloodTests");
 		violation.setVdcID("VDC_2");
 		
+		ArrayList<Violation> violations = new ArrayList<Violation>();
+		violations.add(violation);
 		
 		//*** set up other VDC ( it takes the complete one, not necessary)
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
@@ -255,7 +269,7 @@ public class ManageGoalTreeTest {
 		dataUtilityTS.getChildern().get(0).getChildern().get(0).getLeaves().add(newGoal);
 	
 		
-		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
+		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==2);
 		
