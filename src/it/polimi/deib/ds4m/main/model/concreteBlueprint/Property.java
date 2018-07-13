@@ -4,6 +4,7 @@ import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Property 
 {
+	//metrics
 	private String name;
 	private String unit;
 	private Double maximum;
