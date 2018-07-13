@@ -1,6 +1,11 @@
 package it.polimi.deib.ds4m.main.model.dataSources;
 
 
+import java.util.ArrayList;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import it.polimi.deib.ds4m.main.model.resources.Resource;
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class DataSource 
@@ -8,6 +13,22 @@ public class DataSource
 	private String name;
 	private String type;
 	private Parameters parameters;
+	private Resource resourceUsed;//this represent the resource used in terms of how many GB and CPU% the Data Source uses 
+	
+	@JsonIgnore
+	private Resource resourceUsedLinked;// this is the link to the actual resource that host the DS. in here the parameters represent what the resource has available a nd in total.
+	
+	public void connectWithResource(ArrayList<Resource> resources)
+	{
+		for (Resource resource : resources)
+		{
+			if (resource.getName().equals(resourceUsed.getName()))
+			{
+				resourceUsedLinked = resource;
+				break;
+			}
+		}
+	}
  
     
 	/**
@@ -89,5 +110,17 @@ public class DataSource
             append(parameters).
             toHashCode();
     }
+	/**
+	 * @return the resourceUsed
+	 */
+	public Resource getResourceUsed() {
+		return resourceUsed;
+	}
+	/**
+	 * @param resourceUsed the resourceUsed to set
+	 */
+	public void setResourceUsed(Resource resourceUsed) {
+		this.resourceUsed = resourceUsed;
+	}
 
 }

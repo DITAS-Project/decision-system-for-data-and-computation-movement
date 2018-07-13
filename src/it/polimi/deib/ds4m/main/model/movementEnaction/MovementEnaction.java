@@ -10,6 +10,7 @@ public class MovementEnaction
 	String from;
 	String to;
 	ArrayList<String> transformations;
+	String type;
 	
 	/**
 	 * @return the from
@@ -52,6 +53,7 @@ public class MovementEnaction
 	{
 		this.from = movement.getFromLinked().getName();
 		this.to = movement.getToLinked().getName();
+		this.type = movement.getType();
 		
 		
 		if (transformations==null)
@@ -62,6 +64,18 @@ public class MovementEnaction
 			{
 				transformations.add(transformationMovement.getType());
 			}
+	}
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
 	}
 
 

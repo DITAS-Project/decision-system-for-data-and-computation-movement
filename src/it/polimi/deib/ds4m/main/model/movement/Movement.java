@@ -3,22 +3,21 @@ package it.polimi.deib.ds4m.main.model.movement;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
+import it.polimi.deib.ds4m.main.model.resources.Resource;
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Movement 
 {
 	private String type;
-	private String fromType;
-	private String toType;
+	private String fromType;//cloud/esdge
+	private String toType;//cloud/esdge
 	private double restTime;
 	
 	//linked to data source class, when the movement is instantiated
 	@JsonIgnore
-	private DataSource fromLinked;
+	private Resource fromLinked;
 	@JsonIgnore
-	private DataSource toLinked;
+	private Resource toLinked;
 	
 	private ArrayList<String> positiveImpacts; //list of IDs of goals with a positive impact
 	private ArrayList<String> negativeImpacts; //list of IDs of goals with a negative impact
@@ -197,33 +196,6 @@ public class Movement
             toHashCode();
     }
 
-	/**
-	 * @return the fromLinked
-	 */
-	public DataSource getFromLinked() {
-		return fromLinked;
-	}
-
-	/**
-	 * @param fromLinked the fromLinked to set
-	 */
-	public void setFromLinked(DataSource fromLinked) {
-		this.fromLinked = fromLinked;
-	}
-
-	/**
-	 * @return the toLinked
-	 */
-	public DataSource getToLinked() {
-		return toLinked;
-	}
-
-	/**
-	 * @param toLinked the toLinked to set
-	 */
-	public void setToLinked(DataSource toLinked) {
-		this.toLinked = toLinked;
-	}
 
 	/**
 	 * @return the fromType
@@ -251,6 +223,34 @@ public class Movement
 	 */
 	public void setToType(String toType) {
 		this.toType = toType;
+	}
+
+	/**
+	 * @return the fromLinked
+	 */
+	public Resource getFromLinked() {
+		return fromLinked;
+	}
+
+	/**
+	 * @param fromLinked the fromLinked to set
+	 */
+	public void setFromLinked(Resource fromLinked) {
+		this.fromLinked = fromLinked;
+	}
+
+	/**
+	 * @return the toLinked
+	 */
+	public Resource getToLinked() {
+		return toLinked;
+	}
+
+	/**
+	 * @param toLinked the toLinked to set
+	 */
+	public void setToLinked(Resource toLinked) {
+		this.toLinked = toLinked;
 	}
 	
 

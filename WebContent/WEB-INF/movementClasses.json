@@ -3,8 +3,8 @@
         [
             {
                 "type":"DataMovement",
-                "fromType":"Edge",
-                "toType":"Cloud",
+                "fromType":"edge",
+                "toType":"cloud",
                 "restTime":"12",
                 "positiveImpacts":["fastDataStreaming","dataVolume"],
                 "negativeImpacts":["completeness"],
@@ -63,8 +63,8 @@
             },
             {
                 "type":"DataDuplication",
-                "fromType":"Cloud",
-                "toType":"Edge",
+                "fromType":"edge",
+                "toType":"cloud",
                 "positiveImpacts":["serviceAvailable","fastDataProcess"],
                 "negativeImpacts":["fastDataStreaming","dataVolume"],
                 "restTime":"15",

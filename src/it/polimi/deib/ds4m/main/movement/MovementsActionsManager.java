@@ -16,6 +16,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Cost;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
+import it.polimi.deib.ds4m.main.model.resources.Resource;
 
 /**
  * @author Mattia Salnitri
@@ -42,7 +43,7 @@ public class MovementsActionsManager
 	 * @param movementsJSON JSON representing the movement action classes
 	 * @return The array list of instantiated movements, null if problems arise
 	 */
-	public static ArrayList<Movement> instantiateMovementActions(List<DataSource> dataSources, String movementsJSON) 
+	public static ArrayList<Movement> instantiateMovementActions(List<Resource> resources, String movementsJSON) 
 	{
 		//the container for the instantiated movement
 		ArrayList<Movement> movements = new ArrayList<Movement>();
@@ -59,24 +60,35 @@ public class MovementsActionsManager
 			JsonNode movementNode = root.get("movements");
 			
 			//assigned copied 
-			for(DataSource dataSource_source: dataSources)
+			for(Resource resource_source: resources)
 			{
-				for(DataSource dataSource_target: dataSources)
+				for(Resource resource_target: resources)
 				{
-					//if it is the same data source don't instantiate data movement action
-					if (dataSource_source.equals(dataSource_target))
+					//if it is the same resource don't instantiate data movement action
+					if (resource_source.equals(resource_target))
 						continue;
 
+					//for a copy of resource add the data movement compatible 
+					//this is the (deep copy), i create 1 new object for each new movement
 					ArrayList<Movement> newMovements = new ArrayList<Movement> (Arrays.asList(mapper.treeToValue(movementNode, Movement[].class)));
 					//set target and source
 					for (Movement movement: newMovements)
 					{
-						movement.setFromLinked(dataSource_source);
-						movement.setToLinked(dataSource_target);
+						if (
+								movement.getToType().toLowerCase().equals(resource_target.getLocation().toLowerCase()) && //if it matches the location target (cloud/edge)
+								movement.getFromType().toLowerCase().equals(resource_source.getLocation().toLowerCase()) &&//if it matches the location source (cloud/edge)
+								resource_source.getType().equals(resource_target.getType()) //the type of the source and target should be the same
+								
+								)
+						{
+							//set the targets
+							movement.setFromLinked(resource_source);
+							movement.setToLinked(resource_target);
+							
+							//add to list of data movement action 
+							movements.add(movement);
+						}
 					}
-					
-					//add to list of data movement action 
-					movements.addAll(newMovements);
 				}
 			}
 			

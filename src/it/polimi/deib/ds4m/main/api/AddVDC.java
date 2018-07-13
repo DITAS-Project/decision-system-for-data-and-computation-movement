@@ -26,6 +26,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
+import it.polimi.deib.ds4m.main.model.resources.Resource;
 import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 
 /**
@@ -54,6 +55,8 @@ public class AddVDC extends HttpServlet {
 		
 		//convert the json in object
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+		
 		JsonNode root; 
 		try {
 			root = mapper.readTree(concreteBlueprintJSON);
@@ -83,7 +86,6 @@ public class AddVDC extends HttpServlet {
 		JsonNode abstractPropertiesJson = root.get("ABSTRACT_PROPERTIES");
 		ArrayList<AbstractProperty> abstractProperties; 
 		try {
-			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
 			abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
 		}
 		
@@ -92,7 +94,20 @@ public class AddVDC extends HttpServlet {
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 			e.printStackTrace();
 			return;			
-		}		
+		}
+		
+		//retrieve resources
+		JsonNode resourcesJSON = root.get("INTERNAL_STRUCTURE").get("resourcesAvailable");
+		ArrayList<Resource> resources;
+		try {
+			resources = new ArrayList<Resource>(Arrays.asList(mapper.treeToValue(resourcesJSON, Resource[].class)));
+		}
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;			
+		}
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
@@ -102,8 +117,15 @@ public class AddVDC extends HttpServlet {
 		}
 		catch (JsonProcessingException e) 
 		{
+			e.printStackTrace();
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 			return;			
+		}
+		
+		//connect data sources with resource
+		for (DataSource dataSource: dataSources)
+		{
+			dataSource.connectWithResource(resources);
 		}
 		
 		StringBuilder movementsJSON;
@@ -125,13 +147,12 @@ public class AddVDC extends HttpServlet {
 		}
 		
 	    //instantiate movement classes for each data source
-		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString()); 
+		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(resources,movementsJSON.toString()); 
 	    if (instantiatedMovements==null)
 	    {
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			return;
 	    }
-	    
 	    
 	    //retrieve VDC name
 		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
@@ -152,6 +173,7 @@ public class AddVDC extends HttpServlet {
 		vdc.setDataSources(dataSources);
 		vdc.setMovements(instantiatedMovements);
 		vdc.connectAbstractProperties();
+		vdc.setResources(resources);
 		vdc.setId(vdcName);
 		
 		//if it is not set create a collection of appl.s requirements
