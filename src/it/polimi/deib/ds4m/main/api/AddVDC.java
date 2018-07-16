@@ -122,10 +122,10 @@ public class AddVDC extends HttpServlet {
 			return;			
 		}
 		
-		//connect data sources with resource
+		//create a fake (initial) resource for the data source
 		for (DataSource dataSource: dataSources)
 		{
-			dataSource.connectWithResource(resources);
+			dataSource.createResource(resources);
 		}
 		
 		StringBuilder movementsJSON;

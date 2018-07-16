@@ -44,7 +44,7 @@ public class ManageMovementsActionsTest
 		
 		try 
 		{
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_V3_complete2.json", Charset.forName("UTF-8"));
+			concreteBlueprintJSON=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -75,7 +75,7 @@ public class ManageMovementsActionsTest
 		//connect data sources with resource
 		for (DataSource dataSource: dataSources)
 		{
-			dataSource.connectWithResource(resources);
+			dataSource.createResource(resources);
 		}
 		
 
@@ -87,7 +87,7 @@ public class ManageMovementsActionsTest
 	    ArrayList<Movement> movements = MovementsActionsManager.instantiateMovementActions(resources,movementsJSON);
 	    
 	    //2 data sources and 2 moment action classes so 4 data movement action instances 
- 	    assertTrue(movements.size()==4);
+ 	    assertTrue(movements.size()==6);
 
  	    
  	    
@@ -279,7 +279,7 @@ public class ManageMovementsActionsTest
 				try 
 				{
 					//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-					concreteBlueprintJSON=Utility.readFile("./testResources/example_V3_complete2.json", Charset.forName("UTF-8"));
+					concreteBlueprintJSON=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
 					
 				} catch (IOException e) 
 				{
@@ -352,7 +352,7 @@ public class ManageMovementsActionsTest
 				//connect data sources with resource
 				for (DataSource dataSource: dataSources)
 				{
-					dataSource.connectWithResource(resources);
+					dataSource.createResource(resources);
 				}
 				
 				

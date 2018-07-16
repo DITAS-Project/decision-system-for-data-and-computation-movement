@@ -2,12 +2,17 @@ package it.polimi.deib.ds4m.main.model.resources;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Resource 
 {
 	private String name;
 	private String type;
 	private String location;//cloud edge
 	private ArrayList<Characteristic> characteristics;
+	
+	@JsonIgnore
+	private Boolean isDataSource = false;
 	
 	
 	
@@ -58,6 +63,18 @@ public class Resource
 	 */
 	public void setCharacteristics(ArrayList<Characteristic> characteristics) {
 		this.characteristics = characteristics;
+	}
+	/**
+	 * @return the isDataSource
+	 */
+	public Boolean getIsDataSource() {
+		return isDataSource;
+	}
+	/**
+	 * @param isDataSource the isDataSource to set
+	 */
+	public void setIsDataSource(Boolean isDataSource) {
+		this.isDataSource = isDataSource;
 	}
 
 

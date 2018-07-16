@@ -1,18 +1,20 @@
 {
-  "UUID":"id_2",
    "INTERNAL_STRUCTURE":{  
       "Overview":{  
          "name":"VDC_2",
          "description":"This VDC provides information about the weather in Athens, Greece",
-         "topic":"Weather",
-         "keywords":[  
-            "Athens",
-            "Weather"
-         ]
+         "tags":
+           [
+             {
+                "method_id": "getAllBlodTest",
+                "tags":["t1", "t2"]
+             }
+           ]
       },
       "Data_Sources":[  
          {  
-            "name":"MinioDS1",
+            "id":"MinioDS1",
+           "class":"relational database",
             "type":"sql",
             "parameters":{  
                "hostname":"localhost",
@@ -38,8 +40,9 @@
 	           	] 
          },
          {  
-            "name":"MinioDS2",
+            "id":"MinioDS2",
             "type":"sql",
+			"class":"relational database",
             "parameters":{  
                "hostname":"localhost",
                "port":"8000",
@@ -144,7 +147,7 @@
          }
       ],
       "Flow":{  
-         "platform":"NodeRED",
+         "platform":"Node-RED",
          "source_code":[  
             {  
                "id":"266d1e0.2f202e2",
@@ -220,25 +223,7 @@
                ]
             }
          ]
-      },
-      "Testing_Output_Data":[  
-         {  
-            "method_name":"get_weather",
-            "data":{  
-               "weather":"Clear",
-               "tempk":288.3,
-               "tempc":15.1,
-               "tempf":59.2,
-               "humidity":"50%",
-               "windspeed":3.1,
-               "winddirection":220,
-               "location":"Vyronas, Viron, ",
-               "epoch":"1517917694",
-               "description":"The weather in Athens at coordinates: 37.97999954, 23.72999954 is Clear",
-               "forecast":"Athens : Tuesday : Plenty of sunshine. High around 15C. Winds E at 10 to 15 km/h."
-            }
-         }
-      ]
+      }
    },
 "DATA_MANAGEMENT":
     [
@@ -848,5 +833,6 @@
     
     
 }
+
 
 

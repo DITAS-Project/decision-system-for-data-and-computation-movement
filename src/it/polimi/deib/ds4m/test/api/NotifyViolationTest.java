@@ -108,7 +108,7 @@ public class NotifyViolationTest
 		{
 			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
 			//concreteBlueprint=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));//before change
-			concreteBlueprint=Utility.readFile("./testResources/example_V3_complete2.json", Charset.forName("UTF-8"));
+			concreteBlueprint=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -258,7 +258,7 @@ public class NotifyViolationTest
             //check the answer to the mocked server
             verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withHeader("Content-Type", equalTo("application/x-www-form-urlencoded")));
             
-            verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withRequestBody(containing("movementsEnaction=%7B%22movementsEnaction%22%3A%5B%7B%22from%22%3A%22rescource1%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22rescource2%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22rescource1%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataMovement%22%7D%2C%7B%22from%22%3A%22rescource2%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataMovement%22%7D%5D%7D")));
+            verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withRequestBody(containing("movementsEnaction=%7B%22movementsEnaction%22%3A%5B%7B%22from%22%3A%22rescource1%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22rescource2%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22MinioDS1%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22MinioDS2%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22rescource1%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataMovement%22%7D%2C%7B%22from%22%3A%22rescource2%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataMovement%22%7D%5D%7D")));
             
             	
         } catch (IOException e) {

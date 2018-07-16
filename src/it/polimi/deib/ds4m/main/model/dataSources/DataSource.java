@@ -4,45 +4,43 @@ package it.polimi.deib.ds4m.main.model.dataSources;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import it.polimi.deib.ds4m.main.model.resources.Characteristic;
 import it.polimi.deib.ds4m.main.model.resources.Resource;
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class DataSource 
 {
-	private String name;
+	private String id;
 	private String type;
+	private String classDataSource;
 	private Parameters parameters;
-	private Resource resourceUsed;//this represent the resource used in terms of how many GB and CPU% the Data Source uses 
+	private String location;
+	private ArrayList<Characteristic> resourceUsed;//this represent the resource used in terms of how many GB and CPU% the Data Source uses 
 	
 	@JsonIgnore
 	private Resource resourceUsedLinked;// this is the link to the actual resource that host the DS. in here the parameters represent what the resource has available a nd in total.
 	
-	public void connectWithResource(ArrayList<Resource> resources)
+	/**
+	 * It creates the resource that represent the data source. please notice that the locatioj is set tu null since this resource can be olty used as source of data movement 
+	 * 
+	 * @param resources
+	 */
+	public void createResource(ArrayList<Resource> resources)
 	{
-		for (Resource resource : resources)
-		{
-			if (resource.getName().equals(resourceUsed.getName()))
-			{
-				resourceUsedLinked = resource;
-				break;
-			}
-		}
+		this.resourceUsedLinked =  new Resource();
+		this.resourceUsedLinked.setCharacteristics(resourceUsed);
+		this.resourceUsedLinked.setName(id);
+		this.resourceUsedLinked.setType(type);
+		this.resourceUsedLinked.setLocation(location);
+		this.resourceUsedLinked.setIsDataSource(true);
+		
+		resources.add(resourceUsedLinked);//add the newly created resoure to the list of resource to later create the movement
+
 	}
  
     
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
 	/**
 	 * @return the type
 	 */
@@ -84,7 +82,11 @@ public class DataSource
 	    //check all the fields
 	    final DataSource other = (DataSource) obj;	  
 	    
-	    if (!this.name.equals(other.getName()) ) {
+	    if (!this.id.equals(other.getId()) ) {
+	        return false;
+	    }
+	    
+	    if (!this.classDataSource.equals(other.getClassDataSource()) ) {
 	        return false;
 	    }
 	    
@@ -105,22 +107,94 @@ public class DataSource
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
             // if deriving: appendSuper(super.hashCode()).
-            append(name).
+            append(id).
             append(type).
             append(parameters).
+            append(classDataSource).
             toHashCode();
     }
+
+
 	/**
 	 * @return the resourceUsed
 	 */
-	public Resource getResourceUsed() {
+	public ArrayList<Characteristic> getResourceUsed() {
 		return resourceUsed;
 	}
+
+
 	/**
 	 * @param resourceUsed the resourceUsed to set
 	 */
-	public void setResourceUsed(Resource resourceUsed) {
+	public void setResourceUsed(ArrayList<Characteristic> resourceUsed) {
 		this.resourceUsed = resourceUsed;
 	}
+
+
+	/**
+	 * @return the resourceUsedLinked
+	 */
+	public Resource getResourceUsedLinked() {
+		return resourceUsedLinked;
+	}
+
+
+	/**
+	 * @param resourceUsedLinked the resourceUsedLinked to set
+	 */
+	public void setResourceUsedLinked(Resource resourceUsedLinked) {
+		this.resourceUsedLinked = resourceUsedLinked;
+	}
+
+
+	/**
+	 * @return the location
+	 */
+	public String getLocation() {
+		return location;
+	}
+
+
+	/**
+	 * @param location the location to set
+	 */
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
+
+
+	/**
+	 * @return the classDataSource
+	 */
+	@JsonProperty("class")
+	public String getClassDataSource() {
+		return classDataSource;
+	}
+
+
+	/**
+	 * @param classDataSource the classDataSource to set
+	 */
+	@JsonProperty("class")
+	public void setClassDataSource(String classDataSource) {
+		this.classDataSource = classDataSource;
+	}
+
 
 }

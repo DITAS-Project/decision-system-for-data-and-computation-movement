@@ -75,9 +75,15 @@ public class MovementsActionsManager
 					for (Movement movement: newMovements)
 					{
 						if (
+								//TODO now I do only data movement. When I will include computation movement, I will need to differentiate between the two types 
+								!resource_target.getIsDataSource() && //if the target resource has the location set to "null" it means the resource represent the host system of the initial data source, so it means it cannot be used  to move data in, only to take data
+								
+								(!(resource_source.getIsDataSource()) || movement.getType().toLowerCase().equals("dataduplication")) && //if the source ha the location set to null, it means is a data source, therefore i can only duplicate from it  null -> dadaduplication
+								
 								movement.getToType().toLowerCase().equals(resource_target.getLocation().toLowerCase()) && //if it matches the location target (cloud/edge)
-								movement.getFromType().toLowerCase().equals(resource_source.getLocation().toLowerCase()) &&//if it matches the location source (cloud/edge)
+								(movement.getFromType().toLowerCase().equals(resource_source.getLocation().toLowerCase()) ) &&//if it matches the location source (cloud/edge)
 								resource_source.getType().equals(resource_target.getType()) //the type of the source and target should be the same
+								
 								
 								)
 						{
