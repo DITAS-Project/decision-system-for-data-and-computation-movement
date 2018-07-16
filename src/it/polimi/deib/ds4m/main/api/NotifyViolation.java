@@ -22,6 +22,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.Violations;
@@ -191,7 +192,10 @@ public class NotifyViolation extends HttpServlet {
 		}
 		catch (JsonParseException e)
 		{
-			e.printStackTrace();
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+		}
+		catch (UnrecognizedPropertyException e)
+		{
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 		}
 	}

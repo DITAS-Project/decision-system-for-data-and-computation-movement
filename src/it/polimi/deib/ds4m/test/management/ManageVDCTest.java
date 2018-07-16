@@ -227,8 +227,8 @@ public class ManageVDCTest {
 		Movement movement1 =  new Movement();
 		movement1.setPositiveImpacts(positiveImpacts1);//impacts are not considered in the comparison of data movement (extension of "equals" interface)
 		movement1.setNegativeImpacts(negativeImpacts1);//impacts are not considered in the comparison of data movement (extension of "equals" interface)
-		movement1.setFromType("Edge");
-		movement1.setToType("Cloud");
+		movement1.setFromType("edge");
+		movement1.setToType("cloud");
 		movement1.setRestTime(12.);
 		movement1.setType("DataMovement");
 		movement1.setCosts(costs);
@@ -311,8 +311,8 @@ public class ManageVDCTest {
 		Movement movement1 =  new Movement();
 		movement1.setPositiveImpacts(positiveImpacts1);//impacts are not considered in the comparison of data movement (extension of "equals" interface)
 		movement1.setNegativeImpacts(negativeImpacts1);//impacts are not considered in the comparison of data movement (extension of "equals" interface)
-		movement1.setFromType("Edge");
-		movement1.setToType("Cloud");
+		movement1.setFromType("edge");
+		movement1.setToType("cloud");
 		movement1.setRestTime(12.);
 		movement1.setType("DataMovement");
 		movement1.setCosts(costs);

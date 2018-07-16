@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.http.HttpStatus;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,6 +25,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Cost;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
+import it.polimi.deib.ds4m.main.model.resources.Resource;
 import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 
 public class ManageMovementsActionsTest 
@@ -42,7 +44,7 @@ public class ManageMovementsActionsTest
 		
 		try 
 		{
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
+			concreteBlueprintJSON=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -54,19 +56,38 @@ public class ManageMovementsActionsTest
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode root = mapper.readTree(concreteBlueprintJSON);
 		
+		//retrieve resources
+		JsonNode resourcesJSON = root.get("INTERNAL_STRUCTURE").get("resourcesAvailable");
+		ArrayList<Resource> resources;
+		try {
+			resources = new ArrayList<Resource>(Arrays.asList(mapper.treeToValue(resourcesJSON, Resource[].class)));
+		}
+		catch (JsonProcessingException e) 
+		{
+			e.printStackTrace();
+			return;			
+		}
+		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
 		ArrayList<DataSource> dataSources = new ArrayList<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
 		
+		//connect data sources with resource
+		for (DataSource dataSource: dataSources)
+		{
+			dataSource.createResource(resources);
+		}
+		
+
 		
 		//retrieve movement classes
 	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
 	    
 	    //instantiate movement classes for each data source 
-	    ArrayList<Movement> movements = MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON);
+	    ArrayList<Movement> movements = MovementsActionsManager.instantiateMovementActions(resources,movementsJSON);
 	    
 	    //2 data sources and 2 moment action classes so 4 data movement action instances 
- 	    assertTrue(movements.size()==4);
+ 	    assertTrue(movements.size()==6);
 
  	    
  	    
@@ -258,7 +279,7 @@ public class ManageMovementsActionsTest
 				try 
 				{
 					//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-					concreteBlueprintJSON=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
+					concreteBlueprintJSON=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
 					
 				} catch (IOException e) 
 				{
@@ -305,17 +326,35 @@ public class ManageMovementsActionsTest
 					return null;			
 				}		
 				
-				//retrieve data sources
-				JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-				ArrayList<DataSource> dataSources;
+				//retrieve resources
+				JsonNode resourcesJSON = root.get("INTERNAL_STRUCTURE").get("resourcesAvailable");
+				ArrayList<Resource> resources;
 				try {
-					dataSources = new ArrayList<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+					resources = new ArrayList<Resource>(Arrays.asList(mapper.treeToValue(resourcesJSON, Resource[].class)));
 				}
 				catch (JsonProcessingException e) 
 				{
 					e.printStackTrace();
 					return null;			
 				}
+				
+				//retrieve data sources
+				JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
+				ArrayList<DataSource> dataSources;
+				try {
+					dataSources = new ArrayList<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+				} catch (JsonProcessingException e2) 
+				{
+					e2.printStackTrace();
+					return null;
+				}
+				
+				//connect data sources with resource
+				for (DataSource dataSource: dataSources)
+				{
+					dataSource.createResource(resources);
+				}
+				
 				
 				//retrieve movement classes
 			    String movementsJSON;
@@ -328,7 +367,7 @@ public class ManageMovementsActionsTest
 				}
 				
 			    //instantiate movement classes for each data source
-				ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(dataSources,movementsJSON.toString()); 
+				ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(resources,movementsJSON.toString()); 
 			    if (instantiatedMovements==null)
 			    {
 			    	return null;

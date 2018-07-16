@@ -6,14 +6,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
+import it.polimi.deib.ds4m.main.model.resources.Resource;
 
 public class VDC 
 {	
 	//vector of requirements
 	private ArrayList<DataManagement> dataManagement;
 	private ArrayList<AbstractProperty> abstractProperties;
-	private ArrayList<DataSource> DataSources;
+	private ArrayList<DataSource> dataSources;
 	private String id;
+	private ArrayList<Resource> resources;
 	
     @JsonIgnore
     private ArrayList<Movement> movements;
@@ -23,14 +25,14 @@ public class VDC
 	 * @return the dataSources
 	 */
 	public ArrayList<DataSource> getDataSources() {
-		return DataSources;
+		return dataSources;
 	}
 
 	/**
 	 * @param dataSources the dataSources to set
 	 */
 	public void setDataSources(ArrayList<DataSource> dataSources) {
-		DataSources = dataSources;
+		this.dataSources = dataSources;
 	}
 
 	/**
@@ -146,6 +148,20 @@ public class VDC
 	 */
 	public void setMovements(ArrayList<Movement> movements) {
 		this.movements = movements;
+	}
+
+	/**
+	 * @return the resources
+	 */
+	public ArrayList<Resource> getResources() {
+		return resources;
+	}
+
+	/**
+	 * @param resources the resources to set
+	 */
+	public void setResources(ArrayList<Resource> resources) {
+		this.resources = resources;
 	}
 	
 	

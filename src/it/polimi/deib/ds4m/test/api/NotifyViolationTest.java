@@ -2,6 +2,7 @@ package it.polimi.deib.ds4m.test.api;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -33,7 +34,7 @@ public class NotifyViolationTest
 {	
 	//set URLS and costants
 	private String URSDS4M_notifyViolation = "http://localhost:8080/ROOT/NotifyViolation";
-	private String URSDS4M_setUp = "http://localhost:8080/ROOT/SetUp";
+	private String URSDS4M_addVDC = "http://localhost:8080/ROOT/AddVDC";
 	//private String URSDS4M_notifyViolation = "http://31.171.247.162:50003/NotifyViolation";
 	//private String URSDS4M_setUp = "http://31.171.247.162:50003/SetUp";
 	private String URLdataMovementEnactor = "/dataEnactor/action";
@@ -46,6 +47,9 @@ public class NotifyViolationTest
 	//set global variables
     Violations violations;
     ObjectMapper mapper;
+    
+    //True if the vdc has been added once.
+    boolean addVDC = false;
     
 	//setup to be called to instantiate variables
     @Before
@@ -89,8 +93,14 @@ public class NotifyViolationTest
 	} 
     
 	@Test
-    public void testSetUp_correct() 
+    public void testAddVDC_correct() 
 	{
+		//if the VDC has already been added, i skip this call
+		if (addVDC)
+		{
+			assertTrue(true);
+			return;
+		}
 		
 		String concreteBlueprint;
 		
@@ -98,7 +108,7 @@ public class NotifyViolationTest
 		{
 			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
 			//concreteBlueprint=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));//before change
-			concreteBlueprint=Utility.readFile("./testResources/example_V2_complete.json", Charset.forName("UTF-8"));
+			concreteBlueprint=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -109,7 +119,7 @@ public class NotifyViolationTest
 		
 		//set up connection 
         HttpClient client = HttpClientBuilder.create().build();    
-        HttpPost post = new HttpPost(URSDS4M_setUp);
+        HttpPost post = new HttpPost(URSDS4M_addVDC);
 		
         // Create some NameValuePair for HttpPost parameters
         List<NameValuePair> arguments = new ArrayList<>(3);
@@ -137,7 +147,7 @@ public class NotifyViolationTest
 	@Test
     public void testNotifyViolations_correct() 
 	{
-		this.testSetUp_correct();
+		this.testAddVDC_correct();
 		
         //setup a mock server for data movement
 		stubFor(post(urlEqualTo(URLdataMovementEnactor))
@@ -183,7 +193,7 @@ public class NotifyViolationTest
 	@Test
     public void testNotifyViolations_notCorrect() 
 	{
-		this.testSetUp_correct();
+		this.testAddVDC_correct();
 		
 		//set up connection 
         HttpClient client = HttpClientBuilder.create().build();
@@ -191,7 +201,7 @@ public class NotifyViolationTest
 		
         // Create some NameValuePair for HttpPost parameters
         List<NameValuePair> arguments = new ArrayList<>(3);
-        arguments.add(new BasicNameValuePair("violations", "{\\\"violations\\\":[{\\\"type11\\\":\\\"violation type\\\",\\\"vdcID\\\":\\\"01\\\",\\\"agreementid\\\":1,\\\"guaranteename\\\":\\\"guarantee name\\\",\\\"date\\\":\\\"12/01\\\",\\\"metric\\\":\\\"Availability\\\",\\\"value\\\":1.0},{\\\"type\\\":\\\"violation type2\\\",\\\"agreementid\\\":2,\\\"vdcID\\\":\\\"01\\\",\\\"guaranteename11\\\":\\\"guarantee name2\\\",\\\"date\\\":\\\"12/02\\\",\\\"metric\\\":\\\"ResponseTime\\\",\\\"value\\\":5.0}]}"));
+        arguments.add(new BasicNameValuePair("violations", "{\"violations\":[{\"type_wrong\":\"violation type\",\"methodID_wrong\":\"GetAllBloodTests\",\"vdcID\":\"VDC_02\",\"agreementid\":1,\"guaranteename\":\"guarantee name\",\"date\":\"12/01\",\"metric\":\"Availability\",\"value\":1.0},{\"type\":\"violation type2\",\"methodID\":\"GetAllBloodTests\",\"agreementid\":2,\"vdcID\":\"VDC_02\",\"guaranteename\":\"guarantee name2\",\"date\":\"12/02\",\"metric\":\"ResponseTime\",\"value\":5.0}]}"));
         //connect to service
         try {
             post.setEntity(new UrlEncodedFormEntity(arguments));
@@ -211,7 +221,7 @@ public class NotifyViolationTest
 	@Test
     public void testNotifyViolations_content() 
 	{
-		this.testSetUp_correct();
+		this.testAddVDC_correct();
 		
         //setup a mock server
 		stubFor(post(urlEqualTo(URLdataMovementEnactor))
@@ -248,7 +258,7 @@ public class NotifyViolationTest
             //check the answer to the mocked server
             verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withHeader("Content-Type", equalTo("application/x-www-form-urlencoded")));
             
-            verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withRequestBody(containing("movementsEnaction=%7B%22movementsEnaction%22%3A%5B%7B%22from%22%3A%22MinioDS1%22%2C%22to%22%3A%22MinioDS2%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%2C%7B%22from%22%3A%22MinioDS2%22%2C%22to%22%3A%22MinioDS1%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%2C%7B%22from%22%3A%22MinioDS1%22%2C%22to%22%3A%22MinioDS2%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%2C%7B%22from%22%3A%22MinioDS2%22%2C%22to%22%3A%22MinioDS1%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%7D%5D%7D")));
+            verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withRequestBody(containing("movementsEnaction=%7B%22movementsEnaction%22%3A%5B%7B%22from%22%3A%22rescource1%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22rescource2%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22MinioDS1%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22MinioDS2%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22rescource1%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataMovement%22%7D%2C%7B%22from%22%3A%22rescource2%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataMovement%22%7D%5D%7D")));
             
             	
         } catch (IOException e) {

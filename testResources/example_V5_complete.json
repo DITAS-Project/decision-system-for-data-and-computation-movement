@@ -1,0 +1,838 @@
+{
+   "INTERNAL_STRUCTURE":{  
+      "Overview":{  
+         "name":"VDC_2",
+         "description":"This VDC provides information about the weather in Athens, Greece",
+         "tags":
+           [
+             {
+                "method_id": "getAllBlodTest",
+                "tags":["t1", "t2"]
+             }
+           ]
+      },
+      "Data_Sources":[  
+         {  
+            "id":"MinioDS1",
+           "class":"relational database",
+            "type":"sql",
+            "parameters":{  
+               "hostname":"localhost",
+               "port":"8000",
+               "proxy-hostname":"localhost",
+               "proxy-port":"9800",
+               "username":"user1",
+               "password":"pass1"
+            },
+            "location" : "edge",
+	         "resourceUsed":  
+	         	[
+		            {  
+		               "type":"space",
+		               "total":"40",
+		               "unit":"GB"
+		            },
+		            {  
+		               "type":"memory",
+		               "total":"3",
+		               "unit":"GB"
+		            }
+	           	] 
+         },
+         {  
+            "id":"MinioDS2",
+            "type":"sql",
+			"class":"relational database",
+            "parameters":{  
+               "hostname":"localhost",
+               "port":"8000",
+               "proxy-hostname":"localhost",
+               "proxy-port":"9800",
+               "username":"user1",
+               "password":"pass1"
+               
+            },
+            "location" : "edge",
+	         "resourceUsed":  
+	         	[
+		            {  
+		               "type":"space",
+		               "total":"20",
+		               "unit":"GB"
+		            },
+		            {  
+		               "type":"memory",
+		               "total":"5",
+		               "unit":"GB"
+		            }
+	           	]  
+         }
+       ],
+      "resourcesAvailable":[  
+         {  
+            "name":"rescource1",
+            "type":"sql",
+            "location":"edge",
+            "characteristics":[
+	            {  
+	               "type":"space",
+	               "total":"100",
+	               "free":"50",
+	               "unit":"GB"
+	            },
+	            {  
+	               "type":"memory",
+	               "total":"100",
+	               "free":"50",
+	               "unit":"GB"
+	            }
+            ]
+         },
+         {  
+            "name":"rescource2",
+            "type":"sql",
+            "location":"edge",
+            "characteristics":[
+	            {  
+	               "type":"space",
+	               "total":"100",
+	               "free":"50",
+	               "unit":"GB"
+	            },
+	            {  
+	               "type":"memory",
+	               "total":"100",
+	               "free":"50",
+	               "unit":"GB"
+	            }
+            ]
+         },
+         {  
+            "name":"rescource3",
+            "type":"sql",
+            "location":"cloud",
+            "characteristics":[
+	            {  
+	               "type":"space",
+	               "total":"100",
+	               "free":"50",
+	               "unit":"GB"
+	            },
+	            {  
+	               "type":"memory",
+	               "total":"100",
+	               "free":"50",
+	               "unit":"GB"
+	            }
+            ]
+         },
+         {  
+            "name":"rescource4",
+            "type":"computation",
+            "location":"edge",
+            "characteristics":[
+	            {  
+	               "type":"memory",
+	               "total":"100",
+	               "free":"50",
+	               "unit":"GB"
+	            },
+	            {  
+	               "type":"CPU",
+	               "total":"100",
+	               "free":"50",
+	               "unit":"percentage"
+	            }
+            ]
+         }
+      ],
+      "Flow":{  
+         "platform":"Node-RED",
+         "source_code":[  
+            {  
+               "id":"266d1e0.2f202e2",
+               "type":"http in",
+               "z":"edca8e77.6ea5e",
+               "name":"[http rest web servive in]   CAF",
+               "url":"/CAF",
+               "method":"post",
+               "upload":false,
+               "swaggerDoc":"",
+               "x":147.78973388671875,
+               "y":194.3920373916626,
+               "wires":[  
+                  [  
+                     "e78e4849.721ba8"
+                  ]
+               ]
+            },
+            {  
+               "id":"a0810829.8d5538",
+               "type":"http response",
+               "z":"edca8e77.6ea5e",
+               "name":"[http rest web servive out]   CAF",
+               "statusCode":"",
+               "headers":{  
+
+               },
+               "x":686.7812347412109,
+               "y":302.5482864379883,
+               "wires":[  
+
+               ]
+            },
+            {  
+               "id":"218f7e99.a6fc42",
+               "type":"wunderground",
+               "z":"edca8e77.6ea5e",
+               "name":"",
+               "lon":"",
+               "lat":"",
+               "city":"Athens",
+               "country":"Greece",
+               "x":404.79258728027344,
+               "y":332.3210220336914,
+               "wires":[  
+                  [  
+                     "a0810829.8d5538"
+                  ]
+               ]
+            },
+            {  
+               "id":"e78e4849.721ba8",
+               "type":"switch",
+               "z":"edca8e77.6ea5e",
+               "name":"[switch]   select VDC exposed method",
+               "property":"payload.method_name",
+               "propertyType":"msg",
+               "rules":[  
+                  {  
+                     "t":"eq",
+                     "v":"get_weather",
+                     "vt":"str"
+                  }
+               ],
+               "checkall":"true",
+               "outputs":1,
+               "x":485.7925796508789,
+               "y":156.26419639587402,
+               "wires":[  
+                  [  
+                     "218f7e99.a6fc42"
+                  ]
+               ]
+            }
+         ]
+      }
+   },
+"DATA_MANAGEMENT":
+    [
+		{
+			"method_id":"GetAllBloodTests",
+			"attributes":
+            {
+                "dataUtility": 
+                [
+                    {
+                        "id": "availability_9599",
+                        "description":"Availability 95-99",
+                        "type":"Availability",
+						"properties": 
+						{
+							"availability": 
+							{
+								"unit": "percentage",
+								"minimum":95,
+								"maximum":99
+							}				
+						}						
+                    },
+                    {
+                        "id": "responseTime_1",
+                        "description": "ResponseTime 1",
+                        "type": "ResponseTime",
+                        "properties": 
+						{
+							"responseTime": 
+							{
+								"maximum":1,
+								"unit": "second"
+							}
+						}
+                    },
+                    {
+                        "id": "volume_10000",
+                        "description": "volume 10000",
+                        "type": "Volume",
+                        "properties": 
+						{
+							"volume": 
+							{
+								"value":"10000",
+								"unit": "tuple"
+							}
+						}						
+                    },
+                    {
+                        "id": "timeliness_06",
+                        "description": "Timeliness 0.6",
+                        "type": "Timeliness",
+						"properties": 
+						{
+							"timeliness": 
+							{
+								"maximum":0.6,
+								"unit": "NONE"
+							}
+						}
+                    },
+                    {
+                        "id": "processCompleteness_90",
+                        "description": "Process completeness 90",
+                        "type": "Process completeness",
+                        "properties": 
+						{
+							"completeness": 
+							{
+								"minimum":90,
+								"unit": "percentage"
+							}
+						}
+                    },
+                    {   
+                        "id": "scaleUpMemory",
+                        "description":"scale-up memory",
+                        "type":"Scale-up",
+                        "properties": 
+						{
+							"ramGain": 
+							{
+								"unit": "percentage",
+								"value": "150"
+							},
+							"ramLimit": 
+							{
+								"unit": "percentage",
+								"value": "95"
+							}
+						}
+                    },
+                    {
+                        "id": "scaleUpSpace",
+                        "description":"scale-up space",
+                        "type":"Scale-up",
+                        "properties": 
+						{
+							"spaceGain": 
+							{
+								"unit": "percentage",
+								"value": "110"
+							},
+							"spaceLimit":     
+							{
+								"unit": "percentage",
+								"value": "90"
+							}
+						}
+                    },
+                    {
+                        "id": "throughput_5",
+                        "description": "Throughput",
+                        "type": "Throughput",
+                        "properties": 
+						{
+							"throughput": 
+							{
+								"maximum":5,
+								"unit": "Gb/s"
+							}
+						}
+                    },
+                    {
+                        "id": "precision_08",
+                        "description": "Precision",
+                        "type": "Precision",
+                        "properties": 
+						{
+							"precision": 
+							{
+								"minimum":0.8,
+								"unit": "none"
+							}
+						}
+                    },
+                    {
+                        "id": "recall_09",
+                        "description": "Recall",
+                        "type": "Recall",
+						"properties": 
+						{
+							"recall": 
+							{
+								"minimum":0.9,
+								"unit": "none"
+							}
+						}
+                    },
+                    {
+                        "id": "accuracy_09",
+                        "description": "Accuracy",
+                        "type": "Accuracy",
+                        "properties": 
+						{
+							"accuracy": 
+							{
+								"minimum":0.9,
+								"unit": "none"
+							}
+						}
+                    }
+                ],
+                "security":
+                [
+                    {
+                        "id": "encryptionAES_128",
+                        "description": "Encryption AES 128",
+                        "type": "Encryption",
+                        "properties": 
+						{
+							"algorithm":
+							{
+								"unit":"enum",
+								"value":"AES"
+							},
+							"keyLength":
+							{
+								"unit":"number",
+								"minimum":128
+							}
+						}
+                    },
+					{
+                        "id": "tracing_99100",
+                        "description": "Tracing",
+                        "type": "Tracing",
+                        "properties": 
+						{
+							"level":
+							{
+							   "unit":"enum",
+							   "value":"datasource"
+							},
+							"sampleRate":
+							{
+							   "unit":"percentage",
+							   "minimum":99,
+							   "maximum":100
+							}  
+						}
+					},
+					{
+                        "id": "aclRoleBasedReadOnly",
+                        "description": "ACL rolebased readOnly",
+                        "type": "ACL",
+                        "properties": 
+						{
+							"kind":
+							{
+							   "unit":"enum",
+							   "value":"rolebased"
+							},
+							"role":
+							{
+							   "unit":"enum",
+							   "value":"readOnly"
+							}
+						}
+					},
+                    {
+                        "id": "encryptionAES_256",
+                        "description": "Encryption AES 256",
+                        "type": "Encryption",
+                        "properties": 
+						{
+							"algorithm":
+							{
+								"unit":"enum",
+								"value":"AES"
+							},
+							"keyLength":
+							{
+								"unit":"number",
+								"minimum":256
+							}  
+						}
+                    }
+               ],
+                "privacy":
+                [
+					{
+					    "id": "purposeControlNCGovernment",
+					    "description": "PurposeControl NonCommercial Government",
+					    "type": "PurposeControl",
+					    "properties": 
+						{
+							"allowedPurpose":
+							{
+							   "unit":"enum",
+							   "value":"NonCommercial"
+							},
+							"allowedGuarantor": 
+							{
+							   "unit":"enum",
+							   "value":"Government"
+							} 
+						}
+					}, 
+                    {
+                        "id": "mutationControlNCGovernment",
+                        "description": "MutationControl NonCommercial Government",
+                        "type": "MutationControl",
+                        "properties": 
+						{
+							"allowedPurpose":
+							{
+							   "unit":"enum",
+							   "value":"NonCommercial"
+							},
+							"allowedGuarantor":
+							{
+							   "unit":"enum",
+							   "value":"Government"
+							}  
+						}
+					}
+				]
+
+            }
+		}
+	],
+"ABSTRACT_PROPERTIES":
+	[
+		{
+			"method_id":"GetAllBloodTests",
+                "goalTrees":
+                {
+                    "dataUtility":
+                    {
+                        "type":"AND",
+                        "children":
+                        [
+                            {
+                                "type":"AND",
+                                "children":[
+                                    {
+                                        "type":"OR",
+                                        "leaves":
+                                        [
+                                            {
+                                                "id": "serviceAvailable",
+                                                "description": "Service available", 
+                                                "weight":1,
+                                                "attributes": 
+                                                [
+                                                    "availability_9599"
+                                                ]
+                                            }
+                                            ,
+                                            {
+                                                "id": "serviceScalable",
+                                                "description": "Service Scalable",
+                                                "weight":1,
+                                                "attributes":
+                                                [
+                                                    "scaleUpMemory","scaleUpSpace"
+                                                ]                
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type":"OR",
+                                        "leaves":
+                                        [
+                                            {
+                                                "id": "fastDataProcess",
+                                                "description": "Fast data process", 
+                                                "weight":1,
+                                                "attributes": 
+                                                [
+                                                    "responseTime_1"
+                                                ]
+                                            }
+                                            ,
+                                            {
+                                                "id": "fastDataStreaming",
+                                                "description": "Fast data streaming",
+                                                "weight":1,
+                                                "attributes":
+                                                [
+                                                    "throughput_5"
+                                                ]                
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type":"AND",
+                                "leaves":
+                                [
+                                    {
+                                        "id": "dataVolume",
+                                        "description": "Data volume",
+                                        "weight":1,
+                                        "attributes":
+                                        [
+                                            "volume_10000"
+                                        ]
+                                    }
+                                    ,
+                                    {
+                                        "id": "timeliness",
+                                        "description": "Timeliness",
+                                        "weight":1,
+                                        "attributes":
+                                        [
+                                            "timeliness_06"
+                                        ]                
+                                    }
+                                    ,
+                                    {
+                                        "id": "accuracy",
+                                        "description": "Accuracy",
+                                        "weight":1,
+                                        "attributes":
+                                        [
+                                            "accuracy_09"
+                                        ]                
+                                    }
+                                    ,
+                                    {
+                                        "id": "completeness",
+                                        "description": "Completeness",
+                                        "weight":1,
+                                        "attributes":
+                                        [
+                                            "processCompleteness_90"
+                                        ]                
+                                    }
+                                    ,
+                                    {
+                                        "id": "consistency",
+                                        "description": "consistency",
+                                        "weight":1,
+                                        "attributes":
+                                        [
+                                            "precision_08","recall_09"
+                                        ]                
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+					,
+                    "security":
+                    {
+                        "type":"AND",
+                        "children":
+                        [
+                            {
+                                "type":"AND",
+                                "leaves":
+                                [
+                                    {
+                                       "id": "storageEncryption",
+                                       "description": "Storage encryption",
+                                       "weight":1,
+                                       "attributes":[
+                                            "encryptionAES_128"
+                                       ]
+                                   }
+                                    ,
+                                    {
+                                       "id": "11",
+                                       "description": "Data encryption",
+                                       "weight":1,
+                                       "attributes":
+                                       [
+                                           "encryptionAES_256"  
+                                       ]
+                                   }
+                                ]
+                            }
+                        ],
+                        "leaves":[
+                           {
+								"id": "accessControl",
+								"description": "Access control",
+								"weight":1,
+								"attributes":
+								[
+									"aclRoleBasedReadOnly" 
+								]
+                           }
+                            ,
+                           {
+								"id": "tracing",
+								"description": "Tracing and monitoring",
+								"weight":1,
+                                "attributes":
+								[
+									"tracing_99100" 
+								]
+                           }
+                        ]
+                    }
+					,
+					"privacy":
+                    {
+                        "type":"AND",
+                        "leaves":
+                        [
+                           {
+								"id": "purposeControl",
+								"description": "Purpose control",
+								"weight":1,
+                                "attributes":[
+									"purposeControlNCGovernment" 
+								]
+                           },
+                           {
+								"id": "mutationControl",
+								"description": "Mutation control",
+								"weight":1,
+                                "attributes":[
+									"mutationControlNCGovernment" 
+								]
+                           }
+                        ]
+                    }
+                }
+
+            
+		}
+	],
+ "COOKBOOK_APPENDIX":{  
+
+   },
+"EXPOSED_API":{  
+      "Methods":[  
+         {  
+            "name":"get_weather",
+            "description":"The method returns information about the weather in Athens, Greece",
+            "attributes":[  
+               "purpose",
+               "requester_id"
+            ],
+            "HTTP_REST_API":{  
+               "Method":"POST",
+               "Body":{  
+                  "method_name":"get_weather",
+                  "attributes":{  
+                     "$schema":"http://json-schema.org/draft-06/schema#",
+                     "title":"Attributes",
+                     "description":"The attributes of the exposed VDC method",
+                     "type":"object",
+                     "properties":{  
+                        "purpose":{  
+                           "type":"string"
+                        },
+                        "requester_id":{  
+                           "type":"string"
+                        }
+                     },
+                     "additionalProperties":false,
+                     "required":[  
+                        "purpose",
+                        "requester_id"
+                     ]
+                  },
+                  "example":{  
+                     "method_name":"get_weather",
+                     "attributes":{  
+                        "purpose":"research",
+                        "requester_id":"ntua"
+                     }
+                  }
+               },
+               "Headers":[  
+                  {  
+                     "Content-Type":"application/json"
+                  }
+               ]
+            },
+            "output_schema":{  
+               "$schema":"http://json-schema.org/draft-06/schema#",
+               "title":"weather in Athens, Greece",
+               "type":"object",
+               "properties":{  
+                  "weather":{  
+                     "type":"string"
+                  },
+                  "tempk":{  
+                     "type":"number",
+                     "minimum":0,
+                     "description":"the temperature in Kelvin"
+                  },
+                  "tempc":{  
+                     "type":"number",
+                     "minimum":-273.15,
+                     "description":"the temperature in Celsius"
+                  },
+                  "tempf":{  
+                     "type":"number",
+                     "minimum":-459.67,
+                     "description":"the temperature in Fahrenheit"
+                  },
+                  "humidity":{  
+                     "type":"string",
+                     "description":"this is a percentage"
+                  },
+                  "windspeed":{  
+                     "type":"number"
+                  },
+                  "winddirection":{  
+                     "type":"number"
+                  },
+                  "location":{  
+                     "type":"string"
+                  },
+                  "epoch":{  
+                     "type":"string",
+                     "description":"the observation time in epoch format"
+                  },
+                  "description":{  
+                     "type":"string"
+                  },
+                  "forecast":{  
+                     "type":"string"
+                  }
+               },
+               "additionalProperties":false,
+               "required":[  
+                  "weather",
+                  "tempk",
+                  "tempc",
+                  "tempf",
+                  "humidity",
+                  "windspeed",
+                  "winddirection",
+                  "location",
+                  "epoch",
+                  "description",
+                  "forecast"
+               ]
+            }
+         }
+      ],
+      "URI":{  
+         "format":"hostname:port/CAF",
+         "example":"localhost:1880/CAF"
+      }
+   }
+    
+    
+}
+
+
+
