@@ -11,9 +11,8 @@ import java.util.Set;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
-import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Cost;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.resources.Resource;
@@ -115,7 +114,7 @@ public class MovementsActionsManager
 	 * @param vdc the VDC that contains the method that violated the goals 
 	 * @return the movements to be enacted that impact positively on the violated goals. a movement might impact on a subset of goals
 	 */
-	public static ArrayList<Movement> findMovementAction(Set<Goal> violatedGoals, VDC vdc)
+	public static ArrayList<Movement> findMovementAction(Set<TreeStructure> violatedGoals, VDC vdc)
 	{
 		//retrieve the data sources used by the method
 		//TODO: to insert binding in blueprint
@@ -130,7 +129,7 @@ public class MovementsActionsManager
 			//for each impact, check if present in the list of violated goals
 			for (String impact : movement.getPositiveImpacts())
 			{
-				for(Goal goal: violatedGoals)
+				for(TreeStructure goal: violatedGoals)
 				{
 					if (impact.equals(goal.getID()))
 						movementsToBeEnacted.add(movement);

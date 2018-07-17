@@ -4,18 +4,21 @@ package it.polimi.deib.ds4m.main.model.dataSources;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import it.polimi.deib.ds4m.main.model.resources.Characteristic;
 import it.polimi.deib.ds4m.main.model.resources.Resource;
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DataSource 
 {
 	private String id;
 	private String type;
 	private String classDataSource;
-	private Parameters parameters;
+	private String description;
+	//private Parameters parameters;
 	private String location;
 	private ArrayList<Characteristic> resourceUsed;//this represent the resource used in terms of how many GB and CPU% the Data Source uses 
 	
@@ -36,7 +39,7 @@ public class DataSource
 		this.resourceUsedLinked.setLocation(location);
 		this.resourceUsedLinked.setIsDataSource(true);
 		
-		resources.add(resourceUsedLinked);//add the newly created resoure to the list of resource to later create the movement
+		resources.add(resourceUsedLinked);//add the newly created resource to the list of resource to later create the movement
 
 	}
  
@@ -53,19 +56,6 @@ public class DataSource
 	public void setType(String type) {
 		this.type = type;
 	}
-	/**
-	 * @return the parameters
-	 */
-	public Parameters getParameters() {
-		return parameters;
-	}
-	/**
-	 * @param parameters the parameters to set
-	 */
-	public void setParameters(Parameters parameters) {
-		this.parameters = parameters;
-	}
-	
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -94,10 +84,6 @@ public class DataSource
 	        return false;
 	    }
 	    
-	    if (!this.parameters.equals(other.getParameters()) ) {
-	        return false;
-	    }
-
 	    
 	    return true;
 	}
@@ -109,7 +95,6 @@ public class DataSource
             // if deriving: appendSuper(super.hashCode()).
             append(id).
             append(type).
-            append(parameters).
             append(classDataSource).
             toHashCode();
     }
@@ -194,6 +179,22 @@ public class DataSource
 	@JsonProperty("class")
 	public void setClassDataSource(String classDataSource) {
 		this.classDataSource = classDataSource;
+	}
+
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 

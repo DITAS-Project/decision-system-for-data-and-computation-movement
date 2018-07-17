@@ -6,7 +6,6 @@ import java.util.Set;
 
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
@@ -83,7 +82,7 @@ public class VDCManager
 				for (Movement movement : movementsToBeEnactedOtherVDC) 
 				{
 					//obtain all leaves
-					ArrayList<Goal> leaves = new ArrayList<Goal>();
+					ArrayList<TreeStructure> leaves = new ArrayList<TreeStructure>();
 					TreeStructure.getAllLeaves(abstractProperty.getGoalTrees().getDataUtility(), leaves);
 					
 					//suppose a movement does not have both a positive and negative impact on the same goal

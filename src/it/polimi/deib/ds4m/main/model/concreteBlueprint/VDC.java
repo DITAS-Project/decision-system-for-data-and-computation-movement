@@ -104,12 +104,13 @@ public class VDC
 			
 			//dataUtility
 			connect(abstractProperty.getGoalTrees().getDataUtility(), selectedDM.getAttributes().dataUtility);
-			
-			//privacy
-			connect(abstractProperty.getGoalTrees().getPrivacy(), selectedDM.getAttributes().privacy);
-			
-			//security
-			connect(abstractProperty.getGoalTrees().getSecurity(), selectedDM.getAttributes().security);
+
+			//TODO fix array
+//			//privacy
+//			connect(abstractProperty.getGoalTrees().getPrivacy(), selectedDM.getAttributes().privacy);
+//			
+//			//security
+//			connect(abstractProperty.getGoalTrees().getSecurity(), selectedDM.getAttributes().security);
 
 			
 		}
@@ -124,10 +125,10 @@ public class VDC
 	private void connect(TreeStructure treeStructure, ArrayList<Attribute> attributes)
 	{
 		if (treeStructure.getLeaves()==null)
-			for (TreeStructure cildren : treeStructure.getChildern())
+			for (TreeStructure cildren : treeStructure.getChildren())
 				connect(cildren, attributes);
 		else
-			for (Goal leaf : treeStructure.getLeaves())
+			for (TreeStructure leaf : treeStructure.getLeaves())
 				for (String attributeLeaf: leaf.getAttributes())
 					for (Attribute attributeDM : attributes)
 						if (attributeDM.getId().equals(attributeLeaf))

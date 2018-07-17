@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import it.polimi.deib.ds4m.main.model.Violation;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Attribute;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Property;
@@ -32,7 +31,7 @@ public class GoalTreeManager {
 	 * @param violatedVDC the violated VDC
 	 * @return the set of violated goals, null if method is not found
 	 */
-	public static Set<Goal> findViolatedGoals(ArrayList<Violation> violations, VDC violatedVDC)
+	public static Set<TreeStructure> findViolatedGoals(ArrayList<Violation> violations, VDC violatedVDC)
 	{
         
 		//retrieve the method that violated from the vdc
@@ -49,7 +48,7 @@ public class GoalTreeManager {
 			return null;
 		
 		//create set of goal add all the violated ones
-		Set<Goal> violatedGoals = new HashSet<Goal>();
+		Set<TreeStructure> violatedGoals = new HashSet<TreeStructure>();
 		
 		//retrieve the violated goals for all violations
 		for (Violation violation: violations)
@@ -77,13 +76,13 @@ public class GoalTreeManager {
 	 * @return the set of violated goal
 	 */
 	@SuppressWarnings("unlikely-arg-type")
-	private static Set<Goal> searchViolatedGoal(AbstractProperty abstractProperty, Violation violation, TreeType treeType)
+	private static Set<TreeStructure> searchViolatedGoal(AbstractProperty abstractProperty, Violation violation, TreeType treeType)
 	{
 		
 		//retrieve all violated goals
-		Set<Goal> violatedGoals = new HashSet<Goal>();//hash set since goal cannot be duplicated// implemented equals for goal and sub classes
+		Set<TreeStructure> violatedGoals = new HashSet<TreeStructure>();//hash set since goal cannot be duplicated// implemented equals for goal and sub classes
 		
-		ArrayList<Goal> leaves = new ArrayList<Goal>();
+		ArrayList<TreeStructure> leaves = new ArrayList<TreeStructure>();
 		
 		//collect all leaf goals
 		switch (treeType) {
@@ -102,7 +101,7 @@ public class GoalTreeManager {
 		if (leaves.size() == 0)
 			return null;
 		
-		for (Goal leaf : leaves)//retrieves all goals f the method
+		for (TreeStructure leaf : leaves)//retrieves all goals f the method
 		{
 			ArrayList<Attribute> attributes = leaf.getAttributesLinked();//get the metrics on the goal
 			for (Attribute attribute : attributes)

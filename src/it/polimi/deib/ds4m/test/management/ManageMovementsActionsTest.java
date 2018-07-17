@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.http.HttpStatus;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.deib.ds4m.main.Utility;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Cost;
@@ -105,8 +104,8 @@ public class ManageMovementsActionsTest
 		VDC vdc = setUpVDC();
 		
 		//set violated goals
-		Set<Goal> violatedGoals = new HashSet<Goal>();
-		Goal g1 = new Goal();
+		Set<TreeStructure> violatedGoals = new HashSet<TreeStructure>();
+		TreeStructure g1 = new TreeStructure(null);
 		g1.setID("dataVolume");
 
 		violatedGoals.add(g1);
@@ -131,8 +130,8 @@ public class ManageMovementsActionsTest
 	
 
 		//set violated goals		
-		Set<Goal> violatedGoals = new HashSet<Goal>();
-		Goal g1 = new Goal();
+		Set<TreeStructure> violatedGoals = new HashSet<TreeStructure>();
+		TreeStructure g1 = new TreeStructure(null);
 		g1.setID("dataVolume");
 
 		violatedGoals.add(g1);
@@ -161,12 +160,12 @@ public class ManageMovementsActionsTest
 		VDC vdc = setUpVDC();
 		
 		//set 2 violated goals, in order to have all 4 data movement action selected
-		Set<Goal> violatedGoals = new HashSet<Goal>();
-		Goal g1 = new Goal();
+		Set<TreeStructure> violatedGoals = new HashSet<TreeStructure>();
+		TreeStructure g1 = new TreeStructure(null);
 		g1.setID("dataVolume");
 		violatedGoals.add(g1);
 		
-		Goal g2 = new Goal();
+		TreeStructure g2 = new TreeStructure(null);
 		g2.setID("fastDataProcess");
 		violatedGoals.add(g1);
 		
@@ -222,12 +221,12 @@ public class ManageMovementsActionsTest
 		VDC vdc = setUpVDC();
 		
 		//set 2 violated goals, in order to have all 4 data movement action selected
-		Set<Goal> violatedGoals = new HashSet<Goal>();
-		Goal g1 = new Goal();
+		Set<TreeStructure> violatedGoals = new HashSet<TreeStructure>();
+		TreeStructure g1 = new TreeStructure(null);
 		g1.setID("dataVolume");
 		violatedGoals.add(g1);
 		
-		Goal g2 = new Goal();
+		TreeStructure g2 = new TreeStructure(null);
 		g2.setID("fastDataProcess");
 		violatedGoals.add(g1);
 		

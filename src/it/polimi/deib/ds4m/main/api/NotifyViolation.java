@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.Violations;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
@@ -115,7 +115,7 @@ public class NotifyViolation extends HttpServlet {
 		        }
 
 		        //identify goal
-		        Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violationToBeExamined, violatedVDC);
+		        Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violationToBeExamined, violatedVDC);
 		        if (violatedGoals==null)
 		        {
 		        	System.out.println("NotifyViolation: No violated goals found");

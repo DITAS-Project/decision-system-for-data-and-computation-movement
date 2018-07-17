@@ -1,5 +1,7 @@
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
+import java.util.ArrayList;
+
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Property 
@@ -9,7 +11,7 @@ public class Property
 	private String unit;
 	private Double maximum;
 	private Double minimum;
-	private String value;
+	private ArrayList<String> value;
 
 	
 	/**
@@ -48,18 +50,7 @@ public class Property
 	public void setMinimum(Double minimum) {
 		this.minimum = minimum;
 	}
-	/**
-	 * @return the value
-	 */
-	public String getValue() {
-		return value;
-	}
-	/**
-	 * @param value the value to set
-	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
+
 	/**
 	 * @return the name
 	 */
@@ -124,5 +115,17 @@ public class Property
             append(value).
             toHashCode();
     }
+	/**
+	 * @return the value
+	 */
+	public ArrayList<String> getValue() {
+		return value;
+	}
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(ArrayList<String> value) {
+		this.value = value;
+	}
 
 }

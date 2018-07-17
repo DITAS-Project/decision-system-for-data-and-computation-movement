@@ -10,7 +10,6 @@ import java.util.Set;
 import org.junit.Test;
 
 import it.polimi.deib.ds4m.main.model.Violation;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.Goal;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Attribute;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Property;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
@@ -46,11 +45,11 @@ public class ManageGoalTreeTest {
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
+		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
-		for (Goal goal : violatedGoals)
+		for (TreeStructure goal : violatedGoals)
 		{
 			assertTrue(goal.getID().equals("serviceAvailable"));
 		}
@@ -84,11 +83,11 @@ public class ManageGoalTreeTest {
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
+		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
-		for (Goal goal : violatedGoals)
+		for (TreeStructure goal : violatedGoals)
 		{
 			assertTrue(goal.getID().equals("serviceAvailable"));
 		}
@@ -122,11 +121,11 @@ public class ManageGoalTreeTest {
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
+		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
-		for (Goal goal : violatedGoals)
+		for (TreeStructure goal : violatedGoals)
 		{
 			assertTrue(goal.getID().equals("consistency"));
 		}
@@ -160,11 +159,11 @@ public class ManageGoalTreeTest {
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
+		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
-		for (Goal goal : violatedGoals)
+		for (TreeStructure goal : violatedGoals)
 		{
 			assertTrue(goal.getID().equals("fastDataProcess"));
 		}
@@ -199,11 +198,11 @@ public class ManageGoalTreeTest {
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
+		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
-		for (Goal goal : violatedGoals)
+		for (TreeStructure goal : violatedGoals)
 		{
 			assertTrue(goal.getID().equals("serviceScalable"));
 		}	
@@ -258,7 +257,7 @@ public class ManageGoalTreeTest {
 		ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 		attributes.add(attribute);
 		
-		Goal newGoal = new Goal();
+		TreeStructure newGoal = new TreeStructure(null);//set the argument to null since i specify a goal
 		newGoal.setID(goalID);
 		newGoal.setDescription("new goal");
 		newGoal.setWeight(1.0);
@@ -266,14 +265,14 @@ public class ManageGoalTreeTest {
 		//end creation goal
 		
 		//insert the goal in the leaves
-		dataUtilityTS.getChildern().get(0).getChildern().get(0).getLeaves().add(newGoal);
+		dataUtilityTS.getChildren().get(0).getChildren().get(0).getLeaves().add(newGoal);
 	
 		
-		Set<Goal> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
+		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==2);
 		
-		for (Goal goal : violatedGoals)
+		for (TreeStructure goal : violatedGoals)
 		{
 			assertTrue(goal.getID().equals("serviceAvailable") || goal.getID().equals(goalID));
 		}	
