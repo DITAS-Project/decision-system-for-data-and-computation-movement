@@ -27,8 +27,8 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 import it.polimi.deib.ds4m.main.Utility;
+import it.polimi.deib.ds4m.main.model.Metric;
 import it.polimi.deib.ds4m.main.model.Violation;
-import it.polimi.deib.ds4m.main.model.Violations;
 
 public class NotifyViolationTest 
 {	
@@ -45,7 +45,7 @@ public class NotifyViolationTest
 	public WireMockRule wireMockRule = new WireMockRule(8089);
 	
 	//set global variables
-    Violations violations;
+    ArrayList<Violation> violations;
     ObjectMapper mapper;
     
     //True if the vdc has been added once.
@@ -59,36 +59,47 @@ public class NotifyViolationTest
     	mapper = new ObjectMapper();
 		
 		//set up violations
-		violations = new Violations();
-		
-		ArrayList<Violation> violationsArrayList = new ArrayList<Violation>();
+		violations = new ArrayList<Violation>();
 		
 		Violation violation1 = new Violation();
-		violation1.setType("violation type");
-		violation1.setAgreementid(1);
-		violation1.setGuaranteename("guarantee name");
-		violation1.setDate("12/01");
-		violation1.setMetric("Availability");
-		violation1.setValue("90.0");
 		violation1.setMethodID("GetAllBloodTests");
 		violation1.setVdcID("VDC_2");
+
+		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		
-		violationsArrayList.add(violation1);
+		Metric metric1_vio1 = new Metric();
+		metric1_vio1.setKey("Availability");
+		metric1_vio1.setValue("90.0");
+		metrics.add(metric1_vio1);
+		
+		Metric metric2_vio1 = new Metric();
+		metric2_vio1.setKey("Volume");
+		metric2_vio1.setValue("200");
+		metrics.add(metric2_vio1);
+		
+		violation1.setMetrics(metrics);
+		
+		violations.add(violation1);
 		
 		Violation violation2 = new Violation();
-		violation2.setType("violation type");
-		violation2.setAgreementid(2);
-		violation2.setGuaranteename("guarantee name");
-		violation2.setDate("12/01");
-		violation2.setMetric("Volume");
-		violation2.setValue("200");
 		violation2.setMethodID("GetAllBloodTests");
 		violation2.setVdcID("VDC_2");
+
+		ArrayList<Metric> metrics2 = new ArrayList<Metric>();
 		
-		violationsArrayList.add(violation2);
-	
+		Metric metric1_vio2 = new Metric();
+		metric1_vio2.setKey("Availability");
+		metric1_vio2.setValue("90.0");
+		metrics2.add(metric1_vio2);
 		
-		violations.setViolations(violationsArrayList);
+		Metric metric2_vio2 = new Metric();
+		metric2_vio2.setKey("Volume");
+		metric2_vio2.setValue("200");
+		metrics2.add(metric2_vio2);
+		
+		violation2.setMetrics(metrics2);
+		
+		violations.add(violation2);
 		
 	} 
     
@@ -108,9 +119,9 @@ public class NotifyViolationTest
 		{
 			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
 			//concreteBlueprint=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));//before change
-			//concreteBlueprint=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
+			concreteBlueprint=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
 			//concreteBlueprint=Utility.readFile("./testResources/example_V3_ricercatore.json", Charset.forName("UTF-8")); //test reseracher
-			concreteBlueprint=Utility.readFile("./testResources/example_V3_medico.json", Charset.forName("UTF-8")); //test physician 
+			//concreteBlueprint=Utility.readFile("./testResources/example_V3_medico.json", Charset.forName("UTF-8")); //test physician 
 			
 			
 		} catch (IOException e) 

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import it.polimi.deib.ds4m.main.model.Metric;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.movement.Cost;
@@ -23,17 +24,18 @@ public class ManageVDCTest {
 	 */
 	@Test
     public void findViolatedVDC_Correct_find() throws IOException 
-	{
-		//create violation		
+	{		
+		//set up violation		
 		Violation violation = new Violation();
-		violation.setType("violation type");
-		violation.setAgreementid(1);
-		violation.setGuaranteename("guarantee name");
-		violation.setDate("12/01");
-		violation.setMetric("availability");
-		violation.setValue("90.0");
-		violation.setMethodID("1");
+		violation.setMethodID("GetAllBloodTests");
 		violation.setVdcID("01");
+
+		ArrayList<Metric> metrics = new ArrayList<Metric>();
+		
+		Metric metric1_vio1 = new Metric();
+		metric1_vio1.setKey("Availability");
+		metric1_vio1.setValue("90.0.");
+		metrics.add(metric1_vio1);
 		
 		
 		ArrayList<Violation> violations = new ArrayList<Violation>();
@@ -51,7 +53,7 @@ public class ManageVDCTest {
 		
 		
 		//identify VDC
-        VDC violatedVDC = VDCManager.findViolatedVDC(violations, VDCs);
+        VDC violatedVDC = VDCManager.findViolatedVDC(violation, VDCs);
         
         assertTrue(violatedVDC.getId().equals("01"));
 		
@@ -66,16 +68,18 @@ public class ManageVDCTest {
 	@Test
     public void findViolatedVDC_Correct_noResults() throws IOException 
 	{
-		//create violation		
+		
+		//set up violation		
 		Violation violation = new Violation();
-		violation.setType("violation type");
-		violation.setAgreementid(1);
-		violation.setGuaranteename("guarantee name");
-		violation.setDate("12/01");
-		violation.setMetric("availability");
-		violation.setValue("90.0");
-		violation.setMethodID("1");
+		violation.setMethodID("GetAllBloodTests");
 		violation.setVdcID("10");
+
+		ArrayList<Metric> metrics = new ArrayList<Metric>();
+		
+		Metric metric1_vio1 = new Metric();
+		metric1_vio1.setKey("Availability");
+		metric1_vio1.setValue("90.0.");
+		metrics.add(metric1_vio1);
 		
 		ArrayList<Violation> violations = new ArrayList<Violation>();
 		violations.add(violation);
@@ -93,7 +97,7 @@ public class ManageVDCTest {
 		
 		
 		//identify VDC
-        VDC violatedVDC = VDCManager.findViolatedVDC(violations, VDCs);
+        VDC violatedVDC = VDCManager.findViolatedVDC(violation, VDCs);
         
         assertTrue(violatedVDC==null);
 		

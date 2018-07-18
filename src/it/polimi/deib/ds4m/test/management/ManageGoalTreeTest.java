@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import it.polimi.deib.ds4m.main.model.Metric;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Attribute;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Property;
@@ -26,26 +27,26 @@ public class ManageGoalTreeTest {
 	@Test
     public void findViolatedVDC_Correct_find_below_range() throws IOException 
 	{
-		//create violation		
+		
+		//set up violation		
 		Violation violation = new Violation();
-		violation.setType("violation type");
-		violation.setAgreementid(1);
-		violation.setGuaranteename("guarantee name");
-		violation.setDate("12/01");
-		violation.setMetric("Availability");
-		violation.setValue("90.0");
 		violation.setMethodID("GetAllBloodTests");
-		violation.setVdcID("01");
+		violation.setVdcID("VDC_2");
+
+		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		
-		ArrayList<Violation> violations = new ArrayList<Violation>();
-		violations.add(violation);
+		Metric metric1_vio1 = new Metric();
+		metric1_vio1.setKey("Availability");
+		metric1_vio1.setValue("90.0");
+		metrics.add(metric1_vio1);
 		
+		violation.setMetrics(metrics);
 		
 		//*** set up other VDC ( it takes the complete one, not necessary)
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
+		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -65,25 +66,25 @@ public class ManageGoalTreeTest {
 	@Test
     public void findViolatedVDC_Correct_find_above_range() throws IOException 
 	{
-		//create violation		
+		//create violation			
 		Violation violation = new Violation();
-		violation.setType("violation type");
-		violation.setAgreementid(1);
-		violation.setGuaranteename("guarantee name");
-		violation.setDate("12/01");
-		violation.setMetric("Availability");
-		violation.setValue("100.0");
 		violation.setMethodID("GetAllBloodTests");
 		violation.setVdcID("VDC_2");
+
+		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		
-		ArrayList<Violation> violations = new ArrayList<Violation>();
-		violations.add(violation);
+		Metric metric1_vio1 = new Metric();
+		metric1_vio1.setKey("Availability");
+		metric1_vio1.setValue("100.0");
+		metrics.add(metric1_vio1);
+		
+		violation.setMetrics(metrics);
 		
 		//*** set up other VDC ( it takes the complete one, not necessary)
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
+		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -102,26 +103,25 @@ public class ManageGoalTreeTest {
 	 */
 	@Test
     public void findViolatedVDC_Correct_find_minimum() throws IOException 
-	{
-		//create violation		
+	{		
 		Violation violation = new Violation();
-		violation.setType("violation type");
-		violation.setAgreementid(1);
-		violation.setGuaranteename("guarantee name");
-		violation.setDate("12/01");
-		violation.setMetric("Precision");
-		violation.setValue("0.5");
 		violation.setMethodID("GetAllBloodTests");
 		violation.setVdcID("VDC_2");
+
+		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		
-		ArrayList<Violation> violations = new ArrayList<Violation>();
-		violations.add(violation);
+		Metric metric1_vio1 = new Metric();
+		metric1_vio1.setKey("Precision");
+		metric1_vio1.setValue("0.5");
+		metrics.add(metric1_vio1);
+		
+		violation.setMetrics(metrics);
 		
 		//*** set up other VDC ( it takes the complete one, not necessary)
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
+		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -141,25 +141,26 @@ public class ManageGoalTreeTest {
 	@Test
     public void findViolatedVDC_Correct_find_maximum() throws IOException 
 	{
-		//create violation		
+		
+		//set up violation		
 		Violation violation = new Violation();
-		violation.setType("violation type");
-		violation.setAgreementid(1);
-		violation.setGuaranteename("guarantee name");
-		violation.setDate("12/01");
-		violation.setMetric("ResponseTime");
-		violation.setValue("2.");
 		violation.setMethodID("GetAllBloodTests");
 		violation.setVdcID("VDC_2");
+
+		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		
-		ArrayList<Violation> violations = new ArrayList<Violation>();
-		violations.add(violation);
+		Metric metric1_vio1 = new Metric();
+		metric1_vio1.setKey("ResponseTime");
+		metric1_vio1.setValue("2.");
+		metrics.add(metric1_vio1);
+		
+		violation.setMetrics(metrics);
 		
 		//*** set up other VDC ( it takes the complete one, not necessary)
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
+		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -180,25 +181,25 @@ public class ManageGoalTreeTest {
 	@Test
     public void findViolatedVDC_Correct_find_complex_metric_1Property() throws IOException 
 	{
-		//create violation		
+		//set up violation		
 		Violation violation = new Violation();
-		violation.setType("violation type");
-		violation.setAgreementid(1);
-		violation.setGuaranteename("guarantee name");
-		violation.setDate("12/01");
-		violation.setMetric("ramGain");
-		violation.setValue("40.0");
 		violation.setMethodID("GetAllBloodTests");
 		violation.setVdcID("VDC_2");
+
+		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		
-		ArrayList<Violation> violations = new ArrayList<Violation>();
-		violations.add(violation);
+		Metric metric1_vio1 = new Metric();
+		metric1_vio1.setKey("ramGain");
+		metric1_vio1.setValue("40.0.");
+		metrics.add(metric1_vio1);
+		
+		violation.setMetrics(metrics);
 		
 		//*** set up other VDC ( it takes the complete one, not necessary)
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
 		
 		
-		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
+		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==1);
 		
@@ -217,19 +218,19 @@ public class ManageGoalTreeTest {
 	@Test
     public void findViolatedVDC_Correct_find_complex_metric_2Goals() throws IOException 
 	{
-		//create violation		
+		//set up violation		
 		Violation violation = new Violation();
-		violation.setType("violation type");
-		violation.setAgreementid(1);
-		violation.setGuaranteename("guarantee name");
-		violation.setDate("12/01");
-		violation.setMetric("Availability");
-		violation.setValue("90.0");
 		violation.setMethodID("GetAllBloodTests");
 		violation.setVdcID("VDC_2");
+
+		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		
-		ArrayList<Violation> violations = new ArrayList<Violation>();
-		violations.add(violation);
+		Metric metric1_vio1 = new Metric();
+		metric1_vio1.setKey("Availability");
+		metric1_vio1.setValue("90.0");
+		metrics.add(metric1_vio1);
+		
+		violation.setMetrics(metrics);
 		
 		//*** set up other VDC ( it takes the complete one, not necessary)
 		VDC violatedVDC = ManageMovementsActionsTest.setUpVDC();
@@ -268,7 +269,7 @@ public class ManageGoalTreeTest {
 		dataUtilityTS.getChildren().get(0).getChildren().get(0).getLeaves().add(newGoal);
 	
 		
-		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violations, violatedVDC);
+		Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		
 		assertTrue(violatedGoals.size()==2);
 		
