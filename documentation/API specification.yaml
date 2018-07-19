@@ -21,7 +21,7 @@ paths:
       - "application/json"
       parameters:
       - in: "body"
-        name: "Input"
+        name: "violations"
         description: "the List of violations"
         required: true
         schema:
