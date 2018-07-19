@@ -30,8 +30,8 @@ public class ManageGoalTreeTest {
 		
 		//set up violation		
 		Violation violation = new Violation();
-		violation.setMethodID("GetAllBloodTests");
-		violation.setVdcID("VDC_2");
+		violation.setMethodId("GetAllBloodTests");
+		violation.setVdcId("VDC_2");
 
 		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		
@@ -68,8 +68,8 @@ public class ManageGoalTreeTest {
 	{
 		//create violation			
 		Violation violation = new Violation();
-		violation.setMethodID("GetAllBloodTests");
-		violation.setVdcID("VDC_2");
+		violation.setMethodId("GetAllBloodTests");
+		violation.setVdcId("VDC_2");
 
 		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		
@@ -105,8 +105,8 @@ public class ManageGoalTreeTest {
     public void findViolatedVDC_Correct_find_minimum() throws IOException 
 	{		
 		Violation violation = new Violation();
-		violation.setMethodID("GetAllBloodTests");
-		violation.setVdcID("VDC_2");
+		violation.setMethodId("GetAllBloodTests");
+		violation.setVdcId("VDC_2");
 
 		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		
@@ -144,8 +144,8 @@ public class ManageGoalTreeTest {
 		
 		//set up violation		
 		Violation violation = new Violation();
-		violation.setMethodID("GetAllBloodTests");
-		violation.setVdcID("VDC_2");
+		violation.setMethodId("GetAllBloodTests");
+		violation.setVdcId("VDC_2");
 
 		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		
@@ -183,8 +183,8 @@ public class ManageGoalTreeTest {
 	{
 		//set up violation		
 		Violation violation = new Violation();
-		violation.setMethodID("GetAllBloodTests");
-		violation.setVdcID("VDC_2");
+		violation.setMethodId("GetAllBloodTests");
+		violation.setVdcId("VDC_2");
 
 		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		
@@ -220,8 +220,8 @@ public class ManageGoalTreeTest {
 	{
 		//set up violation		
 		Violation violation = new Violation();
-		violation.setMethodID("GetAllBloodTests");
-		violation.setVdcID("VDC_2");
+		violation.setMethodId("GetAllBloodTests");
+		violation.setVdcId("VDC_2");
 
 		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		

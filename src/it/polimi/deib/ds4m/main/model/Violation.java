@@ -6,33 +6,33 @@ public class Violation
 {
 	
 	public ArrayList<Metric> metrics;
-	public String methodID;
-	public String vdcID;
+	public String methodId;
+	public String vdcId;
 	
 
 	/**
 	 * @return the methodID
 	 */
-	public String getMethodID() {
-		return methodID;
+	public String getMethodId() {
+		return methodId;
 	}
 	/**
 	 * @param methodID the methodID to set
 	 */
-	public void setMethodID(String methodID) {
-		this.methodID = methodID;
+	public void setMethodId(String methodId) {
+		this.methodId = methodId;
 	}
 	/**
 	 * @return the vdcID
 	 */
-	public String getVdcID() {
-		return vdcID;
+	public String getVdcId() {
+		return vdcId;
 	}
 	/**
 	 * @param vdcID the vdcID to set
 	 */
-	public void setVdcID(String vdcID) {
-		this.vdcID = vdcID;
+	public void setVdcId(String vdcId) {
+		this.vdcId = vdcId;
 	}
 	/**
 	 * @return the metrics

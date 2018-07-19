@@ -27,8 +27,8 @@ public class ManageVDCTest {
 	{		
 		//set up violation		
 		Violation violation = new Violation();
-		violation.setMethodID("GetAllBloodTests");
-		violation.setVdcID("01");
+		violation.setMethodId("GetAllBloodTests");
+		violation.setVdcId("01");
 
 		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		
@@ -71,8 +71,8 @@ public class ManageVDCTest {
 		
 		//set up violation		
 		Violation violation = new Violation();
-		violation.setMethodID("GetAllBloodTests");
-		violation.setVdcID("10");
+		violation.setMethodId("GetAllBloodTests");
+		violation.setVdcId("10");
 
 		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		

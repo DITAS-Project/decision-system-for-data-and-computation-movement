@@ -41,7 +41,7 @@ public class GoalTreeManager {
 		//find the method that violated the requirements
 		for (AbstractProperty abstractPropertyExamined : violatedVDC.getAbstractProperties())
 		{
-			if (abstractPropertyExamined.getMethod_id().equals(violation.getMethodID()))//I take the first item, all violations have the seame method ID for previous filtering 
+			if (abstractPropertyExamined.getMethod_id().equals(violation.getMethodId()))//I take the first item, all violations have the seame method ID for previous filtering 
 				abstractProperty = abstractPropertyExamined;
 		}
 		//if not found return null

@@ -62,8 +62,8 @@ public class NotifyViolationTest
 		violations = new ArrayList<Violation>();
 		
 		Violation violation1 = new Violation();
-		violation1.setMethodID("GetAllBloodTests");
-		violation1.setVdcID("VDC_2");
+		violation1.setMethodId("GetAllBloodTests");
+		violation1.setVdcId("VDC_2");
 
 		ArrayList<Metric> metrics = new ArrayList<Metric>();
 		
@@ -82,8 +82,8 @@ public class NotifyViolationTest
 		violations.add(violation1);
 		
 		Violation violation2 = new Violation();
-		violation2.setMethodID("GetAllBloodTests");
-		violation2.setVdcID("VDC_2");
+		violation2.setMethodId("GetAllBloodTests");
+		violation2.setVdcId("VDC_2");
 
 		ArrayList<Metric> metrics2 = new ArrayList<Metric>();
 		
@@ -176,9 +176,14 @@ public class NotifyViolationTest
         // Create some NameValuePair for HttpPost parameters
         List<NameValuePair> arguments = new ArrayList<>(3);
         
+        
+
         try
         {
-			arguments.add(new BasicNameValuePair("violations", mapper.writeValueAsString(violations)));
+        	String violationJSON = mapper.writeValueAsString(violations);
+        	//System.out.println(violationJSON);
+        	
+			arguments.add(new BasicNameValuePair("violations", violationJSON));
 		} 
         catch (JsonProcessingException e1) 
         {
@@ -197,6 +202,54 @@ public class NotifyViolationTest
             assertEquals(0,
             		response.getStatusLine().getStatusCode(),
             	     HttpStatus.SC_OK);
+
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+	
+	@Test
+    public void testNotifyViolations_correct_exampleJSONFile() 
+	{
+		this.testAddVDC_correct();
+		
+        //setup a mock server for data movement
+		stubFor(post(urlEqualTo(URLdataMovementEnactor))
+	            .willReturn(aResponse()
+	                .withHeader("Content-Type", "application/x-www-form-urlencoded")
+	                .withStatus(200)));
+		
+		//set up connection 
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost post = new HttpPost(URSDS4M_notifyViolation);
+		
+        // Create some NameValuePair for HttpPost parameters
+        List<NameValuePair> arguments = new ArrayList<>(3);
+        
+        String violations=null;
+        
+        try {
+			violations=Utility.readFile("./testResources/example_violations.json", Charset.forName("UTF-8"));
+		} catch (IOException e2) 
+        {
+			e2.printStackTrace();
+		}
+        
+        arguments.add(new BasicNameValuePair("violations",violations));
+
+        //connect to service
+        try {
+            post.setEntity(new UrlEncodedFormEntity(arguments));
+            HttpResponse response = client.execute(post);//response empty
+
+            // Print out the response message
+            //System.out.println(EntityUtils.toString(response.getEntity()));
+            
+            //check the status received
+            assertEquals(0,
+            		response.getStatusLine().getStatusCode(),
+            	     HttpStatus.SC_INTERNAL_SERVER_ERROR);
 
             
         } catch (IOException e) {

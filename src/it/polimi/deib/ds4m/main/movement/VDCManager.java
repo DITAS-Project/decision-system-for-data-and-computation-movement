@@ -25,7 +25,7 @@ public class VDCManager
         //find the first VDC (all violation at this stage will refer to the same VDC)
         for(VDC vdcExamined : VDCs)
         {
-    		if (vdcExamined.getId().equals(violation.getVdcID()))
+    		if (vdcExamined.getId().equals(violation.getVdcId()))
     			return vdcExamined;
         }
         
