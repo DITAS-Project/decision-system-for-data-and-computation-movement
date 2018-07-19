@@ -1,11 +1,15 @@
 package it.polimi.deib.ds4m.main.api;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 
 /**
  * Servlet implementation class CheckStatus
@@ -27,7 +31,24 @@ public class CheckStatus extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		response.getWriter().append("Up and running ");
+		String content = "";
+		
+		content=content.concat("<h1>DS4M is up and running <h1> <br>");
+		content=content.concat("Number of VDCs: ");
+		
+		//if it is not set create a collection of appl.s requirements
+		ArrayList<VDC> vdcs;
+		if  (this.getServletConfig().getServletContext().getAttribute("VDCs") == null)
+			content=content.concat("0 <br>");
+		else
+		{
+			vdcs = (ArrayList<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
+			content=content.concat(vdcs.size()+" <br>");
+		}
+		
+		System.out.println(content);
+		
+		response.getWriter().println(content);
 	}
 
 	/**
