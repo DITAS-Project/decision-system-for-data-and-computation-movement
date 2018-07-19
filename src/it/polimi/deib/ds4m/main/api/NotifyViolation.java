@@ -2,6 +2,7 @@ package it.polimi.deib.ds4m.main.api;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -21,16 +22,17 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import it.polimi.deib.ds4m.main.model.Violation;
-import it.polimi.deib.ds4m.main.model.Violations;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementsEnaction;
+import it.polimi.deib.ds4m.main.model.resources.Resource;
 import it.polimi.deib.ds4m.main.movement.GoalTreeManager;
 import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 import it.polimi.deib.ds4m.main.movement.VDCManager;
@@ -66,6 +68,7 @@ public class NotifyViolation extends HttpServlet {
 	{
 		//create the json parser
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
 		
 		//retrieve the application requirements
 		ArrayList<VDC> VDCs = (ArrayList<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
@@ -76,37 +79,13 @@ public class NotifyViolation extends HttpServlet {
 		try 
 		{
 			//convert 
-	        Violations violations = mapper.readValue(violationsJSON, Violations.class);
+	        ArrayList<Violation> violations = new ArrayList<Violation>(Arrays.asList(mapper.readValue(violationsJSON, Violation[].class)));
 	         
 	        //while the set of violations contain a violation, keep analysing them
-	        while (violations.getViolations().size()!=0)
+	        for (Violation violation : violations)
 	        {
-	        	ArrayList<Violation> violationToBeExamined = new ArrayList<Violation>();
-	        	
-	        	//collect all violations to the same VDC and method
-	        	String vdcViolated = null;
-	        	String methodViolated = null;
-	        	for (Violation violation : violations.getViolations())
-	        	{
-	        		//if it is the first violation, put it in the list of violation to be examined
-	        		if (vdcViolated==null)
-	        		{
-	        			vdcViolated=violation.getVdcID();
-	        			methodViolated = violation.getMethodID();
-	        			violationToBeExamined.add(violation);
-	        		}
-	        		//and collect similar (with same method and VDC IDs) violations
-	        		else if (vdcViolated.equals(violation.getVdcID()) & methodViolated.equals(violation.getMethodID()))
-	        		{
-	        			violationToBeExamined.add(violation);
-	        		}	
-	        	}
-	        	
-    			//if the violation is examined, then i remove it from the set of violation that have yet to be examined
-    			violations.getViolations().removeAll(violationToBeExamined);
-		        
 		        //identify VDC
-		        VDC violatedVDC = VDCManager.findViolatedVDC(violationToBeExamined, VDCs);
+		        VDC violatedVDC = VDCManager.findViolatedVDC(violation, VDCs);
 		        if (violatedVDC==null)
 		        {
 		        	System.err.println("NotifyViolation: No violated VDC found");
@@ -115,7 +94,7 @@ public class NotifyViolation extends HttpServlet {
 		        }
 
 		        //identify goal
-		        Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violationToBeExamined, violatedVDC);
+		        Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		        if (violatedGoals==null)
 		        {
 		        	System.out.println("NotifyViolation: No violated goals found");

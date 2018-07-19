@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import it.polimi.deib.ds4m.main.model.Metric;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.Attribute;
@@ -31,7 +32,7 @@ public class GoalTreeManager {
 	 * @param violatedVDC the violated VDC
 	 * @return the set of violated goals, null if method is not found
 	 */
-	public static Set<TreeStructure> findViolatedGoals(ArrayList<Violation> violations, VDC violatedVDC)
+	public static Set<TreeStructure> findViolatedGoals(Violation violation, VDC violatedVDC)
 	{
         
 		//retrieve the method that violated from the vdc
@@ -40,7 +41,7 @@ public class GoalTreeManager {
 		//find the method that violated the requirements
 		for (AbstractProperty abstractPropertyExamined : violatedVDC.getAbstractProperties())
 		{
-			if (abstractPropertyExamined.getMethod_id().equals(violations.get(0).getMethodID()))//I take the first item, all violations have the seame method ID for previous filtering 
+			if (abstractPropertyExamined.getMethod_id().equals(violation.getMethodId()))//I take the first item, all violations have the seame method ID for previous filtering 
 				abstractProperty = abstractPropertyExamined;
 		}
 		//if not found return null
@@ -51,11 +52,11 @@ public class GoalTreeManager {
 		Set<TreeStructure> violatedGoals = new HashSet<TreeStructure>();
 		
 		//retrieve the violated goals for all violations
-		for (Violation violation: violations)
+		for (Metric metric: violation.getMetrics())
 		{
-			violatedGoals.addAll(searchViolatedGoal(abstractProperty, violation, TreeType.DATAUTILITY));
-			violatedGoals.addAll(searchViolatedGoal(abstractProperty, violation, TreeType.SECURITY));		
-			violatedGoals.addAll(searchViolatedGoal(abstractProperty, violation, TreeType.PRIVACY));
+			violatedGoals.addAll(searchViolatedGoal(abstractProperty, metric, TreeType.DATAUTILITY));
+			violatedGoals.addAll(searchViolatedGoal(abstractProperty, metric, TreeType.SECURITY));		
+			violatedGoals.addAll(searchViolatedGoal(abstractProperty, metric, TreeType.PRIVACY));
 			
 			//TODO: check the goal tree
 			
@@ -76,7 +77,7 @@ public class GoalTreeManager {
 	 * @return the set of violated goal
 	 */
 	@SuppressWarnings("unlikely-arg-type")
-	private static Set<TreeStructure> searchViolatedGoal(AbstractProperty abstractProperty, Violation violation, TreeType treeType)
+	private static Set<TreeStructure> searchViolatedGoal(AbstractProperty abstractProperty, Metric metric, TreeType treeType)
 	{
 		
 		//retrieve all violated goals
@@ -108,19 +109,19 @@ public class GoalTreeManager {
 			{
 				for (Map.Entry<String, Property>  property : attribute.getProperties().entrySet())
 				{
-					if (property.getKey().toString().toLowerCase().equals(violation.getMetric().toLowerCase()))//check the violation name is the same. TODO: when i will include multiple violation  before this i will need a "foreach" for each violation 
+					if (property.getKey().toString().toLowerCase().equals(metric.getKey().toLowerCase()))//check the violation name is the same. TODO: when i will include multiple violation  before this i will need a "foreach" for each violation 
 						//i assume that if ""minimum or maximum are set then value is a number ( Double)
-						if (property.getValue().getMinimum()!=null && property.getValue().getMaximum()==null && property.getValue().getMinimum() >= Double.parseDouble(violation.getValue()))
+						if (property.getValue().getMinimum()!=null && property.getValue().getMaximum()==null && property.getValue().getMinimum() >= Double.parseDouble(metric.getValue()))
 							violatedGoals.add(leaf);//skip duplicated goals, no problems for false positives since all properties are in AND.
-						else if (property.getValue().getMinimum()==null && property.getValue().getMaximum()!=null && property.getValue().getMaximum() <= Double.parseDouble(violation.getValue()))
+						else if (property.getValue().getMinimum()==null && property.getValue().getMaximum()!=null && property.getValue().getMaximum() <= Double.parseDouble(metric.getValue()))
 							violatedGoals.add(leaf);
 						else if (property.getValue().getMinimum()!=null && property.getValue().getMaximum()!=null && 
 								(
-										property.getValue().getMinimum()< Double.parseDouble(violation.getValue()) // if it is out of range below OR 
-										|| property.getValue().getMaximum() > Double.parseDouble(violation.getValue())) //it is out of range above
+										property.getValue().getMinimum()< Double.parseDouble(metric.getValue()) // if it is out of range below OR 
+										|| property.getValue().getMaximum() > Double.parseDouble(metric.getValue())) //it is out of range above
 								)
 							violatedGoals.add(leaf); //then it it is violated
-						else if (property.getValue().getMinimum()==null && property.getValue().getMaximum()==null && !property.getValue().equals(violation.getValue()))
+						else if (property.getValue().getMinimum()==null && property.getValue().getMaximum()==null && !property.getValue().equals(metric.getValue()))
 							violatedGoals.add(leaf);
 					
 				}
