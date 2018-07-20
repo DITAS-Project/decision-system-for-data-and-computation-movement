@@ -2,7 +2,7 @@
 The goal of the component consists in selecting the best data and computation movement actions to be adopted in order to restore the level of data quality, quality of service and security defined by the application developer.
 
 ## Input
-* concrete bluepri
+* concrete blueprint
 * list of violated requirements
 
 ## Output
