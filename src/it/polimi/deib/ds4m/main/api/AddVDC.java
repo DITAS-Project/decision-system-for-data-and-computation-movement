@@ -63,6 +63,10 @@ public class AddVDC extends HttpServlet {
 		}
 		catch (JsonParseException e)
 		{
+			String message = "AddVDC: error in reading the tree of the Blueprint /n" + e.getStackTrace().toString();
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 			return;
 		}
@@ -77,8 +81,11 @@ public class AddVDC extends HttpServlet {
 		
 		catch (JsonProcessingException e) 
 		{
+			String message = "AddVDC: error in parsing the DATA MANAGEMET Section of the Blueprint /n" + e.getStackTrace().toString();
+        	System.err.println(message);
+        	response.getWriter().println(message);
+			
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
-			e.printStackTrace();
 			return;			
 		}
 		
@@ -91,8 +98,12 @@ public class AddVDC extends HttpServlet {
 		
 		catch (JsonProcessingException e) 
 		{
+			String message = "AddVDC: error in parsing the ABSTRACT PROPERTIES Section of the Blueprint /n" + e.getStackTrace().toString();
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
-			e.printStackTrace();
+
 			return;			
 		}
 		
@@ -104,7 +115,10 @@ public class AddVDC extends HttpServlet {
 		}
 		catch (JsonProcessingException e) 
 		{
-			e.printStackTrace();
+			String message = "AddVDC: error in parsing the RESOURCE Section of the Blueprint /n" + e.getStackTrace().toString();
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 			return;			
 		}
@@ -117,7 +131,10 @@ public class AddVDC extends HttpServlet {
 		}
 		catch (JsonProcessingException e) 
 		{
-			e.printStackTrace();
+			String message = "AddVDC: error in parsing the DATA SOURCE Section of the Blueprint /n" + e.getStackTrace().toString();
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 			return;			
 		}
@@ -142,6 +159,10 @@ public class AddVDC extends HttpServlet {
 		}
 		catch (IOException  e) 
 		{
+			String message = "AddVDC: error in loading the movement action configuration file /n" + e.getStackTrace().toString();
+        	System.err.println(message);
+        	response.getWriter().println(message);
+			
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
@@ -150,6 +171,10 @@ public class AddVDC extends HttpServlet {
 		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(resources,movementsJSON.toString()); 
 	    if (instantiatedMovements==null)
 	    {
+	    	String message = "AddVDC: error in instantiating the data movement actions";
+        	System.err.println(message);
+        	response.getWriter().println(message);
+	    	
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			return;
 	    }
@@ -162,6 +187,10 @@ public class AddVDC extends HttpServlet {
 		}
 		catch (JsonProcessingException e) 
 		{
+			String message = "AddVDC: error in parsing the NAME Section of the Blueprint /n" + e.getStackTrace().toString();
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 			return;			
 		}
