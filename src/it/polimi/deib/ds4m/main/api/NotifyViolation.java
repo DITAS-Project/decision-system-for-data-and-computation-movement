@@ -87,7 +87,10 @@ public class NotifyViolation extends HttpServlet {
 		        VDC violatedVDC = VDCManager.findViolatedVDC(violation, VDCs);
 		        if (violatedVDC==null)
 		        {
-		        	System.err.println("NotifyViolation: No violated VDC found");
+		        	String message = "NotifyViolation: No violated VDC found";
+		        	System.err.println(message);
+		        	response.getWriter().println(message);
+		        	
 		        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		        	return;
 		        }
@@ -96,7 +99,10 @@ public class NotifyViolation extends HttpServlet {
 		        Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 		        if (violatedGoals==null)
 		        {
-		        	System.out.println("NotifyViolation: No violated goals found");
+		        	String message = "NotifyViolation: No violated goals found";
+		        	System.err.println(message);
+		        	response.getWriter().println(message);
+		        	
 		        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		        	return;
 		        }
@@ -106,7 +112,10 @@ public class NotifyViolation extends HttpServlet {
 		        ArrayList<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals, violatedVDC);
 		        if (movementsToBeEnacted==null)
 		        {
-		        	System.err.println("NotifyViolation: No movements to be enacted found");
+		        	String message = "NotifyViolation: No movements to be enacted found";
+		        	System.err.println(message);
+		        	response.getWriter().println(message);
+		        	
 		        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		        	return;
 		        }
@@ -121,7 +130,10 @@ public class NotifyViolation extends HttpServlet {
 		        movementsToBeEnacted = VDCManager.chechOtherVDC(movementsToBeEnacted, VDCs, violatedVDC);
 		        if (movementsToBeEnacted==null)
 		        {
-		        	System.err.println("NotifyViolation: all movements to be enacted have been removed");
+		        	String message = "NotifyViolation: all movements to be enacted have been removed";
+		        	System.err.println(message);
+		        	response.getWriter().println(message);
+		        	
 		        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		        	return;
 		        }
@@ -170,10 +182,18 @@ public class NotifyViolation extends HttpServlet {
 		}
 		catch (JsonParseException e)
 		{
+			String message = "NotifyViolation: non-well-formed JSON /n" + e.getStackTrace().toString();
+        	System.err.println(message);
+        	response.getWriter().println(message);
+			
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 		}
 		catch (UnrecognizedPropertyException e)
 		{
+			String message = "NotifyViolation: unrecognized property in JSON /n" + e.getStackTrace().toString();
+        	System.err.println(message);
+        	response.getWriter().println(message);
+			
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 		}
 	}
