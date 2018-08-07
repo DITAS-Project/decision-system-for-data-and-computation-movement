@@ -100,7 +100,7 @@ public class GoalTreeManager {
 		}
 		
 		if (leaves.size() == 0)
-			return null;
+			return violatedGoals;
 		
 		for (TreeStructure leaf : leaves)//retrieves all goals f the method
 		{

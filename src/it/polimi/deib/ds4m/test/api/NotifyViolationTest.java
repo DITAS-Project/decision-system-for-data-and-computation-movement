@@ -51,6 +51,11 @@ public class NotifyViolationTest
     //True if the vdc has been added once.
     boolean addVDC = false;
     
+    //True if the vdc (for second test on current vdc) has been added once.
+    //this is a test executed only one, to test occasional errors
+    boolean addVDC_current = false;
+    
+    
 	//setup to be called to instantiate variables
     @Before
 	public void setUp() 
@@ -328,6 +333,102 @@ public class NotifyViolationTest
             verify(postRequestedFor(urlEqualTo(URLdataMovementEnactor)).withRequestBody(containing("movementsEnaction=%7B%22movementsEnaction%22%3A%5B%7B%22from%22%3A%22rescource1%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22rescource2%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22MinioDS1%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22MinioDS2%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22rescource1%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataMovement%22%7D%2C%7B%22from%22%3A%22rescource2%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataMovement%22%7D%5D%7D")));
             
             	
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+	
+	@Test
+    public void testNotifyViolations_current() 
+	{
+		this.testAddVDC_current();
+		
+        //setup a mock server for data movement
+		stubFor(post(urlEqualTo(URLdataMovementEnactor))
+	            .willReturn(aResponse()
+	                .withHeader("Content-Type", "application/x-www-form-urlencoded")
+	                .withStatus(200)));
+		
+		//set up connection 
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost post = new HttpPost(URSDS4M_notifyViolation);
+		
+        // Create some NameValuePair for HttpPost parameters
+        List<NameValuePair> arguments = new ArrayList<>(3);
+        
+        String violations=null;
+        
+        try {
+			violations=Utility.readFile("./testResources/test_violation.json", Charset.forName("UTF-8"));
+		} catch (IOException e2) 
+        {
+			e2.printStackTrace();
+		}
+        
+        arguments.add(new BasicNameValuePair("violations",violations));
+
+        //connect to service
+        try {
+            post.setEntity(new UrlEncodedFormEntity(arguments));
+            HttpResponse response = client.execute(post);//response empty
+
+            // Print out the response message
+            //System.out.println(EntityUtils.toString(response.getEntity()));
+            
+            //check the status received
+            assertEquals(0,
+            		response.getStatusLine().getStatusCode(),
+            	     HttpStatus.SC_OK);
+
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+	
+    public void testAddVDC_current() 
+	{
+		//if the VDC has already been added, i skip this call
+		if (addVDC_current)
+		{
+			assertTrue(true);
+			return;
+		}
+		
+		String concreteBlueprint;
+		
+		try 
+		{
+			concreteBlueprint=Utility.readFile("./testResources/test_current.json", Charset.forName("UTF-8")); 
+		} catch (IOException e) 
+		{
+			System.err.println("error in reading file applicationRequiorements");
+			return;
+		}
+		
+		
+		//set up connection 
+        HttpClient client = HttpClientBuilder.create().build();    
+        HttpPost post = new HttpPost(URSDS4M_addVDC);
+		
+        // Create some NameValuePair for HttpPost parameters
+        List<NameValuePair> arguments = new ArrayList<>(3);
+        arguments.add(new BasicNameValuePair("ConcreteBlueprint", concreteBlueprint));
+
+        //connect to service
+        try {
+            post.setEntity(new UrlEncodedFormEntity(arguments));
+            HttpResponse response = client.execute(post);//response empty
+
+            // Print out the response message
+            //System.out.println(EntityUtils.toString(response.getEntity()));
+            
+            //check the status received
+            assertEquals(0,
+            		response.getStatusLine().getStatusCode(),
+            	     HttpStatus.SC_OK);
+
+            
         } catch (IOException e) {
             e.printStackTrace();
         }

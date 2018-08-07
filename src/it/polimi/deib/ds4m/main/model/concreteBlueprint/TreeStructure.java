@@ -34,10 +34,12 @@ public class TreeStructure
 	public static void getAllLeaves(TreeStructure treeStructure, ArrayList<TreeStructure> leaves)
 	{
 		
-		if (treeStructure.getLeaves()==null)//if the leaves are null, it mean we are still in the goal structure
+		if (treeStructure.getChildren()!=null)//if the are children, then inspect the tree
 			for (TreeStructure cildren : treeStructure.getChildren())
 				getAllLeaves(cildren, leaves);
-		else
+		
+		//when you come back from iteration add all leaves 
+		if (treeStructure.getLeaves()!=null)
 			leaves.addAll(treeStructure.getLeaves());
 				
 	}
