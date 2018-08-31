@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
@@ -56,6 +57,7 @@ public class AddVDC extends HttpServlet {
 		//convert the json in object
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+		mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 		
 		JsonNode root; 
 		try {
@@ -73,6 +75,15 @@ public class AddVDC extends HttpServlet {
 		
 		//retrieve DATA MANAGEMENT
 		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
+		if (dataManagementJson ==null)
+		{
+			String message = "AddVDC: the DATA MANAGEMENT Section of the Blueprint is empty/n";
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;			
+		}
 		ArrayList<DataManagement> dataManagement; 
 		try {
 			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
@@ -81,7 +92,7 @@ public class AddVDC extends HttpServlet {
 		
 		catch (JsonProcessingException e) 
 		{
-			String message = "AddVDC: error in parsing the DATA MANAGEMET Section of the Blueprint /n" + e.getStackTrace().toString();
+			String message = "AddVDC: error in parsing the DATA MANAGEMENT Section of the Blueprint /n" + e.getStackTrace().toString();
         	System.err.println(message);
         	response.getWriter().println(message);
 			
@@ -91,6 +102,15 @@ public class AddVDC extends HttpServlet {
 		
 		//retrieve ABSTRACT_PROPERTIES
 		JsonNode abstractPropertiesJson = root.get("ABSTRACT_PROPERTIES");
+		if (abstractPropertiesJson ==null)
+		{
+			String message = "AddVDC: the ABSTRACT PROPERTIES Section of the Blueprint is empty/n";
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;			
+		}
 		ArrayList<AbstractProperty> abstractProperties; 
 		try {
 			abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
@@ -99,6 +119,7 @@ public class AddVDC extends HttpServlet {
 		catch (JsonProcessingException e) 
 		{
 			String message = "AddVDC: error in parsing the ABSTRACT PROPERTIES Section of the Blueprint /n" + e.getStackTrace().toString();
+			e.printStackTrace();
         	System.err.println(message);
         	response.getWriter().println(message);
         	
@@ -109,13 +130,23 @@ public class AddVDC extends HttpServlet {
 		
 		//retrieve resources
 		JsonNode resourcesJSON = root.get("INTERNAL_STRUCTURE").get("resourcesAvailable");
+		if (resourcesJSON ==null)
+		{
+			String message = "AddVDC: the RESOURCE Section of the Blueprint is empty/n";
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;			
+		}
+		
 		ArrayList<Resource> resources;
 		try {
 			resources = new ArrayList<Resource>(Arrays.asList(mapper.treeToValue(resourcesJSON, Resource[].class)));
 		}
 		catch (JsonProcessingException e) 
 		{
-			String message = "AddVDC: error in parsing the RESOURCE Section of the Blueprint /n" + e.getStackTrace().toString();
+			String message = "AddVDC: error in parsing the RESOURCE Section of the Blueprint /n";
         	System.err.println(message);
         	response.getWriter().println(message);
         	
@@ -125,13 +156,22 @@ public class AddVDC extends HttpServlet {
 		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
+		if (dataSourcesJSON ==null)
+		{
+			String message = "AddVDC: the DATA SOURCES Section of the Blueprint is empty/n";
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;			
+		}
 		ArrayList<DataSource> dataSources;
 		try {
 			dataSources = new ArrayList<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
 		}
 		catch (JsonProcessingException e) 
 		{
-			String message = "AddVDC: error in parsing the DATA SOURCE Section of the Blueprint /n" + e.getStackTrace().toString();
+			String message = "AddVDC: error in parsing the DATA SOURCE Section of the Blueprint /n";
         	System.err.println(message);
         	response.getWriter().println(message);
         	

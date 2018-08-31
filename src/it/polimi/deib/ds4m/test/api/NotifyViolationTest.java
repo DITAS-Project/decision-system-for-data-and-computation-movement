@@ -22,6 +22,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -56,12 +57,19 @@ public class NotifyViolationTest
     boolean addVDC_current = false;
     
     
+    //boolean variable to control which tests to execute.
+    //if false all tests are executed
+    //if true only testNotifyViolations_current is executed
+    boolean onlyCurrentBlueprint = true;
+    
+    
 	//setup to be called to instantiate variables
     @Before
 	public void setUp() 
 	{
     	//create class for JSON conversion
     	mapper = new ObjectMapper();
+    	mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 		
 		//set up violations
 		violations = new ArrayList<Violation>();
@@ -112,7 +120,7 @@ public class NotifyViolationTest
     public void testAddVDC_correct() 
 	{
 		//if the VDC has already been added, i skip this call
-		if (addVDC)
+		if (addVDC | onlyCurrentBlueprint)
 		{
 			assertTrue(true);
 			return;
@@ -166,6 +174,13 @@ public class NotifyViolationTest
 	@Test
     public void testNotifyViolations_correct() 
 	{
+		//if onlyCurrentBlueprint is true, skip the test
+		if (onlyCurrentBlueprint)
+		{
+			assertTrue(true);
+			return;
+		}
+		
 		this.testAddVDC_correct();
 		
         //setup a mock server for data movement
@@ -217,6 +232,14 @@ public class NotifyViolationTest
 	@Test
     public void testNotifyViolations_correct_exampleJSONFile() 
 	{
+		
+		//if onlyCurrentBlueprint is true, skip the test
+		if (onlyCurrentBlueprint)
+		{
+			assertTrue(true);
+			return;
+		}	
+		
 		this.testAddVDC_correct();
 		
         //setup a mock server for data movement
@@ -265,6 +288,13 @@ public class NotifyViolationTest
 	@Test
     public void testNotifyViolations_notCorrect() 
 	{
+		//if onlyCurrentBlueprint is true, skip the test
+		if (onlyCurrentBlueprint)
+		{
+			assertTrue(true);
+			return;
+		}
+		
 		this.testAddVDC_correct();
 		
 		//set up connection 
@@ -293,6 +323,13 @@ public class NotifyViolationTest
 	@Test
     public void testNotifyViolations_content() 
 	{
+		//if onlyCurrentBlueprint is true, skip the test
+		if (onlyCurrentBlueprint)
+		{
+			assertTrue(true);
+			return;
+		}
+		
 		this.testAddVDC_correct();
 		
         //setup a mock server
