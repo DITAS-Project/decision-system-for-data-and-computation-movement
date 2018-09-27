@@ -20,6 +20,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -147,7 +148,7 @@ public class NotifyViolation extends HttpServlet {
 		        
 		       //transform the selected movement actions in element to be sent
 		       MovementsEnaction movementsEnaction = new MovementsEnaction();//container of movements  
-		       ArrayList<MovementEnaction> movementEnactions = new ArrayList<MovementEnaction>();// vector to be dded to the container
+		       ArrayList<MovementEnaction> movementEnactions = new ArrayList<MovementEnaction>();// vector to be added to the container
 		       
 		       for (Movement movement : movementsToBeEnacted)//for each movement to be enacted selected, add it to the vector to be sent
 		       {
@@ -158,26 +159,31 @@ public class NotifyViolation extends HttpServlet {
 		       movementsEnaction.setMovementsEnaction(movementEnactions);
 		        
 		        //call to movement enactors
-		        HttpClient client = HttpClientBuilder.create().build();
-		        HttpPost post = new HttpPost("http://localhost:8089/dataEnactor/action");
-		        
-		        //System.out.println(mapper.writeValueAsString(movementsEnaction));
-		        
-		        // Create some NameValuePair for HttpPost parameters
-		        List<NameValuePair> arguments = new ArrayList<>(3);
-		        arguments.add(new BasicNameValuePair("movementsEnaction", mapper.writeValueAsString(movementsEnaction)));
-		        try {
-		            post.setEntity(new UrlEncodedFormEntity(arguments));
-		            @SuppressWarnings("unused")
-					HttpResponse responseDE = client.execute(post);//response empty
-
-		            //Print out the response of the data movement
-		            //System.out.println(EntityUtils.toString(responseDE.getEntity()));
-		            
-		            
-		        } catch (IOException e) {
-		            e.printStackTrace();
-		        }
+//		        HttpClient client = HttpClientBuilder.create().build();
+//		        
+//		        //this is for tests
+//		        //HttpPost post = new HttpPost("http://localhost:8089/dataEnactor/action");
+//		        
+//		        //call to dma in kubernetes
+//		        HttpPost post = new HttpPost("http://dme:8080/DataMovementEnactor/EnactMovement");
+//		        
+//		        //System.out.println(mapper.writeValueAsString(movementsEnaction));
+//		        
+//		        // Create some NameValuePair for HttpPost parameters
+//		        List<NameValuePair> arguments = new ArrayList<>(3);
+//		        arguments.add(new BasicNameValuePair("movementsEnaction", mapper.writeValueAsString(movementsEnaction)));
+//		        try {
+//		            post.setEntity(new UrlEncodedFormEntity(arguments));
+//		            @SuppressWarnings("unused")
+//					HttpResponse responseDE = client.execute(post);//response empty
+//
+//		            //Print out the response of the data movement
+//		            System.out.println("Answer of DME: "+EntityUtils.toString(responseDE.getEntity()));
+//		            
+//		            
+//		        } catch (IOException e) {
+//		            e.printStackTrace();
+//		        }
 	        }	
 	        //set answer status
 	        response.setStatus(HttpStatus.SC_OK);

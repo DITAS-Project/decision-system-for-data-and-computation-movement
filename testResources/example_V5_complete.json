@@ -6,7 +6,7 @@
          "tags":
            [
              {
-                "method_id": "getAllBlodTest",
+                "method_id": "getAllBloodTest",
                 "tags":["t1", "t2"]
              }
            ]
