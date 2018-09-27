@@ -258,6 +258,8 @@ public class AddVDC extends HttpServlet {
 		//add the application requirements 
 		VDCs.add(vdc);
 		
+		System.out.println("DS4M: VDC Blueprint registered");
+		
 		response.setStatus(HttpStatus.SC_OK);
 	
 	}

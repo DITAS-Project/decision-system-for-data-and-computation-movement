@@ -157,6 +157,8 @@ public class NotifyViolation extends HttpServlet {
 		    	   movementEnactions.add(movementEnaction);
 		       }
 		       movementsEnaction.setMovementsEnaction(movementEnactions);
+		       
+		       System.out.println("DS4M: Violation processed, movement action enacted");
 		        
 		        //call to movement enactors
 //		        HttpClient client = HttpClientBuilder.create().build();
