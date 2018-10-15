@@ -2,11 +2,11 @@
 The goal of the component consists in selecting the best data and computation movement actions to be adopted in order to restore the level of data quality, quality of service and security defined by the application developer.
 
 ## Input
-* concrete blueprint
-* list of violated requirements
+* Concrete blueprint
+* List of violated requirements
 
 ## Output
-* list of data and computation actions
+* List of data and computation actions
 
 ## List of functionalities
 * /api/NotifyViolation
