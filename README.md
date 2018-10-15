@@ -36,25 +36,33 @@ The goal of the component consists in selecting the best data and computation mo
 ## Implementation language
 Java
 
-## Requirements
-In order to work, this component requires the following elements to be installed:
+## Installation
+In order to deploy the DS4M it is not mnandatory to compile the code since an already compiled version of the software is already provided in /target/ROOT.war. If you don't want to compile teh source code skip step _Compilation_.
 
-* jre 8
-* tomcat 8.5
+### Requirements for deployment
+In order to be executed, this component requires the following elements to be installed:
+* JRE 8
+* Apache Tomcat 8.5
 
-## Execution
-To launch this component, execute the following command:
-* copy the file decision-system-for-data-and-computation-movement/DS4M/target/ROOT.war in /usr/local/tomcat/webapps/. of the machine where tomcat is installed
-* start tomcat
+### Requirements for copiling the code
+* JRE 8
+* Maven
 
-## check deployment
+### Compilation
+* Download the source code from this repository
+* Copile it using maven: with a shell navigate to the main folder and use the command  _mvn package_
+
+### Deployment
+* Move the war file _/target/ROOT.war_ just created in the _webapps_ folder of Apache Tomcat
+* Start Apache Tomcat
+
+### Check deployment
 To test if the application is deployed correctly:
 * open a browser 
 * go to __address__:__port__/NotifyViolation
 * a web page saying that the service is up and running should be displayed.
 
 __address__: address of the machine where tomcat is installed
-
 __port__: port of the application, if no port forwarding has been specified, it is 8080
 
 ## License
