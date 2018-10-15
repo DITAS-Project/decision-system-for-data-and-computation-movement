@@ -68,3 +68,6 @@ __port__: port of the application, if no port forwarding has been specified, it 
 
 ## License
 The  project is under Apache 2.0 license. You can find the license [here](https://github.com/DITAS-Project/decision-system-for-data-and-computation-movement/blob/master/LICENSE).
+
+## Acknowledge 
+This is being developed for the DITAS Project: https://www.ditas-project.eu/
