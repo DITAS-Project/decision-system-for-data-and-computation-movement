@@ -32,9 +32,6 @@ The goal of the component consists in selecting the best data and computation mo
     * concrete blueprint
   * output
     * none
-  
-## API definition
-API definition in [SwaggerHub](https://app.swaggerhub.com/apis/ditas-project/DecisionSystemForDataAndComputationMovement/0.0.1).
 
 ## Implementation language
 Java
@@ -59,3 +56,6 @@ To test if the application is deployed correctly:
 __address__: address of the machine where tomcat is installed
 
 __port__: port of the application, if no port forwarding has been specified, it is 8080
+
+## License
+The  project is under Apache 2.0 license. You can find the license [here](https://github.com/DITAS-Project/decision-system-for-data-and-computation-movement/blob/master/LICENSE).
