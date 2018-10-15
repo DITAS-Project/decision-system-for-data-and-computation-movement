@@ -63,6 +63,7 @@ To test if the application is deployed correctly:
 * a web page saying that the service is up and running should be displayed.
 
 __address__: address of the machine where tomcat is installed
+
 __port__: port of the application, if no port forwarding has been specified, it is 8080
 
 ## License
