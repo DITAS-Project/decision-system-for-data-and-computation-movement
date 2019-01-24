@@ -35,29 +35,6 @@ paths:
         200:
           description: "Input processed correctly"
           
-  /setUp:
-    post:
-      summary: "set Up"
-      description: "The API is called when the service is deployed, it receives in input the abstract blueprint."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "Input"
-        description: "Concrete blueprimt of the deployed blueprint"
-        required: true
-        schema:
-          $ref: "#/definitions/concreteBlueprint"
-      responses:
-        400:
-          description: "Invalid input"
-        500:
-          description: "Internal error"
-        200:
-          description: "Input processed correctly"
-          
   /addVDC:
     post:
       summary: "add VDC"
@@ -104,7 +81,7 @@ definitions:
         type: "integer"
       guaranteename: 
         type: "string"
-        description: "the slo name"
+        description: "the sla name"
       date: 
         type: "string"
         description: "date when the violation was detected"
