@@ -223,7 +223,51 @@
                ]
             }
          ]
-      }
+      },
+	"methodsInput":{
+		"Methods":[
+			{ 
+				"method_id":"get_weather",
+				"dataSources":[
+					{
+						"dataSourceID": "ID1",
+						"tables" : [
+							{ 
+							"table_id" : "table 1",
+							"columns" : [
+								"c1","c2"
+								]
+							},
+							{
+							"id" : "table 2",
+							"columns" : [
+								"c1","c3"
+								]
+							}
+						]
+						
+					},
+					{
+						"dataSourceID": "ID1",
+						"tables" : [
+							{ 
+							"id" : "table 3",
+							"columns" : [
+								"c1","c2"
+								]
+							},
+							{
+							"id" : "table 4",
+							"columns" : [
+								"c1","c3"
+								]
+							}
+						]
+					}
+				]
+			}
+		]
+	}
    },
 "DATA_MANAGEMENT":
     [
@@ -877,29 +921,7 @@
          "format":"hostname:port/CAF",
          "example":"localhost:1880/CAF"
       }
-   },
-   
-"METHOD INPUT":{
-	"Methods":[
-		{ 
-			"name":"get_weather",
-			"data sources":[
-				{
-					"data source ID": "ID1",
-					"columns" : [
-						"c1","c2"
-					]
-				},
-				{
-					"data source ID": "ID1",
-					"columns" : [
-						"c1","c2"
-					]
-				}
-			]
-		}
-	]
-}
+   }
    
     
 }
