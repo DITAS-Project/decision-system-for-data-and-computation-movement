@@ -392,7 +392,7 @@ public class NotifyViolationTest
         }
     }
 	
-	@Test
+	//@Test
     public void testNotifyViolations_current() 
 	{
 		this.testAddVDC_current();
