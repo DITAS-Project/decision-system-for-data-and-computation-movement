@@ -42,7 +42,7 @@ pipeline {
                 echo 'Creating the image...'
 
                 // This will search for a Dockerfile.artifact in the working directory and build the image to the local repository
-                sh "docker build -t \"ditas/decision-system-for-data-and-computation-movement\" -f Dockerfile.artifact ."
+                sh "docker build -t \"ditas/decision-system-for-data-and-computation-movement:staging\" -f Dockerfile.artifact ."
                 echo "Done"
 
                 echo 'Retrieving Docker Hub password from /opt/ditas-docker-hub.passwd...'
