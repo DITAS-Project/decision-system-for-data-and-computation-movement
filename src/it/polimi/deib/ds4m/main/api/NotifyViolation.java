@@ -93,7 +93,7 @@ public class NotifyViolation extends HttpServlet {
 		ArrayList<VDC> VDCs = (ArrayList<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
 		
 		//retrieve parameter (the list of violations)
-		String violationsJSON = request.getParameter("violations");
+		String violationsJSON = request.getReader().toString();//request.getParameter("violations");
 
 		try 
 		{

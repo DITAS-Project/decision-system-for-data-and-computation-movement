@@ -69,7 +69,7 @@ public class AddVDC extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException 
 	{
 		//retrieve concrete blueprint
-		String concreteBlueprintJSON = request.getParameter("ConcreteBlueprint");
+		String concreteBlueprintJSON = request.getReader().toString(); //request.getParameter("ConcreteBlueprint");
 		
 		//convert the json in object
 		ObjectMapper mapper = new ObjectMapper();

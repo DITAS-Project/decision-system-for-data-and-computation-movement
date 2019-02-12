@@ -22,6 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.Before;
@@ -164,14 +166,22 @@ public class NotifyViolationTest
 		//set up connection 
         HttpClient client = HttpClientBuilder.create().build();    
         HttpPost post = new HttpPost(URSDS4M_addVDC);
+        
+        //set the body
+        StringEntity params=null;
+		try {
+			params = new StringEntity(concreteBlueprint);
+		} 
+		catch (UnsupportedEncodingException e1) 
+		{
+			e1.printStackTrace();
+		}
 		
-        // Create some NameValuePair for HttpPost parameters
-        List<NameValuePair> arguments = new ArrayList<>(3);
-        arguments.add(new BasicNameValuePair("ConcreteBlueprint", concreteBlueprint));
 
         //connect to service
         try {
-            post.setEntity(new UrlEncodedFormEntity(arguments));
+        	post.setEntity(params);
+        	
             HttpResponse response = client.execute(post);//response empty
 
             // Print out the response message
@@ -210,26 +220,27 @@ public class NotifyViolationTest
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(URSDS4M_notifyViolation);
 		
-        // Create some NameValuePair for HttpPost parameters
-        List<NameValuePair> arguments = new ArrayList<>(3);
-        
-        
-
+        //create body
+        StringEntity params=null;
         try
         {
         	String violationJSON = mapper.writeValueAsString(violations);
         	//System.out.println(violationJSON);
-        	
-			arguments.add(new BasicNameValuePair("violations", violationJSON));
+        	params = new StringEntity(violationJSON);
 		} 
         catch (JsonProcessingException e1) 
         {
 			e1.printStackTrace();
 		}
+        catch (UnsupportedEncodingException e1) 
+		{
+			e1.printStackTrace();
+		}
+        
 
         //connect to service
         try {
-            post.setEntity(new UrlEncodedFormEntity(arguments));
+        	post.setEntity(params);
             HttpResponse response = client.execute(post);//response empty
 
             // Print out the response message
@@ -269,11 +280,9 @@ public class NotifyViolationTest
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(URSDS4M_notifyViolation);
 		
-        // Create some NameValuePair for HttpPost parameters
-        List<NameValuePair> arguments = new ArrayList<>(3);
         
+        //read violations
         String violations=null;
-        
         try {
 			violations=Utility.readFile("./testResources/example_violations.json", Charset.forName("UTF-8"));
 		} catch (IOException e2) 
@@ -281,11 +290,19 @@ public class NotifyViolationTest
 			e2.printStackTrace();
 		}
         
-        arguments.add(new BasicNameValuePair("violations",violations));
+        //set the body
+        StringEntity params=null;
+		try {
+			params = new StringEntity(violations);
+		} 
+		catch (UnsupportedEncodingException e1) 
+		{
+			e1.printStackTrace();
+		}
 
         //connect to service
         try {
-            post.setEntity(new UrlEncodedFormEntity(arguments));
+        	post.setEntity(params);
             HttpResponse response = client.execute(post);//response empty
 
             // Print out the response message
@@ -318,12 +335,21 @@ public class NotifyViolationTest
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(URSDS4M_notifyViolation);
 		
-        // Create some NameValuePair for HttpPost parameters
-        List<NameValuePair> arguments = new ArrayList<>(3);
-        arguments.add(new BasicNameValuePair("violations", "{\"violations\":[{\"type_wrong\":\"violation type\",\"methodID_wrong\":\"GetAllBloodTests\",\"vdcID\":\"VDC_02\",\"agreementid\":1,\"guaranteename\":\"guarantee name\",\"date\":\"12/01\",\"metric\":\"Availability\",\"value\":1.0},{\"type\":\"violation type2\",\"methodID\":\"GetAllBloodTests\",\"agreementid\":2,\"vdcID\":\"VDC_02\",\"guaranteename\":\"guarantee name2\",\"date\":\"12/02\",\"metric\":\"ResponseTime\",\"value\":5.0}]}"));
+
+        //set the body 
+        StringEntity params=null;
+		try {
+			params = new StringEntity("violations\", \"{\\\"violations\\\":[{\\\"type_wrong\\\":\\\"violation type\\\",\\\"methodID_wrong\\\":\\\"GetAllBloodTests\\\",\\\"vdcID\\\":\\\"VDC_02\\\",\\\"agreementid\\\":1,\\\"guaranteename\\\":\\\"guarantee name\\\",\\\"date\\\":\\\"12/01\\\",\\\"metric\\\":\\\"Availability\\\",\\\"value\\\":1.0},{\\\"type\\\":\\\"violation type2\\\",\\\"methodID\\\":\\\"GetAllBloodTests\\\",\\\"agreementid\\\":2,\\\"vdcID\\\":\\\"VDC_02\\\",\\\"guaranteename\\\":\\\"guarantee name2\\\",\\\"date\\\":\\\"12/02\\\",\\\"metric\\\":\\\"ResponseTime\\\",\\\"value\\\":5.0}]}");
+		} 
+		catch (UnsupportedEncodingException e1) 
+		{
+			e1.printStackTrace();
+		}
+        
+        
         //connect to service
         try {
-            post.setEntity(new UrlEncodedFormEntity(arguments));
+        	post.setEntity(params);
             HttpResponse response = client.execute(post);//response empty
                         
             assertEquals(0,
@@ -361,20 +387,29 @@ public class NotifyViolationTest
         HttpPost post = new HttpPost(URSDS4M_notifyViolation);
 
 		this.setUp();
-		
-        // Create some NameValuePair for HttpPost parameters
-        List<NameValuePair> arguments = new ArrayList<>(3);
-        try {
-			arguments.add(new BasicNameValuePair("violations", mapper.writeValueAsString(violations)));
+        
+        //create body
+        StringEntity params=null;
+        try
+        {
+        	String violationJSON = mapper.writeValueAsString(violations);
+        	//System.out.println(violationJSON);
+        	params = new StringEntity(violationJSON);
 		} 
         catch (JsonProcessingException e1) 
         {
 			e1.printStackTrace();
 		}
+        catch (UnsupportedEncodingException e1) 
+		{
+			e1.printStackTrace();
+		}
+        
+        
 
         //connect to service
         try {
-            post.setEntity(new UrlEncodedFormEntity(arguments));
+            post.setEntity(params);
             @SuppressWarnings("unused")
 			HttpResponse response = client.execute(post);//response empty
 
@@ -407,11 +442,9 @@ public class NotifyViolationTest
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(URSDS4M_notifyViolation);
 		
-        // Create some NameValuePair for HttpPost parameters
-        List<NameValuePair> arguments = new ArrayList<>(3);
-        
-        String violations=null;
-        
+
+        //read file
+        String violations=null;        
         try {
 			violations=Utility.readFile("./testResources/test_violation.json", Charset.forName("UTF-8"));
 		} catch (IOException e2) 
@@ -419,11 +452,20 @@ public class NotifyViolationTest
 			e2.printStackTrace();
 		}
         
-        arguments.add(new BasicNameValuePair("violations",violations));
+        //set the body
+        StringEntity params=null;
+		try {
+			params = new StringEntity(violations);
+		} 
+		catch (UnsupportedEncodingException e1) 
+		{
+			e1.printStackTrace();
+		}
+       
 
         //connect to service
         try {
-            post.setEntity(new UrlEncodedFormEntity(arguments));
+            post.setEntity(params);
             HttpResponse response = client.execute(post);//response empty
 
             // Print out the response message
@@ -465,13 +507,19 @@ public class NotifyViolationTest
         HttpClient client = HttpClientBuilder.create().build();    
         HttpPost post = new HttpPost(URSDS4M_addVDC);
 		
-        // Create some NameValuePair for HttpPost parameters
-        List<NameValuePair> arguments = new ArrayList<>(3);
-        arguments.add(new BasicNameValuePair("ConcreteBlueprint", concreteBlueprint));
+        //set the body
+        StringEntity params=null;
+		try {
+			params = new StringEntity(concreteBlueprint);
+		} 
+		catch (UnsupportedEncodingException e1) 
+		{
+			e1.printStackTrace();
+		}
 
         //connect to service
         try {
-            post.setEntity(new UrlEncodedFormEntity(arguments));
+            post.setEntity(params);
             HttpResponse response = client.execute(post);//response empty
 
             // Print out the response message
