@@ -66,7 +66,7 @@ public class AddVDC extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@SuppressWarnings("unchecked")
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException 
 	{
 		//retrieve concrete blueprint
 		String concreteBlueprintJSON = request.getParameter("ConcreteBlueprint");
@@ -80,16 +80,7 @@ public class AddVDC extends HttpServlet {
 		try {
 			root = mapper.readTree(concreteBlueprintJSON);
 		}
-		catch (JsonParseException e)
-		{
-			String message = "AddVDC: error in reading the tree of the Blueprint";
-        	System.err.println(message);
-        	response.getWriter().println(message);
-        	
-			response.setStatus(HttpStatus.SC_BAD_REQUEST);
-			return;
-		}
-		catch (NullPointerException e)
+		catch (Exception e)
 		{
 			String message = "AddVDC: error in reading the tree of the Blueprint";
         	System.err.println(message);
