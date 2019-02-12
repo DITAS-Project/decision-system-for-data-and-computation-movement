@@ -80,7 +80,7 @@ public class AddVDC extends HttpServlet {
 		try {
 			root = mapper.readTree(concreteBlueprintJSON);
 		}
-		catch (Exception e)
+		catch (JsonParseException e)
 		{
 			String message = "AddVDC: error in reading the tree of the Blueprint";
         	System.err.println(message);
@@ -89,6 +89,17 @@ public class AddVDC extends HttpServlet {
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 			return;
 		}
+		catch (NullPointerException e)
+		{
+			String message = "AddVDC: error in reading the tree of the Blueprint";
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;
+		}
+		
+		
 		
 		//retrieve DATA MANAGEMENT
 		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
