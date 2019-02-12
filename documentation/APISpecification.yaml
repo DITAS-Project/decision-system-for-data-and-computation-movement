@@ -11,7 +11,7 @@ basePath: "/"
 schemes:
 - "http"
 paths:
-  /notifyViolation:
+  /NotifyViolation:
     post:
       summary: "notifyViolation"
       description: "The method receives in input the list of violated requirements."
@@ -35,7 +35,7 @@ paths:
         200:
           description: "Input processed correctly"
           
-  /addVDC:
+  /AddVDC:
     post:
       summary: "add VDC"
       description: "The API is called when a new VDC is deployed, it receives in input the abstract blueprint."
