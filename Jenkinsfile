@@ -31,7 +31,7 @@ pipeline {
                 }
             }
         }
-        stage('Image creation') {
+        stage('Staging Image creation') {
             agent any
             options {
                 // Already compiled the WAR, so don't checkout againg (checkout also cleans the workspace, removing any generated artifact)
@@ -56,8 +56,8 @@ pipeline {
                 sh "docker login -u ditasgeneric -p ${password}"
                 echo "Done"
 
-                echo "Pushing the image ditas/decision-system-for-data-and-computation-movement:latest..."
-                sh "docker push ditas/decision-system-for-data-and-computation-movement:latest"
+                echo "Pushing the image ditas/decision-system-for-data-and-computation-movement:staging..."
+                sh "docker push ditas/decision-system-for-data-and-computation-movement:staging"
                 echo "Done "
             }
         }
@@ -72,5 +72,12 @@ pipeline {
                 sh './jenkins/deploy-staging.sh'
             }
         }
+        stage('Dredd API validation') {
+		    agent any
+		    steps {
+		   	 sh './jenkins/dredd/run-api-test.sh'
+			}
+		}
+        
     }
 }

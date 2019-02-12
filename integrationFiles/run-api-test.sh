@@ -3,7 +3,7 @@
 # This script will try to connect to your component during 3 minutes
 
 # TO CHANGE: This line should point to your component in Staging
-COMPONENT_URL="http://31.171.247.162:50011"
+COMPONENT_URL="http://31.171.247.162:30003/"
 
 # TO CHANGE: This line should point to the yaml file of your respository of your api definition
 YAML_FILE="documentation/APISpecification.yaml"
