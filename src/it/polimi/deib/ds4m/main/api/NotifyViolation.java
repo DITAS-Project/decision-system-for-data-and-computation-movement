@@ -209,7 +209,7 @@ public class NotifyViolation extends HttpServlet {
 		}
 		catch (JsonParseException e)
 		{
-			String message = "NotifyViolation: non-well-formed concrete blueprint /n" + e.getStackTrace().toString();
+			String message = "NotifyViolation: non-well-formed concrete blueprint";
 			e.printStackTrace();
         	System.err.println(message);
         	response.getWriter().println(message);
@@ -218,7 +218,7 @@ public class NotifyViolation extends HttpServlet {
 		}
 		catch (UnrecognizedPropertyException e)
 		{
-			String message = "NotifyViolation: unrecognized property in concrete blueprint /n" + e.getStackTrace().toString();
+			String message = "NotifyViolation: unrecognized property in concrete blueprint";
 			e.printStackTrace();
         	System.err.println(message);
         	response.getWriter().println(message);
@@ -227,7 +227,7 @@ public class NotifyViolation extends HttpServlet {
 		}
 		catch (Exception e)
 		{
-			String message = "NotifyViolation: concrete blueprint not well-formed /n" + e.getStackTrace().toString();
+			String message = "NotifyViolation: concrete blueprint not well-formed";
 			e.printStackTrace();
         	System.err.println(message);
         	response.getWriter().println(message);

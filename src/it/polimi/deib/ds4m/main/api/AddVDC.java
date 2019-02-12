@@ -80,9 +80,9 @@ public class AddVDC extends HttpServlet {
 		try {
 			root = mapper.readTree(concreteBlueprintJSON);
 		}
-		catch (JsonParseException e)
+		catch (Exception e)
 		{
-			String message = "AddVDC: error in reading the tree of the Blueprint /n" + e.getStackTrace().toString();
+			String message = "AddVDC: error in reading the tree of the Blueprint";
         	System.err.println(message);
         	response.getWriter().println(message);
         	
