@@ -71,7 +71,7 @@ pipeline {
                 // Deploy to Staging environment calling the deployment script
                 sh './jenkins/deploy-staging.sh'
             }
-        }
+        } 
         stage('Dredd API validation') {
 		    agent any
 		    steps {
