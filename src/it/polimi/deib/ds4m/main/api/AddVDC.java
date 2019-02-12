@@ -115,7 +115,7 @@ public class AddVDC extends HttpServlet {
         	System.err.println(message);
         	response.getWriter().println(message);
 			
-			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			response.setStatus(HttpStatus.SC_BAD_REQUEST); 
 			return;			
 		}
 		
