@@ -1,0 +1,547 @@
+swagger: "2.0"
+info:
+  description: "The goal of the component consists in selecting the best data and computation movement actions to be adopted in order to restore the level of data quality, quality of service and security defined by the application developer."
+  version: "0.0.1"
+  title: "Decision System for Data and Computation Movement"
+  license:
+    name: "License TBD"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "TBD"
+basePath: "/"
+schemes:
+- "http"
+paths:
+  /NotifyViolation:
+    post:
+      summary: "notifyViolation"
+      description: "The method receives in input the list of violated requirements."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "violations"
+        description: "the List of violations"
+        required: true
+        schema:
+          $ref: "#/definitions/violations"
+
+      responses:
+        400:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+        200:
+          description: "Input processed correctly"
+          
+  /AddVDC:
+    post:
+      summary: "add VDC"
+      description: "The API is called when a new VDC is deployed, it receives in input the abstract blueprint."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "ConcreteBlueprint"
+        description: "Concrete blueprint of the VDC to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/concreteBlueprint"
+      responses:
+        400:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+        200:
+          description: "Input processed correctly"
+
+definitions:
+  concreteBlueprint:
+    properties:
+      INTERNAL_STRUCTURE:
+        type: object
+        properties:
+          Overview:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "1" 
+              description:
+                type: string
+              tags:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    method_id:
+                      type: string
+                    tags:
+                      type: array
+                      items:
+                        type: string
+          Data_Sources:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                class:
+                  type: string
+                type:
+                  type: string
+                parameters:
+                  type: object
+                  properties:
+                    hostname:
+                      type: string
+                    port:
+                      type: string
+                    proxy-hostname:
+                      type: string
+                    proxy-port:
+                      type: string
+                    username:
+                      type: string
+                    password:
+                      type: string
+                location:
+                  type: string
+                resourceUsed:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      total:
+                        type: string
+                      unit:
+                        type: string
+          resourcesAvailable:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                type:
+                  type: string
+                location:
+                  type: string
+                characteristics:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      total:
+                        type: string
+                      free:
+                        type: string
+                      unit:
+                        type: string
+      DATA_MANAGEMENT:
+        type: array
+        items:
+          type: object
+          properties:
+            method_id:
+              type: string
+            attributes:
+              type: object
+              properties:
+                dataUtility:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      description:
+                        type: string
+                      type:
+                        type: string
+                      properties:
+                        type: object
+                        properties:
+                          availability:
+                            type: object
+                            properties:
+                              unit:
+                                type: string
+                              minimum:
+                                type: number
+                              maximum:
+                                type: number
+                security:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      description:
+                        type: string
+                      type:
+                        type: string
+                      properties:
+                        type: object
+                        properties:
+                          algorithm:
+                            type: object
+                            properties:
+                              unit:
+                                type: string
+                              value:
+                                type: string
+                          keyLength:
+                            type: object
+                            properties:
+                              unit:
+                                type: string
+                              minimum:
+                                type: number
+                privacy:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      description:
+                        type: string
+                      type:
+                        type: string
+                      properties:
+                        type: object
+                        properties:
+                          allowedPurpose:
+                            type: object
+                            properties:
+                              unit:
+                                type: string
+                              value:
+                                type: string
+                          allowedGuarantor:
+                            type: object
+                            properties:
+                              unit:
+                                type: string
+                              value:
+                                type: string
+      ABSTRACT_PROPERTIES:
+        type: array
+        items:
+          type: object
+          properties:
+            method_id:
+              type: string
+            goalTrees:
+              type: object
+              properties:
+                dataUtility:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    children:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                          children:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                leaves:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      id:
+                                        type: string
+                                      description:
+                                        type: string
+                                      weight:
+                                        type: number
+                                      attributes:
+                                        type: array
+                                        items:
+                                          type: string
+                security:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    children:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                          leaves:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                description:
+                                  type: string
+                                weight:
+                                  type: number
+                                attributes:
+                                  type: array
+                                  items:
+                                    type: string
+                    leaves:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          description:
+                            type: string
+                          weight:
+                            type: number
+                          attributes:
+                            type: array
+                            items:
+                              type: string
+                privacy:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    leaves:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          description:
+                            type: string
+                          weight:
+                            type: number
+                          attributes:
+                            type: array
+                            items:
+                              type: string
+      COOKBOOK_APPENDIX:
+        type: object
+      EXPOSED_API:
+        type: object
+        properties:
+          Methods:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                attributes:
+                  type: array
+                  items:
+                    type: string
+                HTTP_REST_API:
+                  type: object
+                  properties:
+                    Method:
+                      type: string
+                    Body:
+                      type: object
+                      properties:
+                        method_name:
+                          type: string
+                        attributes:
+                          type: object
+                          properties:
+                            $schema:
+                              type: string
+                            title:
+                              type: string
+                            description:
+                              type: string
+                            type:
+                              type: string
+                            properties:
+                              type: object
+                              properties:
+                                purpose:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                requester_id:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                            additionalProperties:
+                              type: boolean
+                            required:
+                              type: array
+                              items:
+                                type: string
+                        example:
+                          type: object
+                          properties:
+                            method_name:
+                              type: string
+                            attributes:
+                              type: object
+                              properties:
+                                purpose:
+                                  type: string
+                                requester_id:
+                                  type: string
+                    Headers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Content-Type:
+                            type: string
+                output_schema:
+                  type: object
+                  properties:
+                    $schema:
+                      type: string
+                    title:
+                      type: string
+                    type:
+                      type: string
+                    properties:
+                      type: object
+                      properties:
+                        weather:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                        tempk:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            minimum:
+                              type: number
+                            description:
+                              type: string
+                        tempc:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            minimum:
+                              type: number
+                            description:
+                              type: string
+                        tempf:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            minimum:
+                              type: number
+                            description:
+                              type: string
+                        humidity:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            description:
+                              type: string
+                        windspeed:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                        winddirection:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                        location:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                        epoch:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            description:
+                              type: string
+                        description:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                        forecast:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                    additionalProperties:
+                      type: boolean
+                    required:
+                      type: array
+                      items:
+                        type: string
+          URI:
+            type: object
+            properties:
+              format:
+                type: string
+              example:
+                type: string
+
+        
+  violations:
+    type: "array"
+    items: 
+      $ref: "#/definitions/violation"
+
+  violation:
+    type: "object"
+    properties:
+      vdcId:
+        type: "string"
+        example: "1" 
+        description: "the agreement id"
+      methodId: 
+        type: "string"
+        example: "1" 
+      metrics: 
+        type: "array"
+        items: 
+          type: "object"
+          properties:
+            key:
+              type: "integer"
+            value:
+              type: "string"
+            datetime:
+              type: "string"
+              
+              
+              
