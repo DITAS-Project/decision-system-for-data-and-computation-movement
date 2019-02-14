@@ -127,11 +127,14 @@ RUN set -e \
 
 # end standard config
 
+#change tomcat port 
+RUN sed -i 's/port="30003"/port="80"/' /usr/local/tomcat/conf/server.xml
+
 #remove root configuration (app), to deploy DS4M in root address
 RUN rm -rf /usr/local/tomcat/webapps/ROOT/
 
 # Copy app src code to the image
 COPY target/ROOT.war /usr/local/tomcat/webapps/.
 
-EXPOSE 8080
+EXPOSE 30003
 CMD ["catalina.sh", "run"]
