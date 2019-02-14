@@ -146,42 +146,6 @@ definitions:
                         type: string
                       unit:
                         type: string
-          Flow:
-            type: object
-            properties:
-              platform:
-                type: string
-              source_code:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    type:
-                      type: string
-                    z:
-                      type: string
-                    name:
-                      type: string
-                    url:
-                      type: string
-                    method:
-                      type: string
-                    upload:
-                      type: boolean
-                    swaggerDoc:
-                      type: string
-                    x:
-                      type: number
-                    y:
-                      type: number
-                    wires:
-                      type: array
-                      items:
-                        type: array
-                        items:
-                          type: string
       DATA_MANAGEMENT:
         type: array
         items:
@@ -562,9 +526,11 @@ definitions:
     properties:
       vdcId:
         type: "string"
+        example: "1" 
         description: "the agreement id"
       methodId: 
         type: "string"
+        example: "1" 
       metrics: 
         type: "array"
         items: 
