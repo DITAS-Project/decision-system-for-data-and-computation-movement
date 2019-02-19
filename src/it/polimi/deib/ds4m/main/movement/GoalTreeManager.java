@@ -33,12 +33,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 public class GoalTreeManager {
 	
 	//definition of possible strategies
-	public enum TreeType
-	{
-		DATAUTILITY,
-		SECURITY,
-		PRIVACY
-	}
+	public String TreeType = ""; //DATAUTILITY, SECURITY, PRIVACY before was an enum but modified because on issues of Eclipse
 	
 	//examine 1 volation at time.
 	//Multiple violations refer to multiple method, with diffrent goal threes
@@ -71,9 +66,9 @@ public class GoalTreeManager {
 		//retrieve the violated goals for all violations
 		for (Metric metric: violation.getMetrics())
 		{
-			violatedGoals.addAll(searchViolatedGoal(abstractProperty, metric, TreeType.DATAUTILITY));
-			violatedGoals.addAll(searchViolatedGoal(abstractProperty, metric, TreeType.SECURITY));		
-			violatedGoals.addAll(searchViolatedGoal(abstractProperty, metric, TreeType.PRIVACY));
+			violatedGoals.addAll(searchViolatedGoal(abstractProperty, metric, "DATAUTILITY"));
+			violatedGoals.addAll(searchViolatedGoal(abstractProperty, metric, "SECURITY"));		
+			violatedGoals.addAll(searchViolatedGoal(abstractProperty, metric, "PRIVACY"));
 			
 			//TODO: check the goal tree
 			
@@ -94,7 +89,7 @@ public class GoalTreeManager {
 	 * @return the set of violated goal
 	 */
 	@SuppressWarnings("unlikely-arg-type")
-	private static Set<TreeStructure> searchViolatedGoal(AbstractProperty abstractProperty, Metric metric, TreeType treeType)
+	private static Set<TreeStructure> searchViolatedGoal(AbstractProperty abstractProperty, Metric metric, String treeType)
 	{
 		
 		//retrieve all violated goals
@@ -104,15 +99,15 @@ public class GoalTreeManager {
 		
 		//collect all leaf goals
 		switch (treeType) {
-		case DATAUTILITY:
+		case "DATAUTILITY":
 			TreeStructure.getAllLeaves(abstractProperty.getGoalTrees().getDataUtility(),leaves);
 			break;
 			
-		case PRIVACY:
+		case "PRIVACY":
 			TreeStructure.getAllLeaves(abstractProperty.getGoalTrees().getPrivacy(),leaves);
 			break;
 			
-		case SECURITY:
+		case "SECURITY":
 			TreeStructure.getAllLeaves(abstractProperty.getGoalTrees().getSecurity(),leaves);
 		}
 		

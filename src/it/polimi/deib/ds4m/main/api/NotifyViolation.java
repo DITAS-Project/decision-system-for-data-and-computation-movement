@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -81,7 +82,7 @@ public class NotifyViolation extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	@SuppressWarnings("unchecked")
+	//@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		//create the json parser
@@ -93,13 +94,13 @@ public class NotifyViolation extends HttpServlet {
 		ArrayList<VDC> VDCs = (ArrayList<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
 		
 		//retrieve parameter (the list of violations)
-		String violationsJSON = request.getReader().toString();//request.getParameter("violations");
-
+		String violationsJSON = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+		
 		try 
 		{
 			//convert 
 	        ArrayList<Violation> violations = new ArrayList<Violation>(Arrays.asList(mapper.readValue(violationsJSON, Violation[].class)));
-	         
+	        
 	        //while the set of violations contain a violation, keep analysing them
 	        for (Violation violation : violations)
 	        {
@@ -144,7 +145,7 @@ public class NotifyViolation extends HttpServlet {
 		        //NOT NEEDED?
 		        
 		        //order the dm action using a strategy
-		        MovementsActionsManager.orderMovementAction(movementsToBeEnacted, MovementsActionsManager.Strategy.MONETARY);
+		        MovementsActionsManager.orderMovementAction(movementsToBeEnacted, "MONETARY");
 		        
 		        //check other trees of other VDCs, for all method? 
 		        movementsToBeEnacted = VDCManager.chechOtherVDC(movementsToBeEnacted, VDCs, violatedVDC);
@@ -206,6 +207,8 @@ public class NotifyViolation extends HttpServlet {
 	        }	
 	        //set answer status
 	        response.setStatus(HttpStatus.SC_OK);
+	        response.setContentType("application/x-www-form-urlencoded");
+	        
 		}
 		catch (JsonParseException e)
 		{

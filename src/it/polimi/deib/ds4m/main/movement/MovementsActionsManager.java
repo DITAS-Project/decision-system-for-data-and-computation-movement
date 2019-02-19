@@ -44,12 +44,7 @@ public class MovementsActionsManager
 {
 
 	//definition of possible strategies
-	public enum Strategy
-	{
-		MONETARY,
-		TIME,
-		POSITIVEIMPACTS		
-	}
+	public String Strategy = ""; //MONETARY, TIME, POSITIVEIMPACTS before was an enum but changed because of eclipse problems
 	
 	/**
 	 * The method instantiate the movement actions given a set of movement classes a set of data sources. 
@@ -164,17 +159,17 @@ public class MovementsActionsManager
 	 * @param strategy the ordering strategy
 	 * @return the ordered movement actions
 	 */
-	public static ArrayList<Movement> orderMovementAction(ArrayList<Movement> movementsToBeEnacted, Strategy strategy)
+	public static ArrayList<Movement> orderMovementAction(ArrayList<Movement> movementsToBeEnacted, String strategy)
 	{
 		
 		switch(strategy) {
-			case MONETARY: 
+			case "MONETARY": 
 				Collections.sort(movementsToBeEnacted, new MovementsActionsManager().new MonetaryCostComparator());
 				break;
-			case TIME: 
+			case "TIME": 
 				Collections.sort(movementsToBeEnacted, new MovementsActionsManager().new TimeCostComparator());
 				break;
-			case POSITIVEIMPACTS:
+			case "POSITIVEIMPACTS":
 				System.err.println(" 'positive impact' ordering non implemented yet");
 				break;
 			default:

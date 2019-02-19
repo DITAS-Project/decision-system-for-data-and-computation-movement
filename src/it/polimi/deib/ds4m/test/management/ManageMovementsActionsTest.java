@@ -188,7 +188,7 @@ public class ManageMovementsActionsTest
 		
 		ArrayList<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals,  vdc);
 		
-		movementsToBeEnacted = MovementsActionsManager.orderMovementAction(movementsToBeEnacted, MovementsActionsManager.Strategy.MONETARY);
+		movementsToBeEnacted = MovementsActionsManager.orderMovementAction(movementsToBeEnacted, "MONETARY");
 		
 		
 		int positionCost= -1;
@@ -249,7 +249,7 @@ public class ManageMovementsActionsTest
 		
 		ArrayList<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals,  vdc);
 		
-		movementsToBeEnacted = MovementsActionsManager.orderMovementAction(movementsToBeEnacted, MovementsActionsManager.Strategy.TIME);
+		movementsToBeEnacted = MovementsActionsManager.orderMovementAction(movementsToBeEnacted, "TIME");
 		
 		
 		int positionCost= -1;

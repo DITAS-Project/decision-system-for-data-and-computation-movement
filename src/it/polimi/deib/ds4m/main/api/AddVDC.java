@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -65,11 +66,12 @@ public class AddVDC extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException 
 	{
 		//retrieve concrete blueprint
-		String concreteBlueprintJSON = request.getReader().toString(); //request.getParameter("ConcreteBlueprint");
+		//String concreteBlueprintJSON = request.getReader().toString(); //request.getParameter("ConcreteBlueprint");
+		String concreteBlueprintJSON = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));	
 		
 		//convert the json in object
 		ObjectMapper mapper = new ObjectMapper();
@@ -82,6 +84,7 @@ public class AddVDC extends HttpServlet {
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			String message = "AddVDC: error in reading the tree of the Blueprint";
         	System.err.println(message);
         	response.getWriter().println(message);
@@ -89,8 +92,6 @@ public class AddVDC extends HttpServlet {
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 			return;
 		}
-		
-		
 		
 		//retrieve DATA MANAGEMENT
 		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
@@ -264,7 +265,7 @@ public class AddVDC extends HttpServlet {
 		vdc.setResources(resources);
 		vdc.setId(vdcName);
 		
-		//if it is not set create a collection of appl.s requirements
+		//if it is not set create a collection of VDCs
 		ArrayList<VDC> VDCs;
 		if  (this.getServletConfig().getServletContext().getAttribute("VDCs") == null)
 		{
@@ -274,7 +275,7 @@ public class AddVDC extends HttpServlet {
 		else
 			VDCs = (ArrayList<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
 		
-		//add the application requirements 
+		//add the VDC
 		VDCs.add(vdc);
 		
 		System.out.println("DS4M: VDC Blueprint registered");
