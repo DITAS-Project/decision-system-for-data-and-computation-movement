@@ -50,7 +50,7 @@ paths:
         required: true
         schema:
           type: object
-          example:
+          x-example:
             INTERNAL_STRUCTURE:
               Overview:
                 name: BP1
@@ -437,7 +437,7 @@ definitions:
               type: "string"
             datetime:
               type: "string"
-    example:
+    x-example:
       - vdcId: osr_hospital_vdc
         methodId: getAllValuesForBloodTestComponent
         metrics:
