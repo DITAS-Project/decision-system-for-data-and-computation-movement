@@ -17,7 +17,9 @@
  */
 package it.polimi.deib.ds4m.main.api;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +37,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
@@ -62,6 +65,7 @@ import it.polimi.deib.ds4m.main.movement.VDCManager;
 @WebServlet("/NotifyViolation")
 public class NotifyViolation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String urlDA_Resources = "http://178.22.69.180:8080/data-analytics/resources/cloudsigma-deployment/node1.ditas.mia.cloudsigma.com/usage/";
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -164,6 +168,8 @@ public class NotifyViolation extends HttpServlet {
 		       
 		       //TODO differentiate between data and computation movements
 		        
+		        
+		        
 		       //transform the selected movement actions in element to be sent
 		       MovementsEnaction movementsEnaction = new MovementsEnaction();//container of movements  
 		       ArrayList<MovementEnaction> movementEnactions = new ArrayList<MovementEnaction>();// vector to be added to the container
@@ -176,7 +182,39 @@ public class NotifyViolation extends HttpServlet {
 		       }
 		       movementsEnaction.setMovementsEnaction(movementEnactions);
 		       
-		       System.out.println("DS4M: Violation processed, movement action enacted");
+		       //once the movement action has been selected, 
+		       //1-check the amount of space that is used by the sourse DAL
+		       
+		       //TODO
+		       
+		       //2-check if the target node/infrastructure has enough space
+		       
+		       
+				HttpClient client = HttpClientBuilder.create().build();
+				HttpGet requestDA = new HttpGet(urlDA_Resources);
+				   
+				
+				HttpResponse responseDA = client.execute(requestDA);
+					
+				System.out.println("\nSending 'GET' request to URL : " + urlDA_Resources);
+				System.out.println("Response Code : " + 
+						responseDA.getStatusLine().getStatusCode());
+				
+				BufferedReader rd = new BufferedReader(
+				               new InputStreamReader(responseDA.getEntity().getContent()));
+				
+				StringBuffer result = new StringBuffer();
+				String line = "";
+				while ((line = rd.readLine()) != null) {
+					result.append(line);
+				}
+				
+				System.out.println(result.toString());
+		       
+				//parse the input
+		       
+		       
+				System.out.println("DS4M: Violation processed, movement action enacted");
 		        
 		        //call to movement enactors
 //		        HttpClient client = HttpClientBuilder.create().build();
@@ -187,7 +225,7 @@ public class NotifyViolation extends HttpServlet {
 //		        //call to dma in kubernetes
 //		        HttpPost post = new HttpPost("http://dme:8080/DataMovementEnactor/EnactMovement");
 //		        
-//		        //System.out.println(mapper.writeValueAsString(movementsEnaction));
+		        System.out.println(mapper.writeValueAsString(movementsEnaction));
 //		        
 //		        // Create some NameValuePair for HttpPost parameters
 //		        List<NameValuePair> arguments = new ArrayList<>(3);
