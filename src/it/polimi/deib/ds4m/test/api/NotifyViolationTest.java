@@ -443,7 +443,6 @@ public class NotifyViolationTest
         try
         {
         	String violationJSON = mapper.writeValueAsString(violations);
-        	System.out.println(violationJSON);
         	params = new StringEntity(violationJSON);
 		} 
         catch (JsonProcessingException e1) 
