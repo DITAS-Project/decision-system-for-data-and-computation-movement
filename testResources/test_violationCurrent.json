@@ -1,54 +1,34 @@
 [
-  {
-    "vdcId": "sunt amet non nisi nostrud",
-    "methodId": "esse veniam Duis sit",
-    "metrics": [
-      {
-        "key": "sint",
-        "value": 66153087,
-        "datetime": "deserunt anim fugiat"
-      },
-      {
-        "key": "aute dolore l",
-        "value": 81612528,
-        "datetime": "do in incididunt"
-      },
-      {
-        "key": "amet",
-        "value": 23180149,
-        "datetime": "velit commodo ut aute mollit"
-      },
-      {
-        "key": "Excepteur",
-        "value": -80312715,
-        "datetime": "elit do"
-      },
-      {
-        "key": "adipisicing occaecat anim",
-        "value": 84879194,
-        "datetime": "aute irure"
-      }
-    ]
-  },
-  {
-    "vdcId": "proident eiusmod reprehenderit cillum",
-    "methodId": "in ut",
-    "metrics": [
-      {
-        "key": "eiusmod dolore",
-        "value": 60638606,
-        "datetime": "exercitation dolor anim mollit"
-      },
-      {
-        "key": "cupidatat magna mollit",
-        "value": -67004264,
-        "datetime": "adipisicing proident nostrud eu"
-      },
-      {
-        "key": "nisi eiusmod cupidatat nostrud incididunt",
-        "value": -23141894,
-        "datetime": "culpa occaecat velit voluptate"
-      }
-    ]
-  }
+	{
+		"vdcId":"VDC_2",
+		"methodId":"GetAllBloodTests",
+		"metrics": [
+			{
+				"key": "Availability",
+				"value": 90,
+				"datetime": "2018-07-18T10:20:32Z"
+			},
+			{
+				"key": "Volume",
+				"value": 200,
+				"datetime": "2018-07-18T10:20:32Z"
+			}
+		]
+	},
+	{
+		"vdcId": "VDC_2",
+		"methodId": "GetAllBloodTests",
+		"metrics": [
+			{
+				"key": "Availability",
+				"value": 90,
+				"datetime": "2018-07-18T10:20:32Z"
+			},
+			{
+				"key": "Volume",
+				"value": 200,
+				"datetime": "2018-07-18T10:20:32Z"
+			}
+		]
+	}
 ]

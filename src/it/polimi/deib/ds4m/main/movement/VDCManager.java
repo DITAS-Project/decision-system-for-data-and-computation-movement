@@ -39,6 +39,9 @@ public class VDCManager
 	 */
 	public static VDC findViolatedVDC(Violation violation, ArrayList<VDC> VDCs)
 	{
+		if  (VDCs==null)
+			return null;
+		
         //find the first VDC (all violation at this stage will refer to the same VDC)
         for(VDC vdcExamined : VDCs)
         {
