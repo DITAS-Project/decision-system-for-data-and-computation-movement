@@ -214,7 +214,7 @@ public class NotifyViolation extends HttpServlet {
 				//parse the input
 		       
 		       
-				System.out.println("DS4M: Violation processed, movement action enacted");
+				//System.out.println("DS4M: Violation processed, movement action enacted");
 		        
 		        //call to movement enactors
 //		        HttpClient client = HttpClientBuilder.create().build();
@@ -225,7 +225,7 @@ public class NotifyViolation extends HttpServlet {
 //		        //call to dma in kubernetes
 //		        HttpPost post = new HttpPost("http://dme:8080/DataMovementEnactor/EnactMovement");
 //		        
-		        System.out.println(mapper.writeValueAsString(movementsEnaction));
+		        //System.out.println(mapper.writeValueAsString(movementsEnaction));
 //		        
 //		        // Create some NameValuePair for HttpPost parameters
 //		        List<NameValuePair> arguments = new ArrayList<>(3);
@@ -250,7 +250,7 @@ public class NotifyViolation extends HttpServlet {
 		}
 		catch (JsonParseException e)
 		{
-			String message = "NotifyViolation: non-well-formed concrete blueprint";
+			String message = "NotifyViolation: non-well-formed violations";
 			e.printStackTrace();
         	System.err.println(message);
         	response.getWriter().println(message);
@@ -259,7 +259,7 @@ public class NotifyViolation extends HttpServlet {
 		}
 		catch (UnrecognizedPropertyException e)
 		{
-			String message = "NotifyViolation: unrecognized property in concrete blueprint";
+			String message = "NotifyViolation: unrecognized property in violations";
 			e.printStackTrace();
         	System.err.println(message);
         	response.getWriter().println(message);
@@ -268,7 +268,7 @@ public class NotifyViolation extends HttpServlet {
 		}
 		catch (Exception e)
 		{
-			String message = "NotifyViolation: concrete blueprint not well-formed";
+			String message = "NotifyViolation: violations not well-formed";
 			e.printStackTrace();
         	System.err.println(message);
         	response.getWriter().println(message);

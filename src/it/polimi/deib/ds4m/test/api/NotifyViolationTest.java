@@ -82,7 +82,7 @@ public class NotifyViolationTest
     //boolean variable to control which tests to execute.
     //if false all tests are executed
     //if true only testNotifyViolations_current is executed
-    boolean onlyCurrentBlueprint = false;
+    boolean onlyCurrentBlueprint = true;
     
     
 	//setup to be called to instantiate variables
@@ -423,7 +423,7 @@ public class NotifyViolationTest
 		//clear from all vdcs
 		this.removeAllVDCs();
 		
-		this.testAddVDC_correct();
+		//this.testAddVDC_correct();
 		
         //setup a mock server
 		stubFor(post(urlEqualTo(urlDataMovementEnactor))
@@ -443,7 +443,6 @@ public class NotifyViolationTest
         try
         {
         	String violationJSON = mapper.writeValueAsString(violations);
-        	System.out.println(violationJSON);
         	params = new StringEntity(violationJSON);
 		} 
         catch (JsonProcessingException e1) 
@@ -501,7 +500,7 @@ public class NotifyViolationTest
         //read file
         String violations=null;        
         try {
-			violations=Utility.readFile("./testResources/test_violationCorrect.json", Charset.forName("UTF-8"));
+			violations=Utility.readFile("./testResources/test_violationCurrent.json", Charset.forName("UTF-8"));
 		} catch (IOException e2) 
         {
 			e2.printStackTrace();
