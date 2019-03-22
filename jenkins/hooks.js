@@ -18,7 +18,7 @@ before("/NotifyViolation > POST > 200", function (transaction) {
 	
 	//transaction.request.headers['content-type'] = "application/json"
 	//transaction.request.headers['Violations'] = "[ { \"vdcId\": \"1\", \"methodId\": \"getAllValuesForBloodTestComponent\", \"metrics\": [ { \"key\": \"availability\", \"value\": 90, \"datetime\": \"2018-08-07T10:50:23.674337517+02:00\"}]}]"
-	transaction.request.body = "prova notifyViolation";
+	transaction.test.request.body = "prova notifyViolation";
 	done();
 });
 
@@ -28,7 +28,7 @@ before("/AddVDC > POST > 200", function (transaction) {
 	
 	//transaction.request.headers['content-type'] = "application/json"
 	//transaction.request.headers['Violations'] = "[ { \"vdcId\": \"1\", \"methodId\": \"getAllValuesForBloodTestComponent\", \"metrics\": [ { \"key\": \"availability\", \"value\": 90, \"datetime\": \"2018-08-07T10:50:23.674337517+02:00\"}]}]"
-	transaction.request.body = "prova add VDC";
+	transaction.test.request.body = "prova add VDC";
 	done();
 });
 
