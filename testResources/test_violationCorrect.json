@@ -1,0 +1,34 @@
+[
+	{
+		"vdcId":"VDC_2",
+		"methodId":"GetAllBloodTests",
+		"metrics": [
+			{
+				"key": "Availability",
+				"value": 90,
+				"datetime": "2018-07-18T10:20:32Z"
+			},
+			{
+				"key": "Volume",
+				"value": 200,
+				"datetime": "2018-07-18T10:20:32Z"
+			}
+		]
+	},
+	{
+		"vdcId": "VDC_2",
+		"methodId": "GetAllBloodTests",
+		"metrics": [
+			{
+				"key": "Availability",
+				"value": 90,
+				"datetime": "2018-07-18T10:20:32Z"
+			},
+			{
+				"key": "Volume",
+				"value": 200,
+				"datetime": "2018-07-18T10:20:32Z"
+			}
+		]
+	}
+]

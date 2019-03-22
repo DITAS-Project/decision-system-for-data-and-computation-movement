@@ -82,7 +82,7 @@ public class NotifyViolationTest
     //boolean variable to control which tests to execute.
     //if false all tests are executed
     //if true only testNotifyViolations_current is executed
-    boolean onlyCurrentBlueprint = true;
+    boolean onlyCurrentBlueprint = false;
     
     
 	//setup to be called to instantiate variables
@@ -484,7 +484,7 @@ public class NotifyViolationTest
 		this.removeAllVDCs();
 		
 		//add the current blueprint
-		//this.testAddVDC_current();
+		this.testAddVDC_current();
 		
         //setup a mock server for data movement
 		stubFor(post(urlEqualTo(urlDataMovementEnactor))
@@ -500,7 +500,7 @@ public class NotifyViolationTest
         //read file
         String violations=null;        
         try {
-			violations=Utility.readFile("./testResources/test_violationCurrent2.json", Charset.forName("UTF-8"));
+			violations=Utility.readFile("./testResources/test_violationCurrent.json", Charset.forName("UTF-8"));
 		} catch (IOException e2) 
         {
 			e2.printStackTrace();
