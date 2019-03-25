@@ -22,4 +22,4 @@ done
 
 # If you use Hooks, you have to modify this line. Read the Dredd manual.
 #dredd $YAML_FILE $COMPONENT_URL
-dredd $YAML_FILE $COMPONENT_URL --hookfiles=./jenkins/hooks.js #--user publicUser:Blueprint
+dredd $YAML_FILE $COMPONENT_URL --hookfiles=./jenkins/hooks.js
