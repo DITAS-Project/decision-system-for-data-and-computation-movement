@@ -6,28 +6,28 @@ var responseStash = 'prova';
 
 
 // call the addVDC with the blueprint
-//before("/AddVDC > POST > 200", function (transaction) {
-//	transaction.request.headers['content-type'] = "application/json"
-//	transaction.request.body = ""	
-//  
-//});
+before("/AddVDC > POST > 200", function (transaction) {
+	transaction.request.headers['content-type'] = "application/json"
+	transaction.request.body = ""	
+  
+});
 
 //call the notify violations with the same ID of the VDC
-hooks.before("/NotifyViolation > POST > 200", function (transaction) {
+before("/NotifyViolation > POST > 200", function (transaction) {
 	
-	//transaction.request.headers['content-type'] = "application/json"
+	transaction.request.headers['content-type'] = "application/json"
 	//transaction.request.headers['Violations'] = "[ { \"vdcId\": \"1\", \"methodId\": \"getAllValuesForBloodTestComponent\", \"metrics\": [ { \"key\": \"availability\", \"value\": 90, \"datetime\": \"2018-08-07T10:50:23.674337517+02:00\"}]}]"
 	transaction.request.body  = "prova notifyViolation";
 	done();
 });
 
 
-//call the notify violations with the same ID of the VDC
-hooks.before("/AddVDC > POST > 200", function (transaction) {
-	
-	//transaction.request.headers['content-type'] = "application/json"
-	//transaction.request.headers['Violations'] = "[ { \"vdcId\": \"1\", \"methodId\": \"getAllValuesForBloodTestComponent\", \"metrics\": [ { \"key\": \"availability\", \"value\": 90, \"datetime\": \"2018-08-07T10:50:23.674337517+02:00\"}]}]"
-	transaction.request.body = "prova add VDC";
-	done();
-});
+////call the notify violations with the same ID of the VDC
+//hooks.before("/AddVDC > POST > 200", function (transaction) {
+//	
+//	//transaction.request.headers['content-type'] = "application/json"
+//	//transaction.request.headers['Violations'] = "[ { \"vdcId\": \"1\", \"methodId\": \"getAllValuesForBloodTestComponent\", \"metrics\": [ { \"key\": \"availability\", \"value\": 90, \"datetime\": \"2018-08-07T10:50:23.674337517+02:00\"}]}]"
+//	transaction.request.body = "prova add VDC";
+//	done();
+//});
 
