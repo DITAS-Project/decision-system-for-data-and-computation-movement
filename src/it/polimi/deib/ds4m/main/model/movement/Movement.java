@@ -20,7 +20,7 @@ package it.polimi.deib.ds4m.main.model.movement;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import it.polimi.deib.ds4m.main.model.resources.Resource;
+import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Movement 
@@ -32,9 +32,9 @@ public class Movement
 	
 	//linked to data source class, when the movement is instantiated
 	@JsonIgnore
-	private Resource fromLinked;
+	private Infrastructure fromLinked;
 	@JsonIgnore
-	private Resource toLinked;
+	private Infrastructure toLinked;
 	
 	private ArrayList<String> positiveImpacts; //list of IDs of goals with a positive impact
 	private ArrayList<String> negativeImpacts; //list of IDs of goals with a negative impact
@@ -245,28 +245,28 @@ public class Movement
 	/**
 	 * @return the fromLinked
 	 */
-	public Resource getFromLinked() {
+	public Infrastructure getFromLinked() {
 		return fromLinked;
 	}
 
 	/**
 	 * @param fromLinked the fromLinked to set
 	 */
-	public void setFromLinked(Resource fromLinked) {
+	public void setFromLinked(Infrastructure fromLinked) {
 		this.fromLinked = fromLinked;
 	}
 
 	/**
 	 * @return the toLinked
 	 */
-	public Resource getToLinked() {
+	public Infrastructure getToLinked() {
 		return toLinked;
 	}
 
 	/**
 	 * @param toLinked the toLinked to set
 	 */
-	public void setToLinked(Resource toLinked) {
+	public void setToLinked(Infrastructure toLinked) {
 		this.toLinked = toLinked;
 	}
 	

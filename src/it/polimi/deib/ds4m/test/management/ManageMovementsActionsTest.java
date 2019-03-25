@@ -31,6 +31,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.Utility;
@@ -41,7 +42,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Cost;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
-import it.polimi.deib.ds4m.main.model.resources.Resource;
+import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 
 public class ManageMovementsActionsTest 
@@ -60,7 +61,8 @@ public class ManageMovementsActionsTest
 		
 		try 
 		{
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
+			//concreteBlueprintJSON=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
+			concreteBlueprintJSON=Utility.readFile("./testResources/example_V5_complete_withResourcesMoved.json", Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -73,10 +75,10 @@ public class ManageMovementsActionsTest
 		JsonNode root = mapper.readTree(concreteBlueprintJSON);
 		
 		//retrieve resources
-		JsonNode resourcesJSON = root.get("INTERNAL_STRUCTURE").get("resourcesAvailable");
-		ArrayList<Resource> resources;
+		JsonNode resourcesJSON = root.get("COOKBOOK_APPENDIX").get("infrastructure");
+		ArrayList<Infrastructure> resources;
 		try {
-			resources = new ArrayList<Resource>(Arrays.asList(mapper.treeToValue(resourcesJSON, Resource[].class)));
+			resources = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(resourcesJSON, Infrastructure[].class)));
 		}
 		catch (JsonProcessingException e) 
 		{
@@ -103,7 +105,7 @@ public class ManageMovementsActionsTest
 	    ArrayList<Movement> movements = MovementsActionsManager.instantiateMovementActions(resources,movementsJSON);
 	    
 	    //2 data sources and 2 moment action classes so 4 data movement action instances 
- 	    assertTrue(movements.size()==6);
+ 	    assertTrue(movements.size()==8);
 
  	    
  	    
@@ -131,7 +133,7 @@ public class ManageMovementsActionsTest
 		ArrayList<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals,  vdc);
 
 		//TODO: important: data sources are not filtered by capabilities, so I got 2, with the filtering this might change.
-		assertTrue(movementsToBeEnacted.size()==2);
+		assertTrue(movementsToBeEnacted.size()==3);
 	}
 	
 	/**
@@ -295,7 +297,8 @@ public class ManageMovementsActionsTest
 				try 
 				{
 					//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-					concreteBlueprintJSON=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
+					//concreteBlueprintJSON=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
+					concreteBlueprintJSON=Utility.readFile("./testResources/example_V5_complete_withResourcesMoved.json", Charset.forName("UTF-8"));
 					
 				} catch (IOException e) 
 				{
@@ -305,6 +308,9 @@ public class ManageMovementsActionsTest
 				
 				//convert the json in object
 				ObjectMapper mapper = new ObjectMapper();
+				mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+				mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+				
 				JsonNode root;
 				try {
 					root = mapper.readTree(concreteBlueprintJSON);
@@ -343,10 +349,10 @@ public class ManageMovementsActionsTest
 				}		
 				
 				//retrieve resources
-				JsonNode resourcesJSON = root.get("INTERNAL_STRUCTURE").get("resourcesAvailable");
-				ArrayList<Resource> resources;
+				JsonNode resourcesJSON = root.get("COOKBOOK_APPENDIX").get("infrastructure");
+				ArrayList<Infrastructure> resources;
 				try {
-					resources = new ArrayList<Resource>(Arrays.asList(mapper.treeToValue(resourcesJSON, Resource[].class)));
+					resources = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(resourcesJSON, Infrastructure[].class)));
 				}
 				catch (JsonProcessingException e) 
 				{

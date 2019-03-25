@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import it.polimi.deib.ds4m.main.model.resources.Characteristic;
-import it.polimi.deib.ds4m.main.model.resources.Resource;
+import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -36,24 +36,24 @@ public class DataSource
 	private String classDataSource;
 	private String description;
 	//private Parameters parameters;
-	private String location;
+	private String location;//cloud or edge
 	private ArrayList<Characteristic> resourceUsed;//this represent the resource used in terms of how many GB and CPU% the Data Source uses 
 	
 	@JsonIgnore
-	private Resource resourceUsedLinked;// this is the link to the actual resource that host the DS. in here the parameters represent what the resource has available a nd in total.
+	private Infrastructure resourceUsedLinked;// this is the link to the actual resource that host the DS. in here the parameters represent what the resource has available and in total.
 	
 	/**
-	 * It creates the resource that represent the data source. please notice that the locatioj is set tu null since this resource can be olty used as source of data movement 
+	 * It creates the resource that represent the data source. please notice that the location is set to null since this resource can be only used as source of data movement 
 	 * 
 	 * @param resources
 	 */
-	public void createResource(ArrayList<Resource> resources)
+	public void createResource(ArrayList<Infrastructure> resources)
 	{
-		this.resourceUsedLinked =  new Resource();
+		//the new resource has the dame parameter of the datasource since it is fake and used as a source for the data movement
+		this.resourceUsedLinked =  new Infrastructure();
 		this.resourceUsedLinked.setCharacteristics(resourceUsed);
 		this.resourceUsedLinked.setName(id);
-		this.resourceUsedLinked.setType(type);
-		this.resourceUsedLinked.setLocation(location);
+		this.resourceUsedLinked.setType(location);
 		this.resourceUsedLinked.setIsDataSource(true);
 		
 		resources.add(resourceUsedLinked);//add the newly created resource to the list of resource to later create the movement
@@ -136,7 +136,7 @@ public class DataSource
 	/**
 	 * @return the resourceUsedLinked
 	 */
-	public Resource getResourceUsedLinked() {
+	public Infrastructure getResourceUsedLinked() {
 		return resourceUsedLinked;
 	}
 
@@ -144,7 +144,7 @@ public class DataSource
 	/**
 	 * @param resourceUsedLinked the resourceUsedLinked to set
 	 */
-	public void setResourceUsedLinked(Resource resourceUsedLinked) {
+	public void setResourceUsedLinked(Infrastructure resourceUsedLinked) {
 		this.resourceUsedLinked = resourceUsedLinked;
 	}
 
