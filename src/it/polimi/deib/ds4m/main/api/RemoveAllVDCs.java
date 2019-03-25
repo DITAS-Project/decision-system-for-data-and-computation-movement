@@ -68,6 +68,7 @@ public class RemoveAllVDCs extends HttpServlet {
 		VDCs.clear();
 		
 		response.setStatus(HttpStatus.SC_OK);
+		response.setContentType("application/json");
 	}
 
 }

@@ -57,6 +57,7 @@ public class RemoveVDC extends HttpServlet {
 		System.out.println("DS4M: VDC removed");
 		
 		response.setStatus(HttpStatus.SC_OK);
+		response.setContentType("application/json");
 	}
 
 }
