@@ -5,6 +5,24 @@ var after = hooks.after;
 var fs = require('fs');
 
 
+beforeAll(function (transactions) {
+	  hooks.log('setup order tests');
+	  
+	  transactions.push(clone(transactions[0]));
+	  
+	  //copy the transaction array (i don't need a deep copy)
+	  var transactions2=transactions.slice(); 
+	  
+	  transactions[0]=transactions2[3];
+	  transactions[1]=transactions2[0];
+	  transactions[2]=transactions2[1];
+	  transactions[3]=transactions2[2];
+	  transactions[4]=transactions2[4];
+	  transactions[5]=transactions2[5];
+	  
+	  
+	});
+
 
 // call the addVDC with the blueprint
 before("/AddVDC > add VDC > 200 > application/json", function (transaction) {
@@ -21,7 +39,6 @@ before("/NotifyViolation > notifyViolation > 200 > application/json", function (
 	var violations = fs.readFileSync('./testResources/test_violation.json', 'utf8');
 	
 	transaction.request.headers['content-type'] = "application/json";
-	//transaction.request.headers['Violations'] = "[ { \"vdcId\": \"1\", \"methodId\": \"getAllValuesForBloodTestComponent\", \"metrics\": [ { \"key\": \"availability\", \"value\": 90, \"datetime\": \"2018-08-07T10:50:23.674337517+02:00\"}]}]"
 	transaction.request.body  = violations;
 });
 
