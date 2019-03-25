@@ -68,84 +68,6 @@
 	           	]  
          }
        ],
-      "resourcesAvailable":[  
-         {  
-            "name":"rescource1",
-            "type":"sql",
-            "location":"edge",
-            "characteristics":[
-	            {  
-	               "type":"space",
-	               "total":"100",
-	               "free":"50",
-	               "unit":"GB"
-	            },
-	            {  
-	               "type":"memory",
-	               "total":"100",
-	               "free":"50",
-	               "unit":"GB"
-	            }
-            ]
-         },
-         {  
-            "name":"rescource2",
-            "type":"sql",
-            "location":"edge",
-            "characteristics":[
-	            {  
-	               "type":"space",
-	               "total":"100",
-	               "free":"50",
-	               "unit":"GB"
-	            },
-	            {  
-	               "type":"memory",
-	               "total":"100",
-	               "free":"50",
-	               "unit":"GB"
-	            }
-            ]
-         },
-         {  
-            "name":"rescource3",
-            "type":"sql",
-            "location":"cloud",
-            "characteristics":[
-	            {  
-	               "type":"space",
-	               "total":"100",
-	               "free":"50",
-	               "unit":"GB"
-	            },
-	            {  
-	               "type":"memory",
-	               "total":"100",
-	               "free":"50",
-	               "unit":"GB"
-	            }
-            ]
-         },
-         {  
-            "name":"rescource4",
-            "type":"computation",
-            "location":"edge",
-            "characteristics":[
-	            {  
-	               "type":"memory",
-	               "total":"100",
-	               "free":"50",
-	               "unit":"GB"
-	            },
-	            {  
-	               "type":"CPU",
-	               "total":"100",
-	               "free":"50",
-	               "unit":"percentage"
-	            }
-            ]
-         }
-      ],
       "Flow":{  
          "platform":"Node-RED",
          "source_code":[  
@@ -761,7 +683,31 @@
    "description":"Test deployment in CloudSigma",
    "infrastructure":[
       {
-         "name":"cloudsigma-deployment",
+         "name":"rescource1",
+         "description":"Deployment in CloudSigma",
+         "type":"edge",
+         "on-line":true,
+         "provider":{
+            "api_endpoint":"api url",
+            "api_type":"cloudsigma",
+            "keypair_id":"keypair_uuid"
+         },
+         "resources":[]
+      },
+      {
+         "name":"rescource2",
+         "description":"Deployment in CloudSigma",
+         "type":"edge",
+         "on-line":true,
+         "provider":{
+            "api_endpoint":"api url",
+            "api_type":"cloudsigma",
+            "keypair_id":"keypair_uuid"
+         },
+         "resources":[]
+      },
+      {
+         "name":"rescource3",
          "description":"Deployment in CloudSigma",
          "type":"cloud",
          "on-line":true,
@@ -770,39 +716,19 @@
             "api_type":"cloudsigma",
             "keypair_id":"keypair_uuid"
          },
-         "resources":[
-            {
-               "name":"master",
-               "instance_type":"cpu=4000,000000,ram=4096",
-               "type":"vm",
-               "cpu":4000,
-               "ram":4096,
-               "disk":40960,
-               "generate_ssh_keys":false,
-               "ssh_keys_id":"uuid",
-               "role":"master",
-               "image_id":"a2a67f55-c775-4871-808d-53136e31d2f0",
-               "drives":[
-                  {
-                     "name":"data",
-                     "type":"SDD",
-                     "size":10240
-                  }
-               ]
-            },
-            {
-               "name":"slave",
-               "instance_type":"cpu=2000,000000,ram=4096",
-               "type":"vm",
-               "cpu":2000,
-               "ram":4096,
-               "disk":40960,
-               "generate_ssh_keys":false,
-               "ssh_keys_id":"uuid",
-               "role":"slave",
-               "image_id":"a2a67f55-c775-4871-808d-53136e31d2f0"
-            }
-         ]
+         "resources":[]
+      },
+      {
+         "name":"rescource4",
+         "description":"Deployment in CloudSigma",
+         "type":"edge",
+         "on-line":true,
+         "provider":{
+            "api_endpoint":"api url",
+            "api_type":"cloudsigma",
+            "keypair_id":"keypair_uuid"
+         },
+         "resources":[]
       }
    ]
 

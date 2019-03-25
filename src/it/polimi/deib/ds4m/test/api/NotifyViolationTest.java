@@ -178,9 +178,11 @@ public class NotifyViolationTest
 		{
 			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
 			//concreteBlueprint=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));//before change
-			concreteBlueprint=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
+			//concreteBlueprint=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
 			//concreteBlueprint=Utility.readFile("./testResources/example_V3_ricercatore.json", Charset.forName("UTF-8")); //test reseracher
 			//concreteBlueprint=Utility.readFile("./testResources/example_V3_medico.json", Charset.forName("UTF-8")); //test physician 
+			concreteBlueprint=Utility.readFile("./testResources/example_V5_complete_withResourcesMoved.json", Charset.forName("UTF-8"));
+			
 			
 			
 		} catch (IOException e) 
@@ -477,7 +479,7 @@ public class NotifyViolationTest
     }
 	
 	
-    @Test
+    //@Test
     public void testNotifyViolations_current() 
 	{
 		//clear from all vdcs
@@ -543,7 +545,8 @@ public class NotifyViolationTest
 		
 		try 
 		{
-			concreteBlueprint=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8")); 
+			//concreteBlueprint=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
+			concreteBlueprint=Utility.readFile("./testResources/example_V5_complete_withResourcesMoved.json", Charset.forName("UTF-8"));
 		} catch (IOException e) 
 		{
 			System.err.println("error in reading file blueprint");

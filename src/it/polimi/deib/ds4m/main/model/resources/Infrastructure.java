@@ -20,18 +20,18 @@ package it.polimi.deib.ds4m.main.model.resources;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-public class Resource 
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Infrastructure 
 {
+	
 	private String name;
-	private String type;
-	private String location;//cloud edge
+	private String type;//cloud edge
 	private ArrayList<Characteristic> characteristics;
 	
 	@JsonIgnore
 	private Boolean isDataSource = false;
-	
-	
 	
 	/**
 	 * @return the name
@@ -56,18 +56,6 @@ public class Resource
 	 */
 	public void setType(String type) {
 		this.type = type;
-	}
-	/**
-	 * @return the location
-	 */
-	public String getLocation() {
-		return location;
-	}
-	/**
-	 * @param location the location to set
-	 */
-	public void setLocation(String location) {
-		this.location = location;
 	}
 	/**
 	 * @return the characteristics

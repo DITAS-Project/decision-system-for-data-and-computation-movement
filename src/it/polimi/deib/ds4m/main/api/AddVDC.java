@@ -45,7 +45,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
-import it.polimi.deib.ds4m.main.model.resources.Resource;
+import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 
 /**
@@ -148,11 +148,11 @@ public class AddVDC extends HttpServlet {
 			return;			
 		}
 		
-		//retrieve resources
-		JsonNode resourcesJSON = root.get("INTERNAL_STRUCTURE").get("resourcesAvailable");
-		if (resourcesJSON ==null)
+		//retrieve resources (infrastucture)
+		JsonNode infrastructureJSON = root.get("COOKBOOK_APPENDIX").get("infrastructure");
+		if (infrastructureJSON ==null)
 		{
-			String message = "AddVDC: the RESOURCE Section of the Blueprint is empty/n";
+			String message = "AddVDC: the INFRASTRUCURE Section of the Blueprint is empty/n";
         	System.err.println(message);
         	response.getWriter().println(message);
         	
@@ -160,13 +160,13 @@ public class AddVDC extends HttpServlet {
 			return;			
 		}
 		
-		ArrayList<Resource> resources;
+		ArrayList<Infrastructure> infrastructure;
 		try {
-			resources = new ArrayList<Resource>(Arrays.asList(mapper.treeToValue(resourcesJSON, Resource[].class)));
+			infrastructure = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(infrastructureJSON, Infrastructure[].class)));
 		}
 		catch (JsonProcessingException e) 
 		{
-			String message = "AddVDC: error in parsing the RESOURCE Section of the Blueprint /n";
+			String message = "AddVDC: error in parsing the INFRASTRUCURE Section of the Blueprint /n";
         	System.err.println(message);
         	response.getWriter().println(message);
         	
@@ -199,10 +199,10 @@ public class AddVDC extends HttpServlet {
 			return;			
 		}
 		
-		//create a fake (initial) resource for the data source
+		//for each data source creates a fake (initial) resource for the data source, to allow movement
 		for (DataSource dataSource: dataSources)
 		{
-			dataSource.createResource(resources);
+			dataSource.createResource(infrastructure);
 		}
 		
 		StringBuilder movementsJSON;
@@ -228,7 +228,7 @@ public class AddVDC extends HttpServlet {
 		}
 		
 	    //instantiate movement classes for each data source
-		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(resources,movementsJSON.toString()); 
+		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(infrastructure,movementsJSON.toString()); 
 	    if (instantiatedMovements==null)
 	    {
 	    	String message = "AddVDC: error in instantiating the data movement actions";
@@ -262,7 +262,7 @@ public class AddVDC extends HttpServlet {
 		vdc.setDataSources(dataSources);
 		vdc.setMovements(instantiatedMovements);
 		vdc.connectAbstractProperties();
-		vdc.setResources(resources);
+		vdc.setResources(infrastructure);
 		vdc.setId(vdcName);
 		
 		//if it is not set create a collection of VDCs

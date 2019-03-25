@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
-import it.polimi.deib.ds4m.main.model.resources.Resource;
+import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 
 public class VDC 
 {	
@@ -32,7 +32,7 @@ public class VDC
 	private ArrayList<AbstractProperty> abstractProperties;
 	private ArrayList<DataSource> dataSources;
 	private String id;
-	private ArrayList<Resource> resources;
+	private ArrayList<Infrastructure> resources;
 	
     @JsonIgnore
     private ArrayList<Movement> movements;
@@ -171,14 +171,14 @@ public class VDC
 	/**
 	 * @return the resources
 	 */
-	public ArrayList<Resource> getResources() {
+	public ArrayList<Infrastructure> getResources() {
 		return resources;
 	}
 
 	/**
 	 * @param resources the resources to set
 	 */
-	public void setResources(ArrayList<Resource> resources) {
+	public void setResources(ArrayList<Infrastructure> resources) {
 		this.resources = resources;
 	}
 	
