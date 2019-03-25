@@ -9,7 +9,6 @@ var responseStash = 'prova';
 before("/AddVDC > add VDC > 200 > application/json", function (transaction) {
 	transaction.request.headers['content-type'] = "text";
 	transaction.request.body = "www";
-	done();
 });
 
 //call the notify violations with the same ID of the VDC
@@ -18,7 +17,6 @@ before("/NotifyViolation > notifyViolation > 200 > application/json", function (
 	transaction.request.headers['content-type'] = "application/json";
 	//transaction.request.headers['Violations'] = "[ { \"vdcId\": \"1\", \"methodId\": \"getAllValuesForBloodTestComponent\", \"metrics\": [ { \"key\": \"availability\", \"value\": 90, \"datetime\": \"2018-08-07T10:50:23.674337517+02:00\"}]}]"
 	transaction.request.body  = "prova notifyViolation";
-	done();
 });
 
 
