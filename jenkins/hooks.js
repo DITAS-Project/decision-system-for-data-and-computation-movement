@@ -8,7 +8,7 @@ var responseStash = 'prova';
 // call the addVDC with the blueprint
 before("AddVDC > POST > 200", function (transaction) {
 	transaction.request.headers['content-type'] = "application/json"
-	transaction.request.body = ""	
+	transaction.request.body = "";
 	done();
 });
 
