@@ -6,7 +6,7 @@
 COMPONENT_URL="http://31.171.247.162:30003/"
 
 # TO CHANGE: This line should point to the yaml file of your respository of your api definition
-YAML_FILE="documentation/APISpecification.yaml"
+YAML_FILE="documentation/APISpecification_integrationTest.yaml"
 
 attempts=0
 until $(curl --output /dev/null --silent $COMPONENT_URL); do
