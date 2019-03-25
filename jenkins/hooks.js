@@ -11,9 +11,9 @@ hooks.beforeAll(function (transactions) {
 	  //copy the transaction array (i don't need a deep copy)
 	  var transactions2_tmp=transactions[0]; 
 	  
-	  transactions[0]=transactions2[3];
-	  transactions[3]=transactions2[2];
-	  transactions[2]=transactions2[1];
+	  transactions[0]=transactions[3];
+	  transactions[3]=transactions[2];
+	  transactions[2]=transactions[1];
 	  transactions[1]=transactions2_tmp;	  
 
 	  //transactions[4]=transactions2[4];
