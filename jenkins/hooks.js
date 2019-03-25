@@ -8,7 +8,16 @@ var fs = require('fs');
 hooks.beforeAll(function (transactions) {	
 	  hooks.log('setup order tests');
 	  
-
+	  //copy the transaction array (i don't need a deep copy)
+	  var transactions2=transactions.slice(); 
+	  
+	  transactions[0]=transactions2[3];
+	  transactions[1]=transactions2[0];
+	  transactions[2]=transactions2[1];
+	  transactions[3]=transactions2[2];
+	  transactions[4]=transactions2[4];
+	  transactions[5]=transactions2[5];
+	  
 	  
 	});
 
