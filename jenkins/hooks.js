@@ -5,22 +5,27 @@ var after = hooks.after;
 var fs = require('fs');
 
 
-hooks.beforeAll(function (transactions) {	
-	  hooks.log('setup order tests');
-	  
-	  //copy the transaction array (i don't need a deep copy)
-	  var transactions2_tmp=transactions[0]; 
-	  
-	  transactions[0]=transactions[3];
-	  transactions[3]=transactions[2];
-	  transactions[2]=transactions[1];
-	  transactions[1]=transactions2_tmp;	  
+//hooks.beforeAll(function (transactions) {	
+//	  hooks.log('setup order tests');
+//	  
+//	  //copy the transaction array (i don't need a deep copy)
+//	  var transactions2_tmp=transactions[0]; 
+//	  
+//	  transactions[0]=transactions[3];
+//	  transactions[3]=transactions[2];
+//	  transactions[2]=transactions[1];
+//	  transactions[1]=transactions2_tmp;	  
+//
+//	  //transactions[4]=transactions2[4];
+//	  //transactions[5]=transactions2[5];
+//	  
+//	  
+//	});
 
-	  //transactions[4]=transactions2[4];
-	  //transactions[5]=transactions2[5];
-	  
-	  
-	});
+//beforeAll(function (transactions, done) {
+//	  console.log('before all');
+//	  done();
+//	});
 
 
 // call the addVDC with the blueprint

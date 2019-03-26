@@ -11,30 +11,6 @@ basePath: "/"
 schemes:
 - "http"
 paths:
-  /NotifyViolation:
-    post:
-      summary: "notifyViolation"
-      description: "The method receives in input the list of violated requirements."
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "Violations"
-        in: "body"
-        schema:
-          example:
-            title: "Crispy schnitzel"
-            text: "Prepare eggs…"
-
-      responses:
-        400:
-          description: "Invalid input"
-        500:
-          description: "Internal error"
-        200:
-          description: "Input processed correctly"
-          
   /AddVDC:
     post:
       summary: "add VDC"
@@ -58,6 +34,28 @@ paths:
         200:
           description: "Input processed correctly"
 
-              
-              
+  /NotifyViolation:
+    post:
+      summary: "notifyViolation"
+      description: "The method receives in input the list of violated requirements."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Violations"
+        in: "body"
+        schema:
+          example:
+            title: "Crispy schnitzel"
+            text: "Prepare eggs…"
+
+      responses:
+        400:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+        200:
+          description: "Input processed correctly"
+         
               
