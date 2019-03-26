@@ -160,6 +160,7 @@ public class NotifyViolation extends HttpServlet {
 		        	response.getWriter().println(message);
 		        	
 		        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		        	response.setContentType("application/json");
 		        	return;
 		        }
 		        
@@ -245,7 +246,7 @@ public class NotifyViolation extends HttpServlet {
 	        }	
 	        //set answer status
 	        response.setStatus(HttpStatus.SC_OK);
-	        response.setContentType("application/x-www-form-urlencoded");
+	        response.setContentType("application/json");
 	        
 		}
 		catch (JsonParseException e)
@@ -256,6 +257,7 @@ public class NotifyViolation extends HttpServlet {
         	response.getWriter().println(message);
 			
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			response.setContentType("application/json");
 		}
 		catch (UnrecognizedPropertyException e)
 		{
@@ -265,6 +267,7 @@ public class NotifyViolation extends HttpServlet {
         	response.getWriter().println(message);
 			
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			response.setContentType("application/json");
 		}
 		catch (Exception e)
 		{
