@@ -78,6 +78,14 @@ pipeline {
 		   	 sh './jenkins/run-api-test.sh'
 			}
 		}
+		stage('Production image creation') {
+            agent any
+            steps {                
+                // Change the tag from staging to production 
+                sh "docker tag ditas/decision-system-for-data-and-computation-movement:staging ditas/decision-system-for-data-and-computation-movement:production"
+                sh "docker push ditas/decision-system-for-data-and-computation-movement:production"
+            }
+        }
         
     }
 }

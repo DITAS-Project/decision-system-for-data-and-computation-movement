@@ -278,8 +278,6 @@ public class AddVDC extends HttpServlet {
 		//add the VDC
 		VDCs.add(vdc);
 		
-		System.out.println("DS4M: VDC Blueprint registered");
-		
 		response.setStatus(HttpStatus.SC_OK);
 		response.setContentType("application/json");
 	
