@@ -47,6 +47,11 @@ import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 
 public class ManageMovementsActionsTest 
 {
+	
+	//paths to blueprint and violations
+	private static String pathCorrectBlueprint="./testResources/test_Blueprint_V6_correct.json"; 
+	private static String pathCorrectMovementClasses="./testResources/movementClasses.json";
+	
 	/**
 	 * 
 	 * Test if the number of movement action instantiated is correct
@@ -61,8 +66,7 @@ public class ManageMovementsActionsTest
 		
 		try 
 		{
-			//concreteBlueprintJSON=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
-			concreteBlueprintJSON=Utility.readFile("./testResources/example_V5_complete_withResourcesMoved.json", Charset.forName("UTF-8"));
+			concreteBlueprintJSON=Utility.readFile(pathCorrectBlueprint, Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -99,7 +103,7 @@ public class ManageMovementsActionsTest
 
 		
 		//retrieve movement classes
-	    String movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
+	    String movementsJSON = Utility.readFile(pathCorrectMovementClasses, Charset.forName("UTF-8"));
 	    
 	    //instantiate movement classes for each data source 
 	    ArrayList<Movement> movements = MovementsActionsManager.instantiateMovementActions(resources,movementsJSON);
@@ -296,9 +300,7 @@ public class ManageMovementsActionsTest
 				
 				try 
 				{
-					//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-					//concreteBlueprintJSON=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
-					concreteBlueprintJSON=Utility.readFile("./testResources/example_V5_complete_withResourcesMoved.json", Charset.forName("UTF-8"));
+					concreteBlueprintJSON=Utility.readFile(pathCorrectBlueprint, Charset.forName("UTF-8"));
 					
 				} catch (IOException e) 
 				{
@@ -381,7 +383,7 @@ public class ManageMovementsActionsTest
 				//retrieve movement classes
 			    String movementsJSON;
 				try {
-					movementsJSON = Utility.readFile("./testResources/movementClasses.json", Charset.forName("UTF-8"));
+					movementsJSON = Utility.readFile(pathCorrectMovementClasses, Charset.forName("UTF-8"));
 				} catch (IOException e1) 
 				{
 					e1.printStackTrace();

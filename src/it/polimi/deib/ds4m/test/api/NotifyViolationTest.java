@@ -65,6 +65,10 @@ public class NotifyViolationTest
 	private String urlDataMovementEnactor = "/dataEnactor/action";
 	private String urlComputationMovementEnactor = "/dataEnactor/action";
 	
+	//paths to blueprint and violations
+	private String pathCorrectBlueprint="./testResources/test_Blueprint_V6_correct.json"; 
+	private String pathCorrectViolations="./testResources/test_violationCorrect.json";
+	
 	//set mockup server
 	@Rule
 	public WireMockRule wireMockRule = new WireMockRule(8089);
@@ -79,11 +83,16 @@ public class NotifyViolationTest
     boolean addVDC_current = false;
     
     
+    //test current 
+    //test when we want to verify an example of blueprint or violations sent by other partners 
+    
     //boolean variable to control which tests to execute.
     //if false all tests are executed
     //if true only testNotifyViolations_current is executed
     boolean onlyCurrentBlueprint = false;
-    
+    //paths to current files
+	private String pathCurrentBlueprint="./testResources/test_Blueprint_V6_correct.json";
+	private String pathViolationCurrent="./testResources/test_violationCurrent.json";
     
 	//setup to be called to instantiate variables
     @Before
@@ -176,14 +185,7 @@ public class NotifyViolationTest
 		
 		try 
 		{
-			//applicationRequirements=readFile("./testResources/example_ApplicationRequirements_V11.json", Charset.forName("UTF-8"));
-			//concreteBlueprint=Utility.readFile("./testResources/example_ConcreteBluePrint_V3_complete.json", Charset.forName("UTF-8"));//before change
-			//concreteBlueprint=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
-			//concreteBlueprint=Utility.readFile("./testResources/example_V3_ricercatore.json", Charset.forName("UTF-8")); //test reseracher
-			//concreteBlueprint=Utility.readFile("./testResources/example_V3_medico.json", Charset.forName("UTF-8")); //test physician 
-			concreteBlueprint=Utility.readFile("./testResources/example_V5_complete_withResourcesMoved.json", Charset.forName("UTF-8"));
-			
-			
+			concreteBlueprint=Utility.readFile(pathCorrectBlueprint, Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -257,7 +259,7 @@ public class NotifyViolationTest
         //read violations
         String violationJSON=null;
         try {
-        	violationJSON=Utility.readFile("./testResources/test_violationCorrect.json", Charset.forName("UTF-8"));
+        	violationJSON=Utility.readFile(pathCorrectViolations, Charset.forName("UTF-8"));
         	
 		} catch (IOException e2) 
         {
@@ -290,72 +292,6 @@ public class NotifyViolationTest
             assertEquals(0,
             		response.getStatusLine().getStatusCode(),
             	     HttpStatus.SC_OK);
-
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-	
-    @Test
-    public void testNotifyViolations_correct_exampleJSONFile() 
-	{
-		
-		//if onlyCurrentBlueprint is true, skip the test
-		if (onlyCurrentBlueprint)
-		{
-			System.out.println("skipped testNotifyViolations_correct_exampleJSONFile");
-			assertTrue(true);
-			return;
-		}	
-		
-		//clear from all vdcs
-		this.removeAllVDCs();
-		
-		this.testAddVDC_correct();
-		
-        //setup a mock server for data movement
-		stubFor(post(urlEqualTo(urlDataMovementEnactor))
-	            .willReturn(aResponse()
-	                .withHeader("Content-Type", "application/x-www-form-urlencoded")
-	                .withStatus(200)));
-		
-		//set up connection 
-        HttpClient client = HttpClientBuilder.create().build();
-        HttpPost post = new HttpPost(urlDS4M_notifyViolation);
-		
-        
-        //read violations
-        String violations=null;
-        try {
-			violations=Utility.readFile("./testResources/example_violations.json", Charset.forName("UTF-8"));
-		} catch (IOException e2) 
-        {
-			e2.printStackTrace();
-		}
-        
-        //set the body
-        StringEntity params=null;
-		try {
-			params = new StringEntity(violations);
-		} 
-		catch (UnsupportedEncodingException e1) 
-		{
-			e1.printStackTrace();
-		}
-
-        //connect to service
-        try {
-        	post.setEntity(params);
-            HttpResponse response = client.execute(post);//response empty
-
-            // Print out the response message
-            //System.out.println(EntityUtils.toString(response.getEntity()));
-            
-            //check the status received
-            assertEquals(0,
-            		response.getStatusLine().getStatusCode(),
-            	     HttpStatus.SC_INTERNAL_SERVER_ERROR);
 
             
         } catch (IOException e) {
@@ -502,7 +438,7 @@ public class NotifyViolationTest
         //read file
         String violations=null;        
         try {
-			violations=Utility.readFile("./testResources/test_violationCurrent.json", Charset.forName("UTF-8"));
+			violations=Utility.readFile(pathViolationCurrent, Charset.forName("UTF-8"));
 		} catch (IOException e2) 
         {
 			e2.printStackTrace();
@@ -545,8 +481,7 @@ public class NotifyViolationTest
 		
 		try 
 		{
-			//concreteBlueprint=Utility.readFile("./testResources/example_V5_complete.json", Charset.forName("UTF-8"));
-			concreteBlueprint=Utility.readFile("./testResources/example_V5_complete_withResourcesMoved.json", Charset.forName("UTF-8"));
+			concreteBlueprint=Utility.readFile(pathCurrentBlueprint, Charset.forName("UTF-8"));
 		} catch (IOException e) 
 		{
 			System.err.println("error in reading file blueprint");
