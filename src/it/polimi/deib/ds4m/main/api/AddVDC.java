@@ -44,6 +44,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
+import it.polimi.deib.ds4m.main.model.methodsInput.Method;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
@@ -69,6 +70,7 @@ public class AddVDC extends HttpServlet {
 	@SuppressWarnings("unchecked") 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException 
 	{
+		
 		//retrieve concrete blueprint
 		//String concreteBlueprintJSON = request.getReader().toString(); //request.getParameter("ConcreteBlueprint");
 		String concreteBlueprintJSON = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));	
@@ -199,6 +201,51 @@ public class AddVDC extends HttpServlet {
 			return;			
 		}
 		
+		System.out.println("START METHOD INPUT");
+		
+		//retrive methods input
+		JsonNode methodsInputsJSON = root.get("INTERNAL_STRUCTURE").get("Methods_Input").get("Methods");
+		if (methodsInputsJSON ==null)
+		{
+			String message = "AddVDC: the Methods_Input Section of the Blueprint is empty/n";
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;			
+		}
+		ArrayList<Method> methodsInputs;
+		try {
+			methodsInputs = new ArrayList<Method>(Arrays.asList(mapper.treeToValue(methodsInputsJSON, Method[].class)));
+		}
+		catch (JsonProcessingException e) 
+		{
+			String message = "AddVDC: error in parsing the Methods_Input Section of the Blueprint /n";
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;			
+		}
+		
+		System.out.println("END METHOD INPUT");
+		
+	    //retrieve VDC name
+		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
+		String vdcName;
+		try {
+			vdcName = mapper.treeToValue(vdcNameJSON, String.class);
+		}
+		catch (JsonProcessingException e) 
+		{
+			String message = "AddVDC: error in parsing the NAME Section of the Blueprint /n" + e.getStackTrace().toString();
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;			
+		}
+		
 		//for each data source creates a fake (initial) resource for the data source, to allow movement
 		for (DataSource dataSource: dataSources)
 		{
@@ -238,22 +285,7 @@ public class AddVDC extends HttpServlet {
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			return;
 	    }
-	    
-	    //retrieve VDC name
-		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
-		String vdcName;
-		try {
-			vdcName = mapper.treeToValue(vdcNameJSON, String.class);
-		}
-		catch (JsonProcessingException e) 
-		{
-			String message = "AddVDC: error in parsing the NAME Section of the Blueprint /n" + e.getStackTrace().toString();
-        	System.err.println(message);
-        	response.getWriter().println(message);
-        	
-			response.setStatus(HttpStatus.SC_BAD_REQUEST);
-			return;			
-		}
+
 	    
 		//set up vdc
 		VDC vdc = new VDC();

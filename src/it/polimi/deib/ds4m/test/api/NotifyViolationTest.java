@@ -66,7 +66,7 @@ public class NotifyViolationTest
 	private String urlComputationMovementEnactor = "/dataEnactor/action";
 	
 	//paths to blueprint and violations
-	private String pathCorrectBlueprint="./testResources/test_Blueprint_V6_correct.json"; 
+	private String pathCorrectBlueprint="./testResources/test_Blueprint_V7.json"; 
 	private String pathCorrectViolations="./testResources/test_violationCorrect.json";
 	
 	//set mockup server
@@ -89,10 +89,12 @@ public class NotifyViolationTest
     //boolean variable to control which tests to execute.
     //if false all tests are executed
     //if true only testNotifyViolations_current is executed
-    boolean onlyCurrentBlueprint = false;
+    boolean onlyCurrentBlueprint = false; //when is true, check that the method testNotifyViolations_current()  has been enables as test. 
+    
     //paths to current files
-	private String pathCurrentBlueprint="./testResources/test_Blueprint_V6_correct.json";
-	private String pathViolationCurrent="./testResources/test_violationCurrent.json";
+	//private String pathCurrentBlueprint="./testResources/test_Blueprint_V6_correct.json";
+	private String pathCurrentBlueprint="./testResources/test_Blueprint_V7.json";
+	private String pathViolationCurrent="./testResources/test_violationCorrect.json";
     
 	//setup to be called to instantiate variables
     @Before
