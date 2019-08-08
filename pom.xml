@@ -69,6 +69,14 @@
 	    <version>[2.9.9.2,)</version>
 	</dependency>
 	
+	<!--  for RCP call to DAL -->
+	<dependency>
+	    <groupId>org.apache.xmlrpc</groupId>
+	    <artifactId>xmlrpc-client</artifactId>
+	    <version>3.1.3</version>
+	</dependency>
+
+	
    </dependencies>
   
 </project>

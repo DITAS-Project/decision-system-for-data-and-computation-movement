@@ -20,6 +20,7 @@ package it.polimi.deib.ds4m.main.api;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +43,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.apache.xmlrpc.client.XmlRpcClient;
+import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -186,7 +189,28 @@ public class NotifyViolation extends HttpServlet {
 		       //once the movement action has been selected, 
 		       //1-check the amount of space that is used by the sourse DAL
 		       
-		       //TODO
+		       //call DAL using GRPC //TODO finish implementation connection to DAL - GRPC
+//		       XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+//
+//		       try{
+//
+//		    	   config.setServerURL(new URL("http://example.net/xmlrpc"));
+//		    	   XmlRpcClient client = new XmlRpcClient();
+//		    	   client.setConfig(config);
+//		    	   // Assuming some.method has a 'String', 'Int', 'Int' signature and returns Int
+//		    	   Object[] params = new Object[]{ new String("Some Text"),
+//		    			   new Integer(38),
+//		    			   new Integer(0),
+//		    	   };
+//
+//		    	   Integer result = (Integer)client.execute("some.method", params);
+//		    	   System.out.println("Results" + result);
+//		       }
+//		       catch(Exception e)
+//		       {
+//		    	   System.out.println("Exception: " + e.getMessage());
+//		       }
+		       
 		       
 		       //2-check if the target node/infrastructure has enough space
 		       

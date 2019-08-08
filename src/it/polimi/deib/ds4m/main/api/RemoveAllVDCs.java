@@ -25,7 +25,6 @@ public class RemoveAllVDCs extends HttpServlet {
      */
     public RemoveAllVDCs() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
