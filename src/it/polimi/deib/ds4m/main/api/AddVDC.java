@@ -201,8 +201,6 @@ public class AddVDC extends HttpServlet {
 			return;			
 		}
 		
-		System.out.println("START METHOD INPUT");
-		
 		//retrive methods input
 		JsonNode methodsInputsJSON = root.get("INTERNAL_STRUCTURE").get("Methods_Input").get("Methods");
 		if (methodsInputsJSON ==null)
@@ -228,7 +226,6 @@ public class AddVDC extends HttpServlet {
 			return;			
 		}
 		
-		System.out.println("END METHOD INPUT");
 		
 	    //retrieve VDC name
 		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
@@ -296,6 +293,7 @@ public class AddVDC extends HttpServlet {
 		vdc.connectAbstractProperties();
 		vdc.setResources(infrastructure);
 		vdc.setId(vdcName);
+		vdc.setMethodsInputs(methodsInputs);
 		
 		//if it is not set create a collection of VDCs
 		ArrayList<VDC> VDCs;
