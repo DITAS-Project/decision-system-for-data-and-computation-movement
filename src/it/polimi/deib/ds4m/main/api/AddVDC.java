@@ -52,7 +52,7 @@ import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 /**
  * Servlet implementation class AddVDC
  */
-@WebServlet("/AddVDC")
+@WebServlet("/v2/AddVDC")
 public class AddVDC extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

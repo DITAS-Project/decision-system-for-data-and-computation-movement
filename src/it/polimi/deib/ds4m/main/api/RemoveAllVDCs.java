@@ -16,7 +16,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 /**
  * Servlet implementation class RemoveAllVDCs
  */
-@WebServlet("/RemoveAllVDCs")
+@WebServlet("/v2/RemoveAllVDCs")
 public class RemoveAllVDCs extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

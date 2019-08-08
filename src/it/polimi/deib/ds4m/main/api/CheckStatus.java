@@ -31,7 +31,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 /**
  * Servlet implementation class CheckStatus
  */
-@WebServlet("/CheckStatus")
+@WebServlet("/v2/CheckStatus")
 public class CheckStatus extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

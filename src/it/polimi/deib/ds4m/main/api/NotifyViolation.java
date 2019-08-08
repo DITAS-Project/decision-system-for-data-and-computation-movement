@@ -62,10 +62,10 @@ import it.polimi.deib.ds4m.main.movement.VDCManager;
 /**
  * Servlet implementation class NotifyViolation
  */
-@WebServlet("/NotifyViolation")
+@WebServlet("/v2/NotifyViolation")
 public class NotifyViolation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String urlDA_Resources = "http://178.22.69.180:8080/data-analytics/resources/cloudsigma-deployment/node1.ditas.mia.cloudsigma.com/usage/";
+	private static final String urlDA_Resources = "http://178.22.69.180:8080/data-analytics/resources/cloudsigma-deployment/usage/";
        
     /**
      * @see HttpServlet#HttpServlet()

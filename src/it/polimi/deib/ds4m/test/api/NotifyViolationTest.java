@@ -54,12 +54,12 @@ import it.polimi.deib.ds4m.main.model.Violation;
 public class NotifyViolationTest 
 {	
 	//set URLS and costants
-	private String urlDS4M_notifyViolation = "http://localhost:8080/ROOT/NotifyViolation";
-	private String urlDS4M_addVDC = "http://localhost:8080/ROOT/AddVDC";
+	private String urlDS4M_notifyViolation = "http://localhost:8080/ROOT/v2/NotifyViolation";
+	private String urlDS4M_addVDC = "http://localhost:8080/ROOT/v2/AddVDC";
 	//private String URSDS4M_notifyViolation = "http://31.171.247.162:50003/NotifyViolation";
 	//private String URSDS4M_setUp = "http://31.171.247.162:50003/SetUp";
-	private String urlDS4M_RemoveVDC = "http://localhost:8080/ROOT/RemoveVDC";
-	private String urlDS4M_RemoveAllVDC = "http://localhost:8080/ROOT/RemoveAllVDC";
+	private String urlDS4M_RemoveVDC = "http://localhost:8080/ROOT/v2/RemoveVDC";
+	private String urlDS4M_RemoveAllVDC = "http://localhost:8080/ROOT/v2/RemoveAllVDC";
 	
 	
 	private String urlDataMovementEnactor = "/dataEnactor/action";
