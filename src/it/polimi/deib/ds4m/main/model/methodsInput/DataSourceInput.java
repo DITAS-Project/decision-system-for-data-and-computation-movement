@@ -2,6 +2,7 @@ package it.polimi.deib.ds4m.main.model.methodsInput;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
@@ -10,6 +11,7 @@ import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 public class DataSourceInput {
 	
 	public String dataSource_id;
+	@JsonIgnore
 	private DataSource dataSource=null;
 	public String dataSource_type;
 	private ArrayList<Database> database;

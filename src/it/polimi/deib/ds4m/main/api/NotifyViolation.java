@@ -55,6 +55,7 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
+import it.polimi.deib.ds4m.main.model.methodsInput.Method;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementsEnaction;
@@ -184,7 +185,11 @@ public class NotifyViolation extends HttpServlet {
 		    	   movementEnaction.importMovement(movement);
 		    	   movementEnactions.add(movementEnaction);
 		       }
-		       movementsEnaction.setMovementsEnaction(movementEnactions);
+		       //setup the object to be sent ( via json to DME) 
+		       movementsEnaction.setMovementsEnaction(movementEnactions.get(0));
+		       //TODO:taken the first one, to be selected by method
+		       movementsEnaction.setDataSources(violatedVDC.getMethodsInputs().get(1).getDataSources());
+		       
 		       
 		       //once the movement action has been selected, 
 		       //1-check the amount of space that is used by the sourse DAL

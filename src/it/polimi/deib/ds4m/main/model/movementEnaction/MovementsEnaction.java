@@ -19,22 +19,40 @@ package it.polimi.deib.ds4m.main.model.movementEnaction;
 
 import java.util.ArrayList;
 
+import it.polimi.deib.ds4m.main.model.methodsInput.DataSourceInput;
+
 public class MovementsEnaction 
 {
-	ArrayList<MovementEnaction> MovementsEnaction;
+	private MovementEnaction MovementsEnaction;
+	private ArrayList<DataSourceInput> dataSources;
+
+	/**
+	 * @return the dataSources
+	 */
+	public ArrayList<DataSourceInput> getDataSources() {
+		return dataSources;
+	}
+
+	/**
+	 * @param dataSources the dataSources to set
+	 */
+	public void setDataSources(ArrayList<DataSourceInput> dataSources) {
+		this.dataSources = dataSources;
+	}
 
 	/**
 	 * @return the movementsEnaction
 	 */
-	public ArrayList<MovementEnaction> getMovementsEnaction() {
+	public MovementEnaction getMovementsEnaction() {
 		return MovementsEnaction;
 	}
 
 	/**
 	 * @param movementsEnaction the movementsEnaction to set
 	 */
-	public void setMovementsEnaction(ArrayList<MovementEnaction> movementsEnaction) {
+	public void setMovementsEnaction(MovementEnaction movementsEnaction) {
 		MovementsEnaction = movementsEnaction;
 	}
+
 
 }
