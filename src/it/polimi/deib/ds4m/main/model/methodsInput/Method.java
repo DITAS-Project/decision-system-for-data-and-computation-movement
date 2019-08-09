@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Method {
 	
 	private String method_id;	
-	private ArrayList<DataSource> dataSources;
+	private ArrayList<DataSourceInput> dataSources;
 
 	/**
 	 * @return the method_id
@@ -26,14 +26,14 @@ public class Method {
 	/**
 	 * @return the dataSources
 	 */
-	public ArrayList<DataSource> getDataSources() {
+	public ArrayList<DataSourceInput> getDataSources() {
 		return dataSources;
 	}
 
 	/**
 	 * @param dataSources the dataSources to set
 	 */
-	public void setDataSources(ArrayList<DataSource> dataSources) {
+	public void setDataSources(ArrayList<DataSourceInput> dataSources) {
 		this.dataSources = dataSources;
 	}
 

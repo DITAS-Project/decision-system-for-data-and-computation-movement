@@ -43,7 +43,8 @@ public class DataSource
 	private Infrastructure resourceUsedLinked;// this is the link to the actual resource that host the DS. in here the parameters represent what the resource has available and in total.
 	
 	/**
-	 * It creates the resource that represent the data source. please notice that the location is set to null since this resource can be only used as source of data movement 
+	 * It creates the resource that represent the data source. 
+	 * Notice that the location is set to null since this resource can be only used as source of data movement 
 	 * 
 	 * @param resources
 	 */

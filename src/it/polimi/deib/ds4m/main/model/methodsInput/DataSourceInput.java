@@ -4,10 +4,13 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DataSource {
+public class DataSourceInput {
 	
 	public String dataSource_id;
+	private DataSource dataSource=null;
 	public String dataSource_type;
 	private ArrayList<Database> database;
 
@@ -16,6 +19,25 @@ public class DataSource {
 	 */
 	public String getDataSource_id() {
 		return dataSource_id;
+	}
+	
+
+	/**
+	 * link the referenced data sources in the dataSource_id, with the data sources 
+	 * @param dataSources the list of data sources to check
+	 * @throws Exception if the id of the data sources is not found in the list of data sources in input
+	 */
+	public void linkDatasource(ArrayList<DataSource> dataSources) throws Exception 
+	{
+		for (DataSource dataSource : dataSources)
+		{
+			if (dataSource.getId().equals(dataSource_id))
+			{
+				dataSource = this.dataSource;
+				return;
+			}
+		}
+		throw new Exception("data source id " + dataSource_id + " not found");
 	}
 
 	/**

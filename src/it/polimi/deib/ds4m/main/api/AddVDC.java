@@ -44,6 +44,7 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
+import it.polimi.deib.ds4m.main.model.methodsInput.DataSourceInput;
 import it.polimi.deib.ds4m.main.model.methodsInput.Method;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
@@ -219,6 +220,29 @@ public class AddVDC extends HttpServlet {
 		catch (JsonProcessingException e) 
 		{
 			String message = "AddVDC: error in parsing the Methods_Input Section of the Blueprint /n";
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;			
+		}
+		
+		//link data source in method input with data sources already retrieved in the blueprint
+		
+		try {
+			//for each method in the method input
+			for (Method method : methodsInputs)
+			{
+				//for each data sources input described
+				for (DataSourceInput dataSourceInput : method.getDataSources())
+				{
+					dataSourceInput.linkDatasource(dataSources);
+				}
+			}
+		}
+		catch (Exception e) 
+		{
+			String message = "AddVDC:  the ids in methods input does not match the id in data source: " + e.getMessage();
         	System.err.println(message);
         	response.getWriter().println(message);
         	

@@ -152,17 +152,17 @@
                     "method_id": "GetStreamingData",
                     "dataSources": [
                         {
-                            "dataSource_id": "InboxStreamingAPI - Kelly",
+                            "dataSource_id": "MinioDS1",
                             "tables": [
                             ]
                         },
                         {
-                            "dataSource_id": "InboxStreamingAPI - Slater",
+                            "dataSource_id": "MinioDS1",
                             "tables": [
                             ]
                         },
                         {
-                            "dataSource_id": "InboxStreamingAPI - Zack",
+                            "dataSource_id": "MinioDS1",
                             "tables": [
                             ]
                         }
@@ -172,7 +172,7 @@
                     "method_id": "GetSimplifiedDiagnostic",
                     "dataSources": [
                         {
-                            "dataSource_id": "MachineTimeseriesDatabase - Kelly",
+                            "dataSource_id": "MinioDS1",
                             "dataSource_type": "time-series",
                             "database": [{
                                 "database_id": "influxdb-kelly",
@@ -216,7 +216,7 @@
                             }]               
                         },
                         {
-                            "dataSource_id": "MachineTimeseriesDatabase - Slater",
+                            "dataSource_id": "MinioDS1",
                             "dataSource_type": "time-series",
                             "database": [{
                                 "database_id": "influxdb-slater",
@@ -253,7 +253,7 @@
                             }]
                        },
                         {
-                            "dataSource_id": "MachineTimeseriesDatabase - Zack",
+                            "dataSource_id": "MinioDS1",
                             "dataSource_type": "time-series",
                             "database": [{
                                 "database_id": "influxdb-zack",
@@ -295,7 +295,7 @@
                     "method_id": "GetFullDiagnostic",
                     "dataSources": [
                         {
-                            "dataSource_id": "MachineTimeseriesDatabase - Kelly",
+                            "dataSource_id": "MinioDS1",
                             "dataSource_type": "time-series",
                             "database": [{
                                 "database_id": "influxdb-kelly",
@@ -332,7 +332,7 @@
                             }]               
                         },
                         {
-                            "dataSource_id": "MachineTimeseriesDatabase - Slater",
+                            "dataSource_id": "MinioDS1",
                             "dataSource_type": "time-series",
                             "database": [{
                                 "database_id": "influxdb-slater",
@@ -369,7 +369,7 @@
                             }]
                        },
                         {
-                            "dataSource_id": "MachineTimeseriesDatabase - Zack",
+                            "dataSource_id": "MinioDS1",
                             "dataSource_type": "time-series",
                             "database": [{
                                 "database_id": "influxdb-zack",

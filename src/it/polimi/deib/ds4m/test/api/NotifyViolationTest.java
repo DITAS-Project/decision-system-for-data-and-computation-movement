@@ -363,14 +363,14 @@ public class NotifyViolationTest
 		//clear from all vdcs
 		this.removeAllVDCs();
 		
-		//this.testAddVDC_correct();
+		this.testAddVDC_correct();
 		
-        //setup a mock server
-		stubFor(post(urlEqualTo(urlDataMovementEnactor))
-	            .willReturn(aResponse()
-	                .withHeader("Content-Type", "application/x-www-form-urlencoded")
-	                .withStatus(200)
-	                .withBody("ack")));
+        //setup a mock server -> not needed here, we test api of DS4M
+//		stubFor(post(urlEqualTo(urlDataMovementEnactor))
+//	            .willReturn(aResponse()
+//	                .withHeader("Content-Type", "application/x-www-form-urlencoded")
+//	                .withStatus(200)
+//	                .withBody("ack")));
 		
 		
         HttpClient client = HttpClientBuilder.create().build();
@@ -396,18 +396,25 @@ public class NotifyViolationTest
         
         
 
-        //connect to service
+        //connect to service for sending notification violation
         try {
             post.setEntity(params);
-            @SuppressWarnings("unused")
 			HttpResponse response = client.execute(post);//response empty
-
+            
+            //check answer of DS4M
+            assertEquals(0,
+            		response.getStatusLine().getStatusCode(),
+            	     HttpStatus.SC_OK);
+            
+            //test answer to DME
+            
+            
+            //connect to the data movement enactor
+            //TODO: connect to the DME
             // Print out the response message
             //System.out.println("responce enactors" + EntityUtils.toString(response.getEntity()));
-            
             //check the answer to the mocked server
             //verify(postRequestedFor(urlEqualTo(urlDataMovementEnactor)).withHeader("Content-Type", equalTo("application/x-www-form-urlencoded")));
-            
             //verify(postRequestedFor(urlEqualTo(urlDataMovementEnactor)).withRequestBody(containing("movementsEnaction=%7B%22movementsEnaction%22%3A%5B%7B%22from%22%3A%22rescource1%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22rescource2%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22MinioDS1%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22MinioDS2%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataDuplication%22%7D%2C%7B%22from%22%3A%22rescource1%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataMovement%22%7D%2C%7B%22from%22%3A%22rescource2%22%2C%22to%22%3A%22rescource3%22%2C%22transformations%22%3A%5B%22Encryption%22%2C%22Aggregation%22%5D%2C%22type%22%3A%22DataMovement%22%7D%5D%7D")));
             
             	

@@ -236,8 +236,15 @@ public class NotifyViolation extends HttpServlet {
 				
 				System.out.println(result.toString());
 		       
-				//parse the input
+				//create request for DME
+				//-from
+				//-to
+				//-trasformations?
+				//-which part to move (method input)
 		       
+				
+				System.out.println(mapper.writeValueAsString(movementsEnaction));
+				
 		       
 				//System.out.println("DS4M: Violation processed, movement action enacted");
 		        
