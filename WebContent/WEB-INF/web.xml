@@ -10,6 +10,12 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   
+  <listener>
+   <listener-class>
+      it.polimi.deib.ds4m.main.onLoad.BootConfigurator 
+   </listener-class>
+</listener>
+  
   <!-- 
       <security-constraint>
         <web-resource-collection>

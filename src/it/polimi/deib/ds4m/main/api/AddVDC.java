@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -35,6 +37,7 @@ import org.apache.http.HttpStatus;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -43,6 +46,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
+import it.polimi.deib.ds4m.main.model.dataSources.DAL;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.methodsInput.DataSourceInput;
 import it.polimi.deib.ds4m.main.model.methodsInput.Method;
@@ -228,7 +232,6 @@ public class AddVDC extends HttpServlet {
 		}
 		
 		//link data source in method input with data sources already retrieved in the blueprint
-		
 		try {
 			//for each method in the method input
 			for (Method method : methodsInputs)
@@ -250,6 +253,42 @@ public class AddVDC extends HttpServlet {
 			return;			
 		}
 		
+		//TODO: fix deresializtion using map
+		//retrive DALs
+		JsonNode DALsJSON = root.get("INTERNAL_STRUCTURE").get("DAL_Images");
+		if (DALsJSON ==null)
+		{
+			String message = "AddVDC: the DAL_Images Section of the Blueprint is empty/n";
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;			
+		}
+		ArrayList<DAL> DALs;
+		try {
+			DALs = new ArrayList<DAL>(Arrays.asList(mapper.treeToValue(DALsJSON, DAL[].class)));
+			
+			TypeReference<HashMap<String, DAL>> typeRef = new TypeReference<HashMap<String, DAL>>() {};
+			//Map<String,DAL> map = mapper.treeToValue(DALsJSON, typeRef);
+			
+			Map<String,DAL> map =mapper.readValue(
+				    mapper.treeAsTokens(DALsJSON), 
+				    mapper.getTypeFactory().constructType(typeRef));
+			
+			
+		}
+		catch (JsonProcessingException e) 
+		{
+			String message = "AddVDC: error in parsing the Methods_Input Section of the Blueprint /n";
+        	System.err.println(message);
+        	response.getWriter().println(message);
+        	
+			response.setStatus(HttpStatus.SC_BAD_REQUEST);
+			return;			
+		}
+		//---
+		
 		
 	    //retrieve VDC name
 		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
@@ -267,11 +306,13 @@ public class AddVDC extends HttpServlet {
 			return;			
 		}
 		
-		//for each data source creates a fake (initial) resource for the data source, to allow movement
+		//for each data source [DAL] creates a fake (initial) infrastructure for the data source, to allow movement
 		for (DataSource dataSource: dataSources)
 		{
 			dataSource.createResource(infrastructure);
 		}
+		
+		//store info
 		
 		StringBuilder movementsJSON;
 		try {

@@ -169,10 +169,13 @@ public class NotifyViolation extends HttpServlet {
 		        }
 		        
 		        //select first data movement action	        
-		       //Movement movement = movementsToBeEnacted.firstElement(); 
+		       //Movement movement = movementsToBeEnacted.firstElement();
+		       
+		        //update the infrastructure of the vdc
+		        
 		       
 		       //TODO differentiate between data and computation movements
-		        
+
 		        
 		        
 		       //transform the selected movement actions in element to be sent

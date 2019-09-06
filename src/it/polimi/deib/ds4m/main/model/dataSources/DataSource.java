@@ -50,7 +50,7 @@ public class DataSource
 	 */
 	public void createResource(ArrayList<Infrastructure> resources)
 	{
-		//the new resource has the dame parameter of the datasource since it is fake and used as a source for the data movement
+		//the new resource has the same parameter of the datasource since it is fake and used as a source for the data movement
 		this.resourceUsedLinked =  new Infrastructure();
 		this.resourceUsedLinked.setCharacteristics(resourceUsed);
 		this.resourceUsedLinked.setName(id);
