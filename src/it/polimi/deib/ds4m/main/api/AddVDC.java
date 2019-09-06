@@ -167,9 +167,9 @@ public class AddVDC extends HttpServlet {
 			return;			
 		}
 		
-		ArrayList<Infrastructure> infrastructure;
+		ArrayList<Infrastructure> infrastructures;
 		try {
-			infrastructure = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(infrastructureJSON, Infrastructure[].class)));
+			infrastructures = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(infrastructureJSON, Infrastructure[].class)));
 		}
 		catch (JsonProcessingException e) 
 		{
@@ -253,7 +253,7 @@ public class AddVDC extends HttpServlet {
 			return;			
 		}
 		
-		//TODO: fix deresializtion using map
+		
 		//retrive DALs
 		JsonNode DALsJSON = root.get("INTERNAL_STRUCTURE").get("DAL_Images");
 		if (DALsJSON ==null)
@@ -265,29 +265,24 @@ public class AddVDC extends HttpServlet {
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 			return;			
 		}
-		ArrayList<DAL> DALs;
+		
+		Map<String,DAL> DALs;
 		try {
-			DALs = new ArrayList<DAL>(Arrays.asList(mapper.treeToValue(DALsJSON, DAL[].class)));
-			
 			TypeReference<HashMap<String, DAL>> typeRef = new TypeReference<HashMap<String, DAL>>() {};
-			//Map<String,DAL> map = mapper.treeToValue(DALsJSON, typeRef);
-			
-			Map<String,DAL> map =mapper.readValue(
+			DALs =mapper.readValue(
 				    mapper.treeAsTokens(DALsJSON), 
 				    mapper.getTypeFactory().constructType(typeRef));
-			
-			
+
 		}
 		catch (JsonProcessingException e) 
 		{
-			String message = "AddVDC: error in parsing the Methods_Input Section of the Blueprint /n";
+			String message = "AddVDC: error in parsing the DAL_Images Section of the Blueprint /n";
         	System.err.println(message);
         	response.getWriter().println(message);
         	
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 			return;			
 		}
-		//---
 		
 		
 	    //retrieve VDC name
@@ -307,9 +302,9 @@ public class AddVDC extends HttpServlet {
 		}
 		
 		//for each data source [DAL] creates a fake (initial) infrastructure for the data source, to allow movement
-		for (DataSource dataSource: dataSources)
+		for (DAL DAL: DALs.values())
 		{
-			dataSource.createResource(infrastructure);
+			DAL.createResource(infrastructures);//FIXME 
 		}
 		
 		//store info
@@ -337,7 +332,7 @@ public class AddVDC extends HttpServlet {
 		}
 		
 	    //instantiate movement classes for each data source
-		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(infrastructure,movementsJSON.toString()); 
+		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(infrastructures,movementsJSON.toString()); 
 	    if (instantiatedMovements==null)
 	    {
 	    	String message = "AddVDC: error in instantiating the data movement actions";
@@ -356,7 +351,7 @@ public class AddVDC extends HttpServlet {
 		vdc.setDataSources(dataSources);
 		vdc.setMovements(instantiatedMovements);
 		vdc.connectAbstractProperties();
-		vdc.setResources(infrastructure);
+		vdc.setResources(infrastructures);
 		vdc.setId(vdcName);
 		vdc.setMethodsInputs(methodsInputs);
 		
