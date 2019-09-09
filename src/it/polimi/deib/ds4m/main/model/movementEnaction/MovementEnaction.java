@@ -19,15 +19,18 @@ package it.polimi.deib.ds4m.main.model.movementEnaction;
 
 import java.util.ArrayList;
 
+import it.polimi.deib.ds4m.main.model.methodsInput.Method;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movement.Transformation;
 
 public class MovementEnaction 
 {
-	String from;
-	String to;
-	ArrayList<String> transformations;
-	String type;
+	private String from;
+	private String to;
+	private ArrayList<String> transformations;
+	private String type;
+	private String DALid;
+	private  ArrayList<Method> methodsInputs;
 	
 	/**
 	 * @return the from
@@ -66,11 +69,13 @@ public class MovementEnaction
 		this.transformations = transformations;
 	}
 	
-	public void importMovement (Movement movement) 
+	public void importMovement (Movement movement, ArrayList<Method> methodsInputs) 
 	{
 		this.from = movement.getFromLinked().getName();
 		this.to = movement.getToLinked().getName();
 		this.type = movement.getType();
+		this.DALid = movement.getDalToMove().getOriginal_ip();
+		this.methodsInputs=methodsInputs;
 		
 		
 		if (transformations==null)
@@ -93,6 +98,18 @@ public class MovementEnaction
 	 */
 	public void setType(String type) {
 		this.type = type;
+	}
+	/**
+	 * @return the dALid
+	 */
+	public String getDALid() {
+		return DALid;
+	}
+	/**
+	 * @param dALid the dALid to set
+	 */
+	public void setDALid(String dALid) {
+		DALid = dALid;
 	}
 
 

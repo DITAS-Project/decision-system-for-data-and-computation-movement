@@ -391,7 +391,7 @@ public class ManageMovementsActionsTest
 				}
 				
 			    //instantiate movement classes for each data source
-				ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(resources,movementsJSON.toString()); 
+				ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(resources,movementsJSON.toString(), DALS); 
 			    if (instantiatedMovements==null)
 			    {
 			    	return null;

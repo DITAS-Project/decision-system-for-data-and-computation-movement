@@ -58,7 +58,6 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.methodsInput.Method;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
-import it.polimi.deib.ds4m.main.model.movementEnaction.MovementsEnaction;
 import it.polimi.deib.ds4m.main.movement.GoalTreeManager;
 import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 import it.polimi.deib.ds4m.main.movement.VDCManager;
@@ -169,30 +168,19 @@ public class NotifyViolation extends HttpServlet {
 		        }
 		        
 		        //select first data movement action	        
-		       //Movement movement = movementsToBeEnacted.firstElement();
+		        //TODO: take the first one since they are ordered
+		        Movement movement = movementsToBeEnacted.get(0);
 		       
-		        //update the infrastructure of the vdc
-		        violatedVDC.set
+		        //update the moved dal with new position
+		        movement.getDalToMove().setPosition(movement.getToLinked());
 		        
 		       
 		       //TODO differentiate between data and computation movements
-
 		        
-		        
-		       //transform the selected movement actions in element to be sent
-		       MovementsEnaction movementsEnaction = new MovementsEnaction();//container of movements  
-		       ArrayList<MovementEnaction> movementEnactions = new ArrayList<MovementEnaction>();// vector to be added to the container
+		       //transform the selected movement actions in element to be sent  
+	    	   MovementEnaction movementEnaction = new MovementEnaction();
+	    	   movementEnaction.importMovement(movement, violatedVDC.getMethodsInputs());
 		       
-		       for (Movement movement : movementsToBeEnacted)//for each movement to be enacted selected, add it to the vector to be sent
-		       {
-		    	   MovementEnaction movementEnaction = new MovementEnaction();
-		    	   movementEnaction.importMovement(movement);
-		    	   movementEnactions.add(movementEnaction);
-		       }
-		       //setup the object to be sent ( via json to DME) 
-		       movementsEnaction.setMovementsEnaction(movementEnactions.get(0));
-		       //TODO:taken the first one, to be selected by method
-		       movementsEnaction.setDataSources(violatedVDC.getMethodsInputs().get(1).getDataSources());
 		       
 		       
 		       //once the movement action has been selected, 
@@ -249,7 +237,9 @@ public class NotifyViolation extends HttpServlet {
 				//-from
 				//-to
 				//-trasformations?
+				//-which dal to move
 				//-which part to move (method input)
+				
 		       
 				
 				System.out.println(mapper.writeValueAsString(movementsEnaction));

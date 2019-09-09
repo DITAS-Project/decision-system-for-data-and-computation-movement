@@ -336,7 +336,7 @@ public class AddVDC extends HttpServlet {
 		}
 		
 	    //instantiate movement classes for each data source
-		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(infrastructures,movementsJSON.toString()); 
+		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(infrastructures,movementsJSON.toString(),DALsArrayList); 
 	    if (instantiatedMovements==null)
 	    {
 	    	String message = "AddVDC: error in instantiating the data movement actions";
