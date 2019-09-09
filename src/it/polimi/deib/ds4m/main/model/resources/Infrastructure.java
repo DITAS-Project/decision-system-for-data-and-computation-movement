@@ -28,7 +28,7 @@ public class Infrastructure
 	
 	private String name;
 	private String type;//cloud edge
-	private ArrayList<Characteristic> characteristics;
+	//private ArrayList<Characteristic> characteristics;
 	
 	@JsonIgnore
 	private Boolean isDataSource = false;
@@ -56,18 +56,6 @@ public class Infrastructure
 	 */
 	public void setType(String type) {
 		this.type = type;
-	}
-	/**
-	 * @return the characteristics
-	 */
-	public ArrayList<Characteristic> getCharacteristics() {
-		return characteristics;
-	}
-	/**
-	 * @param characteristics the characteristics to set
-	 */
-	public void setCharacteristics(ArrayList<Characteristic> characteristics) {
-		this.characteristics = characteristics;
 	}
 	/**
 	 * @return the isDataSource

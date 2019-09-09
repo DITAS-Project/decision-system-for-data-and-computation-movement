@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
+import it.polimi.deib.ds4m.main.model.dataSources.DAL;
 import it.polimi.deib.ds4m.main.model.movement.Cost;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
@@ -54,7 +55,7 @@ public class MovementsActionsManager
 	 * @param movementsJSON JSON representing the movement action classes
 	 * @return The array list of instantiated movements, null if problems arise
 	 */
-	public static ArrayList<Movement> instantiateMovementActions(List<Infrastructure> infrastructures, String movementsJSON) 
+	public static ArrayList<Movement> instantiateMovementActions(List<Infrastructure> infrastructures, String movementsJSON, ArrayList<DAL> DALs) 
 	{
 		//the container for the instantiated movement
 		ArrayList<Movement> movements = new ArrayList<Movement>();
@@ -85,26 +86,45 @@ public class MovementsActionsManager
 					//set target and source
 					for (Movement movement: newMovements)
 					{
-						if (
-								//TODO now I do only data movement. When I will include computation movement, I will need to differentiate between the two types 
-								//!infrastructure_target.getIsDataSource() && //if is the initial data source, it cannot be used to move data in, only to take data
-								
-								(!(infrastrucure_source.getIsDataSource()) || movement.getType().toLowerCase().equals("dataduplication")) && //if the source is a data source, i can only duplicate from it 
-								
-								movement.getToType().toLowerCase().equals(infrastructure_target.getType().toLowerCase()) && //if it matches the location target (cloud/edge)
-								(movement.getFromType().toLowerCase().equals(infrastrucure_source.getType().toLowerCase()) ) //&&//if it matches the location source (cloud/edge)
-								//infrastrucure_source.getType().equals(infrastructure_target.getType()) //the type of the source and target should be the same
-								
-								
-								)
+						//TODO now I do only data movement. When I will include computation movement, I will need to differentiate between the two types
+						//computation movement:
+						//!infrastructure_target.getIsDataSource() && //if is the initial data source, it cannot be used to move data in, only to take data
+						if (movement.getType().toLowerCase().equals("computationmovement") || movement.getType().toLowerCase().equals("computationduplication") )
 						{
-							//set the targets
-							movement.setFromLinked(infrastrucure_source);
-							movement.setToLinked(infrastructure_target);
-							
-							//add to list of data movement action 
-							movements.add(movement);
+							//data movement here
 						}
+						
+						
+						//data movement:						
+						if (movement.getType().toLowerCase().equals("dataduplication") || movement.getType().toLowerCase().equals("datamovement") )
+						{
+							//for each DAL
+							for (DAL dal :DALs) 
+							{
+								//TODO
+								if (		
+										(!(infrastrucure_source.getIsDataSource()) || movement.getType().toLowerCase().equals("dataduplication")) && //if the source is a data source, i can only duplicate from it 
+										
+										movement.getToType().toLowerCase().equals(infrastructure_target.getType().toLowerCase()) && //if it matches the location target (cloud/edge)
+										(movement.getFromType().toLowerCase().equals(infrastrucure_source.getType().toLowerCase()) ) //&&//if it matches the location source (cloud/edge)
+										//infrastrucure_source.getType().equals(infrastructure_target.getType()) //the type of the source and target should be the same
+										
+										)
+								{
+									//set the targets
+									movement.setFromLinked(infrastrucure_source);
+									movement.setToLinked(infrastructure_target);
+									movement.setDalToMove(dal);
+									
+									//add to list of data movement action 
+									movements.add(movement);
+								}
+								
+							}
+						
+						}
+						
+
 					}
 				}
 			}

@@ -284,6 +284,16 @@ public class AddVDC extends HttpServlet {
 			return;			
 		}
 		
+		//for each data source [DAL] creates a fake (initial) infrastructure for the data source, to allow movement
+		//create an array list to it in the VDC object
+		ArrayList<DAL> DALsArrayList = new ArrayList<DAL>();
+		for (DAL DAL: DALs.values())
+		{
+			DAL.createResource(infrastructures);
+			DALsArrayList.add(DAL);
+		}
+		
+		
 		
 	    //retrieve VDC name
 		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
@@ -300,15 +310,9 @@ public class AddVDC extends HttpServlet {
 			response.setStatus(HttpStatus.SC_BAD_REQUEST);
 			return;			
 		}
-		
-		//for each data source [DAL] creates a fake (initial) infrastructure for the data source, to allow movement
-		for (DAL DAL: DALs.values())
-		{
-			DAL.createResource(infrastructures);//FIXME 
-		}
+	
 		
 		//store info
-		
 		StringBuilder movementsJSON;
 		try {
 			//retrieve movement classes
@@ -354,6 +358,7 @@ public class AddVDC extends HttpServlet {
 		vdc.setResources(infrastructures);
 		vdc.setId(vdcName);
 		vdc.setMethodsInputs(methodsInputs);
+		vdc.setDALs(DALsArrayList);
 		
 		//if it is not set create a collection of VDCs
 		ArrayList<VDC> VDCs;

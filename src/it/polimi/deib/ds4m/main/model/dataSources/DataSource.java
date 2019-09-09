@@ -36,8 +36,7 @@ public class DataSource
 	private String classDataSource;
 	private String description;
 	//private Parameters parameters;
-	private String location;//cloud or edge
-	private ArrayList<Characteristic> resourceUsed;//this represent the resource used in terms of how many GB and CPU% the Data Source uses 
+	private String location;//cloud or edge 
 	
 	@JsonIgnore
 	private Infrastructure resourceUsedLinked;// this is the link to the actual resource that host the DS. in here the parameters represent what the resource has available and in total.
@@ -53,7 +52,6 @@ public class DataSource
 	{
 		//the new resource has the same parameter of the datasource since it is fake and used as a source for the data movement
 		this.resourceUsedLinked =  new Infrastructure();
-		this.resourceUsedLinked.setCharacteristics(resourceUsed);
 		this.resourceUsedLinked.setName(id);
 		this.resourceUsedLinked.setType(location);
 		this.resourceUsedLinked.setIsDataSource(true);
@@ -117,23 +115,6 @@ public class DataSource
             append(classDataSource).
             toHashCode();
     }
-
-
-	/**
-	 * @return the resourceUsed
-	 */
-	public ArrayList<Characteristic> getResourceUsed() {
-		return resourceUsed;
-	}
-
-
-	/**
-	 * @param resourceUsed the resourceUsed to set
-	 */
-	public void setResourceUsed(ArrayList<Characteristic> resourceUsed) {
-		this.resourceUsed = resourceUsed;
-	}
-
 
 	/**
 	 * @return the resourceUsedLinked

@@ -27,7 +27,6 @@ public class DAL
 	{
 		//the new resource has the same parameter of the datasource since it is fake and used as a source for the data movement
 		this.position =  new Infrastructure();
-		this.position.setCharacteristics(resourceUsed);//TODO not important	? remove check since i will use DAL/data analytics
 		this.position.setName(original_ip); //hinerited from DAL
 		this.position.setType("edge"); //edge since it is on premise of data owner
 		this.position.setIsDataSource(true);

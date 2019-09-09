@@ -172,6 +172,7 @@ public class NotifyViolation extends HttpServlet {
 		       //Movement movement = movementsToBeEnacted.firstElement();
 		       
 		        //update the infrastructure of the vdc
+		        violatedVDC.set
 		        
 		       
 		       //TODO differentiate between data and computation movements

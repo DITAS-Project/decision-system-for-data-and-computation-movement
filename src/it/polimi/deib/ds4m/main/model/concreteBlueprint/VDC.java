@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import it.polimi.deib.ds4m.main.model.dataSources.DAL;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.methodsInput.Method;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
@@ -35,6 +36,7 @@ public class VDC
 	private String id;
 	private ArrayList<Infrastructure> resources;
 	private  ArrayList<Method> methodsInputs;
+	private ArrayList<DAL> DALs;
 	
     @JsonIgnore
     private ArrayList<Movement> movements;
@@ -196,6 +198,20 @@ public class VDC
 	 */
 	public void setMethodsInputs(ArrayList<Method> methodsInputs) {
 		this.methodsInputs = methodsInputs;
+	}
+
+	/**
+	 * @return the dALs
+	 */
+	public ArrayList<DAL> getDALs() {
+		return DALs;
+	}
+
+	/**
+	 * @param dALs the dALs to set
+	 */
+	public void setDALs(ArrayList<DAL> dALs) {
+		DALs = dALs;
 	}
 	
 	

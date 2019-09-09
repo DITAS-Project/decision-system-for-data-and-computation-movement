@@ -20,13 +20,15 @@ package it.polimi.deib.ds4m.main.model.movement;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import it.polimi.deib.ds4m.main.model.dataSources.DAL;
 import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Movement 
 {
-	private String type;
-	private String fromType;//cloud/esdge
+	private String type; //DataMovement,DataDuplication, ComputationMovement, ComputationDuplication
+	private String fromType;//cloud/edge
 	private String toType;//cloud/esdge
 	private double restTime;
 	
@@ -35,6 +37,8 @@ public class Movement
 	private Infrastructure fromLinked;
 	@JsonIgnore
 	private Infrastructure toLinked;
+	@JsonIgnore
+	private DAL dalToMove;
 	
 	private ArrayList<String> positiveImpacts; //list of IDs of goals with a positive impact
 	private ArrayList<String> negativeImpacts; //list of IDs of goals with a negative impact
@@ -42,6 +46,8 @@ public class Movement
 	private ArrayList<Transformation> transformations;
 	
 	private ArrayList<Cost> costs;
+	
+	
 
 	//default creator
 	public Movement()
@@ -129,7 +135,7 @@ public class Movement
 	}
 
 	/**
-	 * @param type the type to set
+	 * @param type the type to set (movement, replication)
 	 */
 	public void setType(String type) {
 		this.type = type;
@@ -268,6 +274,20 @@ public class Movement
 	 */
 	public void setToLinked(Infrastructure toLinked) {
 		this.toLinked = toLinked;
+	}
+
+	/**
+	 * @return the dalToMove
+	 */
+	public DAL getDalToMove() {
+		return dalToMove;
+	}
+
+	/**
+	 * @param dalToMove the dalToMove to set
+	 */
+	public void setDalToMove(DAL dalToMove) {
+		this.dalToMove = dalToMove;
 	}
 	
 
