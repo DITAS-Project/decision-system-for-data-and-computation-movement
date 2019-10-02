@@ -43,15 +43,19 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.apache.xmlrpc.client.XmlRpcClient;
-import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
+import com.ditas.ehealth.GetDataSourceMetricsReply;
+import com.ditas.ehealth.GetDataSourceMetricsRequest;
+import com.ditas.ehealth.MetricsService;
+import com.ditas.ehealth.MetricsServiceGrpc;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
@@ -187,25 +191,39 @@ public class NotifyViolation extends HttpServlet {
 		       //1-check the amount of space that is used by the sourse DAL
 		       
 		       //call DAL using GRPC //TODO finish implementation connection to DAL - GRPC
-		       XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+//		       XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+//
+//		       try{
+//
+//		    	   config.setServerURL(new URL("http://178.22.71.88:50054"));
+//		    	   XmlRpcClient client = new XmlRpcClient();
+//		    	   client.setConfig(config);
+//		    	   
+//		    	   // Assuming some.method has a 'String', 'Int', 'Int' signature and returns Int
+//		    	   Object[] params = null;//new Object[]{ new String("Some Text"), new Integer(38),new Integer(0),};
+//
+//		    	   String result = (String) client.execute("getMetrics", params);
+//		    	   System.out.println("Results" + result);
+//		       }
+//		       catch(Exception e)
+//		       {
+//		    	   System.out.println("Exception: " + e.getMessage());
+//		       }
+//
+	    	   
+	    	   
+	    	   ManagedChannel channel = ManagedChannelBuilder.forAddress("178.22.71.88", 50054).usePlaintext().build();			   
 
-		       try{
+	    	   MetricsServiceGrpc.MetricsServiceBlockingStub stub = MetricsServiceGrpc.newBlockingStub(channel);
+			  
+	    	   GetDataSourceMetricsReply helloResponse = stub.getDataSourceMetrics(GetDataSourceMetricsRequest.newBuilder()
+	    			   //.setFirstName("Baeldung")
+	    			   //.setLastName("gRPC")
+	    			   .build());
+			   
+			   channel.shutdown();
 
-		    	   config.setServerURL(new URL("http://178.22.71.88:50054"));
-		    	   XmlRpcClient client = new XmlRpcClient();
-		    	   client.setConfig(config);
-		    	   
-		    	   // Assuming some.method has a 'String', 'Int', 'Int' signature and returns Int
-		    	   Object[] params = null;//new Object[]{ new String("Some Text"), new Integer(38),new Integer(0),};
-
-		    	   String result = (String) client.execute("getMetrics", params);
-		    	   System.out.println("Results" + result);
-		       }
-		       catch(Exception e)
-		       {
-		    	   System.out.println("Exception: " + e.getMessage());
-		       }
-		       
+	    	   
 		       
 		       //2-check if the target node/infrastructure has enough space
 		       
