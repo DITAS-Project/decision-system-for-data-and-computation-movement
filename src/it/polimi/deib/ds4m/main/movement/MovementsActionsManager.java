@@ -103,7 +103,10 @@ public class MovementsActionsManager
 							{
 								//TODO
 								if (		
-										(!(infrastrucure_source.getIsDataSource()) || movement.getType().toLowerCase().equals("dataduplication")) && //if the source is a data source, i can only duplicate from it 
+										(!(infrastrucure_source.getIsDataSource()) || movement.getType().toLowerCase().equals("dataduplication")) && //if the source infrastructure is a data source, i can only duplicate from it 
+										
+										(!(infrastructure_target.getIsDataSource()) ) && //The target infrastructure is not a data source (i cannot move to a data source, this infrastructure is dummy, only to represent the data source)
+										
 										
 										movement.getToType().toLowerCase().equals(infrastructure_target.getType().toLowerCase()) && //if it matches the location target (cloud/edge)
 										(movement.getFromType().toLowerCase().equals(infrastrucure_source.getType().toLowerCase()) ) //&&//if it matches the location source (cloud/edge)

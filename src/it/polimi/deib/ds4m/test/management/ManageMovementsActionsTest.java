@@ -19,16 +19,23 @@ package it.polimi.deib.ds4m.test.management;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import org.apache.http.HttpStatus;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -39,7 +46,10 @@ import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
+import it.polimi.deib.ds4m.main.model.dataSources.DAL;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
+import it.polimi.deib.ds4m.main.model.methodsInput.DataSourceInput;
+import it.polimi.deib.ds4m.main.model.methodsInput.Method;
 import it.polimi.deib.ds4m.main.model.movement.Cost;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
@@ -49,7 +59,8 @@ public class ManageMovementsActionsTest
 {
 	
 	//paths to blueprint and violations
-	private static String pathCorrectBlueprint="./testResources/test_Blueprint_V6_correct.json"; 
+	//private static String pathCorrectBlueprint="./testResources/test_Blueprint_V6_correct.json";
+	private static String pathCorrectBlueprint="./testResources/test_Blueprint_V7.json";
 	private static String pathCorrectMovementClasses="./testResources/movementClasses.json";
 	
 	/**
@@ -79,25 +90,78 @@ public class ManageMovementsActionsTest
 		JsonNode root = mapper.readTree(concreteBlueprintJSON);
 		
 		//retrieve resources
-		JsonNode resourcesJSON = root.get("COOKBOOK_APPENDIX").get("infrastructure");
-		ArrayList<Infrastructure> resources;
-		try {
-			resources = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(resourcesJSON, Infrastructure[].class)));
-		}
-		catch (JsonProcessingException e) 
+//		JsonNode resourcesJSON = root.get("COOKBOOK_APPENDIX").get("infrastructure");
+//		ArrayList<Infrastructure> resources;
+//		try {
+//			resources = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(resourcesJSON, Infrastructure[].class)));
+//		}
+//		catch (JsonProcessingException e) 
+//		{
+//			e.printStackTrace();
+//			return;			
+//		}
+//		
+//		//retrieve data sources
+//		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
+//		ArrayList<DataSource> dataSources = new ArrayList<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+//		
+//		//connect data sources with resource
+//		for (DataSource dataSource: dataSources)
+//		{
+//			dataSource.createResource(resources);
+//		}
+		
+		//retrieve resources (infrastucture)
+		JsonNode infrastructureJSON = root.get("COOKBOOK_APPENDIX").get("infrastructure");
+		if (infrastructureJSON ==null)
 		{
-			e.printStackTrace();
+			String message = "manageMovementsActionsTest: the INFRASTRUCURE Section of the Blueprint is empty/n";
+        	System.err.println(message);
 			return;			
 		}
 		
-		//retrieve data sources
-		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
-		ArrayList<DataSource> dataSources = new ArrayList<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
-		
-		//connect data sources with resource
-		for (DataSource dataSource: dataSources)
+		ArrayList<Infrastructure> infrastructures;
+		try {
+			infrastructures = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(infrastructureJSON, Infrastructure[].class)));
+		}
+		catch (JsonProcessingException e) 
 		{
-			dataSource.createResource(resources);
+			String message = "manageMovementsActionsTest: error in parsing the INFRASTRUCURE Section of the Blueprint /n";
+        	System.err.println(message);
+			return;			
+		}
+		
+		//retrive DALs
+		JsonNode DALsJSON = root.get("INTERNAL_STRUCTURE").get("DAL_Images");
+		if (DALsJSON ==null)
+		{
+			String message = "manageMovementsActionsTest: the DAL_Images Section of the Blueprint is empty/n";
+        	System.err.println(message);
+			return;			
+		}
+		
+		Map<String,DAL> DALs;
+		try {
+			TypeReference<HashMap<String, DAL>> typeRef = new TypeReference<HashMap<String, DAL>>() {};
+			DALs =mapper.readValue(
+				    mapper.treeAsTokens(DALsJSON), 
+				    mapper.getTypeFactory().constructType(typeRef));
+
+		}
+		catch (JsonProcessingException e) 
+		{
+			String message = "manageMovementsActionsTest: error in parsing the DAL_Images Section of the Blueprint /n";
+        	System.err.println(message);
+			return;			
+		}
+		
+		//for each data source [DAL] creates a fake (initial) infrastructure for the data source, to allow movement
+		//create an array list to it in the VDC object
+		ArrayList<DAL> DALsArrayList = new ArrayList<DAL>();
+		for (DAL DAL: DALs.values())
+		{
+			DAL.createResource(infrastructures);
+			DALsArrayList.add(DAL);
 		}
 		
 
@@ -106,10 +170,10 @@ public class ManageMovementsActionsTest
 	    String movementsJSON = Utility.readFile(pathCorrectMovementClasses, Charset.forName("UTF-8"));
 	    
 	    //instantiate movement classes for each data source 
-	    ArrayList<Movement> movements = MovementsActionsManager.instantiateMovementActions(resources,movementsJSON);
+	    ArrayList<Movement> movements = MovementsActionsManager.instantiateMovementActions(infrastructures,movementsJSON,DALsArrayList);
 	    
-	    //2 data sources and 2 moment action classes so 4 data movement action instances 
- 	    assertTrue(movements.size()==8);
+	    //1 DAL and 2 moment actions classes 4 infrastructure +  1 fake infrastructure for DAL: 16 duplications + 12 movments =28 movements 
+ 	    assertTrue(movements.size()==28);
 
  	    
  	    
@@ -137,7 +201,7 @@ public class ManageMovementsActionsTest
 		ArrayList<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals,  vdc);
 
 		//TODO: important: data sources are not filtered by capabilities, so I got 2, with the filtering this might change.
-		assertTrue(movementsToBeEnacted.size()==3);
+		assertTrue(movementsToBeEnacted.size()==16);//all DataMovement have positive impacts on dataVolume Goal
 	}
 	
 	/**
@@ -161,7 +225,7 @@ public class ManageMovementsActionsTest
 		
 		ArrayList<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals,  vdc);
 		
-		//this check the type, there will be two data movement selected, both instance of a "data movement" class 
+		//this check the type, there will be 16 data movements selected, all instances of a "data movement" class 
 		for (Movement movementToBeEnacted : movementsToBeEnacted)
 		{
 			assertTrue(movementToBeEnacted.getType().equals("DataMovement"));
@@ -201,6 +265,7 @@ public class ManageMovementsActionsTest
 		for (int i = 0; i < movementsToBeEnacted.size(); i++)
 		{
 			//for the first iteration only inspect the cost and find the right element
+			//the first element is supposd to be the bets, so i will not check against other but i save the position of the wanted cost, to be used later for comparison
 			if (i==0)
 			{
 				ArrayList<Cost> costs= movementsToBeEnacted.get(i).getCosts();
@@ -324,6 +389,12 @@ public class ManageMovementsActionsTest
 				
 				//retrieve DATA MANAGEMENT
 				JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
+				if (dataManagementJson ==null)
+				{
+					String message = "manageMovementsActionsTest: the DATA MANAGEMENT Section of the Blueprint is empty/n";
+		        	System.err.println(message);
+		        	return null;	
+				}
 				ArrayList<DataManagement> dataManagement; 
 				try {
 					mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
@@ -332,72 +403,149 @@ public class ManageMovementsActionsTest
 				
 				catch (JsonProcessingException e) 
 				{
-					e.printStackTrace();
-					return null;			
+					String message = "manageMovementsActionsTest: error in parsing the DATA MANAGEMENT Section of the Blueprint /n" + e.getStackTrace().toString();
+		        	System.err.println(message);
+		        	return null;		
 				}
 				
 				//retrieve ABSTRACT_PROPERTIES
 				JsonNode abstractPropertiesJson = root.get("ABSTRACT_PROPERTIES");
+				if (abstractPropertiesJson ==null)
+				{
+					String message = "manageMovementsActionsTest: the ABSTRACT PROPERTIES Section of the Blueprint is empty/n";
+		        	System.err.println(message);
+		        	return null;		
+				}
 				ArrayList<AbstractProperty> abstractProperties; 
 				try {
-					mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
 					abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
 				}
 				
 				catch (JsonProcessingException e) 
 				{
+					String message = "manageMovementsActionsTest: error in parsing the ABSTRACT PROPERTIES Section of the Blueprint /n" + e.getStackTrace().toString();
 					e.printStackTrace();
-					return null;			
-				}		
+		        	System.err.println(message);
+		        	return null;			
+				}
 				
-				//retrieve resources
-				JsonNode resourcesJSON = root.get("COOKBOOK_APPENDIX").get("infrastructure");
-				ArrayList<Infrastructure> resources;
+				//retrieve resources (infrastucture)
+				JsonNode infrastructureJSON = root.get("COOKBOOK_APPENDIX").get("infrastructure");
+				if (infrastructureJSON ==null)
+				{
+					String message = "manageMovementsActionsTest: the INFRASTRUCURE Section of the Blueprint is empty/n";
+		        	System.err.println(message);
+		        	return null;		
+				}
+				
+				ArrayList<Infrastructure> infrastructures;
 				try {
-					resources = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(resourcesJSON, Infrastructure[].class)));
+					infrastructures = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(infrastructureJSON, Infrastructure[].class)));
 				}
 				catch (JsonProcessingException e) 
 				{
-					e.printStackTrace();
-					return null;			
+					String message = "manageMovementsActionsTest: error in parsing the INFRASTRUCURE Section of the Blueprint /n";
+		        	System.err.println(message);
+		        	return null;		
 				}
 				
 				//retrieve data sources
 				JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
+				if (dataSourcesJSON ==null)
+				{
+					String message = "manageMovementsActionsTest: the DATA SOURCES Section of the Blueprint is empty/n";
+		        	System.err.println(message);
+		        	return null;		
+				}
 				ArrayList<DataSource> dataSources;
 				try {
 					dataSources = new ArrayList<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
-				} catch (JsonProcessingException e2) 
+				}
+				catch (JsonProcessingException e) 
 				{
-					e2.printStackTrace();
-					return null;
+					String message = "manageMovementsActionsTest: error in parsing the DATA SOURCE Section of the Blueprint /n";
+		        	System.err.println(message);
+		        	return null;		
 				}
 				
-				//connect data sources with resource
-				for (DataSource dataSource: dataSources)
+				//retrive methods input
+				JsonNode methodsInputsJSON = root.get("INTERNAL_STRUCTURE").get("Methods_Input").get("Methods");
+				if (methodsInputsJSON ==null)
 				{
-					dataSource.createResource(resources);
+					String message = "manageMovementsActionsTest: the Methods_Input Section of the Blueprint is empty/n";
+		        	System.err.println(message);
+		        	return null;		
 				}
-				
-				
-				//retrieve movement classes
-			    String movementsJSON;
+				ArrayList<Method> methodsInputs;
 				try {
-					movementsJSON = Utility.readFile(pathCorrectMovementClasses, Charset.forName("UTF-8"));
-				} catch (IOException e1) 
+					methodsInputs = new ArrayList<Method>(Arrays.asList(mapper.treeToValue(methodsInputsJSON, Method[].class)));
+				}
+				catch (JsonProcessingException e) 
 				{
-					e1.printStackTrace();
-					return null;
+					String message = "manageMovementsActionsTest: error in parsing the Methods_Input Section of the Blueprint /n";
+		        	System.err.println(message);
+		        	return null;		
 				}
 				
-			    //instantiate movement classes for each data source
-				ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(resources,movementsJSON.toString(), DALS); 
-			    if (instantiatedMovements==null)
-			    {
-			    	return null;
-			    }
-			    
-			    
+				//link data source in method input with data sources already retrieved in the blueprint
+				try {
+					//for each method in the method input
+					for (Method method : methodsInputs)
+					{
+						//for each data sources input described
+						for (DataSourceInput dataSourceInput : method.getDataSources())
+						{
+							dataSourceInput.linkDatasource(dataSources);
+						}
+					}
+				}
+				catch (Exception e) 
+				{
+					String message = "manageMovementsActionsTest:  the ids in methods input does not match the id in data source: " + e.getMessage();
+		        	System.err.println(message);
+		        	return null;		
+				}
+				
+				
+				//retrive DALs
+				JsonNode DALsJSON = root.get("INTERNAL_STRUCTURE").get("DAL_Images");
+				if (DALsJSON ==null)
+				{
+					String message = "manageMovementsActionsTest: the DAL_Images Section of the Blueprint is empty/n";
+		        	System.err.println(message);
+		        	return null;	
+				}
+				
+				Map<String,DAL> DALs;
+				try {
+					TypeReference<HashMap<String, DAL>> typeRef = new TypeReference<HashMap<String, DAL>>() {};
+					DALs =mapper.readValue(
+						    mapper.treeAsTokens(DALsJSON), 
+						    mapper.getTypeFactory().constructType(typeRef));
+
+				}
+				catch (JsonProcessingException e) 
+				{
+					String message = "manageMovementsActionsTest: error in parsing the DAL_Images Section of the Blueprint /n";
+		        	System.err.println(message);
+		        	return null;			
+				} catch (IOException e) {
+					String message = "manageMovementsActionsTest: error in parsing the DAL_Images Section of the Blueprint /n";
+		        	System.err.println(message);
+		        	return null;	
+				}
+				
+				//for each data source [DAL] creates a fake (initial) infrastructure for the data source, to allow movement
+				//create an array list to it in the VDC object
+				ArrayList<DAL> DALsArrayList = new ArrayList<DAL>();
+				for (DAL DAL: DALs.values())
+				{
+					DAL.createResource(infrastructures);
+					DALsArrayList.add(DAL);
+				}
+				
+				
+				
 			    //retrieve VDC name
 				JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
 				String vdcName;
@@ -406,10 +554,30 @@ public class ManageMovementsActionsTest
 				}
 				catch (JsonProcessingException e) 
 				{
-					return null;			
+					String message = "manageMovementsActionsTest: error in parsing the NAME Section of the Blueprint /n" + e.getStackTrace().toString();
+		        	System.err.println(message);
+		        	return null;			
+				}
+			
+				
+				//store info
+			    String movementsJSON;
+				try {
+					movementsJSON = Utility.readFile(pathCorrectMovementClasses, Charset.forName("UTF-8"));
+				} catch (IOException e) {
+					return null;
 				}
 				
-				
+			    //instantiate movement classes for each data source
+				ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(infrastructures,movementsJSON,DALsArrayList); 
+			    if (instantiatedMovements==null)
+			    {
+			    	String message = "manageMovementsActionsTest: error in instantiating the data movement actions";
+		        	System.err.println(message);
+		        	return null;
+			    }
+
+			    
 				//set up vdc
 				VDC vdc = new VDC();
 				vdc.setDataManagement(dataManagement);
@@ -417,7 +585,111 @@ public class ManageMovementsActionsTest
 				vdc.setDataSources(dataSources);
 				vdc.setMovements(instantiatedMovements);
 				vdc.connectAbstractProperties();
+				vdc.setResources(infrastructures);
 				vdc.setId(vdcName);
+				vdc.setMethodsInputs(methodsInputs);
+				vdc.setDALs(DALsArrayList);
+
+				
+				//OLD VERSION
+//				//retrieve DATA MANAGEMENT
+//				JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
+//				ArrayList<DataManagement> dataManagement; 
+//				try {
+//					mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+//					dataManagement = new ArrayList<DataManagement>(Arrays.asList(mapper.treeToValue(dataManagementJson, DataManagement[].class)));
+//				}
+//				
+//				catch (JsonProcessingException e) 
+//				{
+//					e.printStackTrace();
+//					return null;			
+//				}
+//				
+//				
+//				
+//				//retrieve ABSTRACT_PROPERTIES
+//				JsonNode abstractPropertiesJson = root.get("ABSTRACT_PROPERTIES");
+//				ArrayList<AbstractProperty> abstractProperties; 
+//				try {
+//					mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+//					abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
+//				}
+//				
+//				catch (JsonProcessingException e) 
+//				{
+//					e.printStackTrace();
+//					return null;			
+//				}		
+//				
+//				//retrieve resources
+//				JsonNode resourcesJSON = root.get("COOKBOOK_APPENDIX").get("infrastructure");
+//				ArrayList<Infrastructure> resources;
+//				try {
+//					resources = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(resourcesJSON, Infrastructure[].class)));
+//				}
+//				catch (JsonProcessingException e) 
+//				{
+//					e.printStackTrace();
+//					return null;			
+//				}
+//				
+//				//retrieve data sources
+//				JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
+//				ArrayList<DataSource> dataSources;
+//				try {
+//					dataSources = new ArrayList<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+//				} catch (JsonProcessingException e2) 
+//				{
+//					e2.printStackTrace();
+//					return null;
+//				}
+//				
+//				//connect data sources with resource
+//				for (DataSource dataSource: dataSources)
+//				{
+//					dataSource.createResource(resources);
+//				}
+//				
+//				
+//				//retrieve movement classes
+//			    String movementsJSON;
+//				try {
+//					movementsJSON = Utility.readFile(pathCorrectMovementClasses, Charset.forName("UTF-8"));
+//				} catch (IOException e1) 
+//				{
+//					e1.printStackTrace();
+//					return null;
+//				}
+//				
+//			    //instantiate movement classes for each data source
+//				ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(resources,movementsJSON.toString(), DALS); 
+//			    if (instantiatedMovements==null)
+//			    {
+//			    	return null;
+//			    }
+//			    
+//			    
+//			    //retrieve VDC name
+//				JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
+//				String vdcName;
+//				try {
+//					vdcName = mapper.treeToValue(vdcNameJSON, String.class);
+//				}
+//				catch (JsonProcessingException e) 
+//				{
+//					return null;			
+//				}
+//				
+//				
+//				//set up vdc
+//				VDC vdc = new VDC();
+//				vdc.setDataManagement(dataManagement);
+//				vdc.setAbstractProperties(abstractProperties);
+//				vdc.setDataSources(dataSources);
+//				vdc.setMovements(instantiatedMovements);
+//				vdc.connectAbstractProperties();
+//				vdc.setId(vdcName);
 				
 				return vdc;
 	}
