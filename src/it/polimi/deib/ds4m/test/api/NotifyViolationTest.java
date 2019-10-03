@@ -427,6 +427,7 @@ public class NotifyViolationTest
     @Test
     public void testNotifyViolations_current() 
 	{
+    	
 		//clear from all vdcs
 		this.removeAllVDCs();
 		
