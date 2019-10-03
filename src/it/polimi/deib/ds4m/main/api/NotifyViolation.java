@@ -38,18 +38,20 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 
-//import com.ditas.ehealth.GetDataSourceMetricsReply;
-//import com.ditas.ehealth.GetDataSourceMetricsRequest;
-//import com.ditas.ehealth.MetricsService;
-//import com.ditas.ehealth.MetricsServiceGrpc;
+import com.ditas.ehealth.GetDataSourceMetricsReply;
+import com.ditas.ehealth.GetDataSourceMetricsRequest;
+import com.ditas.ehealth.MetricsService;
+import com.ditas.ehealth.MetricsServiceGrpc;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
-//import io.grpc.ManagedChannel;
-//import io.grpc.ManagedChannelBuilder;
+
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
@@ -205,18 +207,17 @@ public class NotifyViolation extends HttpServlet {
 //
 	    	   
 	    	   
-//	    	   ManagedChannel channel = ManagedChannelBuilder.forAddress("178.22.71.88", 50054).usePlaintext().build();			   
-//
-//	    	   MetricsServiceGrpc.MetricsServiceBlockingStub stub = MetricsServiceGrpc.newBlockingStub(channel);
-//			  
-//	    	   GetDataSourceMetricsReply helloResponse = stub.getDataSourceMetrics(GetDataSourceMetricsRequest.newBuilder()
-//	    			   //.setFirstName("Baeldung")
-//	    			   //.setLastName("gRPC")
-//	    			   .build());
-//			   
-//			   channel.shutdown();
+	    	   ManagedChannel channel = ManagedChannelBuilder.forAddress("178.22.71.88", 50054).usePlaintext().build();			   
 
+	    	   MetricsServiceGrpc.MetricsServiceBlockingStub stub = MetricsServiceGrpc.newBlockingStub(channel);
+			  
+	    	   GetDataSourceMetricsReply responseDAL = stub.getDataSourceMetrics(GetDataSourceMetricsRequest.newBuilder().build());
+			   
+	    	   String dalResourceJSON = responseDAL.getMetrics();
 	    	   
+			   channel.shutdown();
+
+	    	   System.out.println(dalResourceJSON);
 		       
 		       //2-check if the target node/infrastructure has enough space
 		       
