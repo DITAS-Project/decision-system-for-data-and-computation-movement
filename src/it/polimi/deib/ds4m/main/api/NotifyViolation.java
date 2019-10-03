@@ -20,10 +20,8 @@ package it.polimi.deib.ds4m.main.api;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,16 +33,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-import org.apache.xmlrpc.client.XmlRpcClient;
-import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+
+
+import com.ditas.ehealth.GetDataSourceMetricsReply;
+import com.ditas.ehealth.GetDataSourceMetricsRequest;
+import com.ditas.ehealth.MetricsService;
+import com.ditas.ehealth.MetricsServiceGrpc;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -52,10 +51,10 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
+
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
-import it.polimi.deib.ds4m.main.model.methodsInput.Method;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
 import it.polimi.deib.ds4m.main.movement.GoalTreeManager;
@@ -187,49 +186,65 @@ public class NotifyViolation extends HttpServlet {
 		       //1-check the amount of space that is used by the sourse DAL
 		       
 		       //call DAL using GRPC //TODO finish implementation connection to DAL - GRPC
-		       XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+//		       XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+//
+//		       try{
+//
+//		    	   config.setServerURL(new URL("http://178.22.71.88:50054"));
+//		    	   XmlRpcClient client = new XmlRpcClient();
+//		    	   client.setConfig(config);
+//		    	   
+//		    	   // Assuming some.method has a 'String', 'Int', 'Int' signature and returns Int
+//		    	   Object[] params = null;//new Object[]{ new String("Some Text"), new Integer(38),new Integer(0),};
+//
+//		    	   String result = (String) client.execute("getMetrics", params);
+//		    	   System.out.println("Results" + result);
+//		       }
+//		       catch(Exception e)
+//		       {
+//		    	   System.out.println("Exception: " + e.getMessage());
+//		       }
+//
+	    	   
+	    	   
+	    	   ManagedChannel channel = ManagedChannelBuilder.forAddress("178.22.71.88", 50054).usePlaintext().build();			   
 
-		       try{
+	    	   MetricsServiceGrpc.MetricsServiceBlockingStub stub = MetricsServiceGrpc.newBlockingStub(channel);
+			  
+	    	   GetDataSourceMetricsReply responseDAL = stub.getDataSourceMetrics(GetDataSourceMetricsRequest.newBuilder().build());
+			   
+	    	   String dalResourceJSON = responseDAL.getMetrics();
+	    	   
+			   channel.shutdown();
 
-		    	   config.setServerURL(new URL("http://178.22.71.88:50054"));
-		    	   XmlRpcClient client = new XmlRpcClient();
-		    	   client.setConfig(config);
-		    	   
-		    	   // Assuming some.method has a 'String', 'Int', 'Int' signature and returns Int
-		    	   Object[] params = null;//new Object[]{ new String("Some Text"), new Integer(38),new Integer(0),};
-
-		    	   String result = (String) client.execute("getMetrics", params);
-		    	   System.out.println("Results" + result);
-		       }
-		       catch(Exception e)
-		       {
-		    	   System.out.println("Exception: " + e.getMessage());
-		       }
-		       
+	    	   System.out.println(dalResourceJSON);
 		       
 		       //2-check if the target node/infrastructure has enough space
 		       
 		       
-				HttpClient client = HttpClientBuilder.create().build();
-				HttpGet requestDA = new HttpGet(urlDA_Resources);
-				   
+	    	   //call to data analytics
+//				HttpClient client = HttpClientBuilder.create().build();
+//				HttpGet requestDA = new HttpGet(urlDA_Resources);
+//				   
+//				
+//				HttpResponse responseDA = client.execute(requestDA);
+//					
+//				System.out.println("\nSending 'GET' request to URL : " + urlDA_Resources);
+//				System.out.println("Response Code : " + 
+//						responseDA.getStatusLine().getStatusCode());
+//				
+//				BufferedReader rd = new BufferedReader(
+//				               new InputStreamReader(responseDA.getEntity().getContent()));
+//				
+//				StringBuffer result = new StringBuffer();
+//				String line = "";
+//				while ((line = rd.readLine()) != null) {
+//					result.append(line);
+//				}
+//				
+//				System.out.println(result.toString());
 				
-				HttpResponse responseDA = client.execute(requestDA);
-					
-				System.out.println("\nSending 'GET' request to URL : " + urlDA_Resources);
-				System.out.println("Response Code : " + 
-						responseDA.getStatusLine().getStatusCode());
-				
-				BufferedReader rd = new BufferedReader(
-				               new InputStreamReader(responseDA.getEntity().getContent()));
-				
-				StringBuffer result = new StringBuffer();
-				String line = "";
-				while ((line = rd.readLine()) != null) {
-					result.append(line);
-				}
-				
-				System.out.println(result.toString());
+				//end call data analytics
 		       
 				//create request for DME
 				//-from

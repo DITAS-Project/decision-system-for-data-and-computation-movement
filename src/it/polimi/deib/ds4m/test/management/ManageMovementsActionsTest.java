@@ -201,7 +201,7 @@ public class ManageMovementsActionsTest
 		ArrayList<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals,  vdc);
 
 		//TODO: important: data sources are not filtered by capabilities, so I got 2, with the filtering this might change.
-		assertTrue(movementsToBeEnacted.size()==16);//all DataMovement have positive impacts on dataVolume Goal
+		assertTrue(movementsToBeEnacted.size()==12);//all DataMovement have positive impacts on dataVolume Goal
 	}
 	
 	/**
