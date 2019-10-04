@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Infrastructure 
 {
@@ -69,6 +71,49 @@ public class Infrastructure
 	public void setIsDataSource(Boolean isDataSource) {
 		this.isDataSource = isDataSource;
 	}
+	
+	@Override
+	public boolean equals(Object o) 
+	{
+	    // self check
+	    if (this == o)
+	        return true;
+	    
+	    // null check
+	    if (o == null)
+	        return false;
+	    
+	    // type check and cast
+	    if (getClass() != o.getClass())
+	        return false;
+	    
+	    Infrastructure other = (Infrastructure) o;
+	    
+	    // field comparison
+	    if (!this.name.equals(other.getName()) ) {
+	        return false;
+	    }
+	    if (!this.type.equals(other.getType()) ) {
+	        return false;
+	    }
+	    if (!this.isDataSource.equals(other.getIsDataSource()) ) {
+	        return false;
+	    }
+	    
+	    return true;
+	    
+	}
+	
+	//Whenever equals is modified, also hasCode has to be modified
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+            // if deriving: appendSuper(super.hashCode()).
+            append(type).
+            append(name).
+            append(isDataSource).
+            toHashCode();
+    }
 
 
 }

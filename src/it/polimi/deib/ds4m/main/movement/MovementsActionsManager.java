@@ -151,9 +151,6 @@ public class MovementsActionsManager
 	 */
 	public static ArrayList<Movement> findMovementAction(Set<TreeStructure> violatedGoals, VDC vdc)
 	{
-		//retrieve the data sources used by the method
-		//TODO: to insert binding in blueprint
-		//TODO: to consider transformations
 		
 		//create arrayList of movements to be enacted 
 		ArrayList<Movement> movementsToBeEnacted = new ArrayList<Movement>();
@@ -161,12 +158,15 @@ public class MovementsActionsManager
 		//for each movements check if it has a positive impact on the goal
 		for (Movement movement : vdc.getMovements())
 		{
-			//for each impact, check if present in the list of violated goals
+			//for each impact, check if the goal is  present in the list of violated goals
 			for (String impact : movement.getPositiveImpacts())
 			{
 				for(TreeStructure goal: violatedGoals)
 				{
-					if (impact.equals(goal.getID()))
+					if (impact.equals(goal.getID()) &&// check if the goal is present
+						movementEnactable(movement, vdc)	//add it is the infrastructure source of the movement is among the 
+						)
+						
 						movementsToBeEnacted.add(movement);
 				}
 			}
@@ -201,6 +201,26 @@ public class MovementsActionsManager
 		}
 
 		return movementsToBeEnacted;
+	}
+	
+	
+	/**
+	 * the method returns true if the DAL to be moved is in the infrastructure defined in the source  
+	 * 
+	 * @param movement
+	 * @param vdc
+	 * @return true if there is a DAL in the infrastructure that is defined in the source of the movement
+	 */
+	public static boolean movementEnactable(Movement movement, VDC vdc)
+	{
+		for (DAL dal : vdc.getDALs())
+		{
+			if (movement.getFromLinked().equals(dal.getPosition()))
+				return true;
+		}
+		
+		return false;
+		
 	}
 	
 	

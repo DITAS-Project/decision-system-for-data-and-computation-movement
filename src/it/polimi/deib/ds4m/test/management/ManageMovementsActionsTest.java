@@ -193,6 +193,33 @@ public class ManageMovementsActionsTest
 		//set violated goals
 		Set<TreeStructure> violatedGoals = new HashSet<TreeStructure>();
 		TreeStructure g1 = new TreeStructure(null);
+		g1.setID("fastDataProcess");
+
+		violatedGoals.add(g1);
+		
+
+		ArrayList<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals,  vdc);
+
+		//TODO: important: data sources are not filtered by capabilities, so I got 2, with the filtering this might change.
+		assertTrue(movementsToBeEnacted.size()==4);//all DataMovement have positive impacts on dataVolume Goal
+	}
+
+	/**
+	 * Test if the movement action find are the correct number, 
+	 * which is 0 since there is only 1 vdc in its original position ( and fake infrastructure) and cannot be moved (but only replicated).
+	 * the violated goal has only 1 positive contribution  
+	 * 
+	 * @throws IOException
+	 */
+	@Test
+	public void findMovementAction_correct_checkSize_0 () throws IOException
+	{
+		//setup vdc
+		VDC vdc = setUpVDC();
+		
+		//set violated goals
+		Set<TreeStructure> violatedGoals = new HashSet<TreeStructure>();
+		TreeStructure g1 = new TreeStructure(null);
 		g1.setID("dataVolume");
 
 		violatedGoals.add(g1);
@@ -201,8 +228,9 @@ public class ManageMovementsActionsTest
 		ArrayList<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals,  vdc);
 
 		//TODO: important: data sources are not filtered by capabilities, so I got 2, with the filtering this might change.
-		assertTrue(movementsToBeEnacted.size()==12);//all DataMovement have positive impacts on dataVolume Goal
+		assertTrue(movementsToBeEnacted.size()==0);//all DataMovement have positive impacts on dataVolume Goal
 	}
+	
 	
 	/**
 	 * Test if the movement action retrieved is correct. the test is on only one  action
