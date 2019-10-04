@@ -31,7 +31,8 @@ var fs = require('fs');
 // call the addVDC with the blueprint
 before("/AddVDC > add VDC > 200 > application/json", function (transaction) {
 	//get the json file to send
-	var VDC = fs.readFileSync('./testResources/test_Blueprint_V6_correct.json', 'utf8');
+	//var VDC = fs.readFileSync('./testResources/test_Blueprint_V6_correct.json', 'utf8');
+	var VDC = fs.readFileSync('./testResources/test_Blueprint_V7.json', 'utf8');
 	
 	transaction.request.headers['content-type'] = "text";
 	transaction.request.body = VDC;
