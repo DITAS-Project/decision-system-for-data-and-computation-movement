@@ -61,7 +61,7 @@ public class ManageMovementsActionsTest
 	//paths to blueprint and violations
 	//private static String pathCorrectBlueprint="./testResources/test_Blueprint_V6_correct.json";
 	private static String pathCorrectBlueprint="./testResources/test_Blueprint_V7.json";
-	private static String pathCorrectMovementClasses="./testResources/movementClasses.json";
+	private static String pathCorrectMovementClasses="./testResources/configuration/DS4M_movementClasses.json";
 	
 	/**
 	 * 

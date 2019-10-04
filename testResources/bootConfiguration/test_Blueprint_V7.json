@@ -408,7 +408,15 @@
                     ]
                 }
             ]
-        }
+        },
+    "DAL_Images": {
+				"streaming-api": {
+					"internalPort": 40001,
+					"externalPort": 40001,
+					"image": "153.92.30.56:5050/streaming-dal:latest",
+					"original_ip": "TODO - set the IP of the running DAL"
+				}
+			}
    },
 "DATA_MANAGEMENT":
     [

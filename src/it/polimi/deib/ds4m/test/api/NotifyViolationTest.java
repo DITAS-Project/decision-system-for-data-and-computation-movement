@@ -89,7 +89,7 @@ public class NotifyViolationTest
     //boolean variable to control which tests to execute.
     //if false all tests are executed
     //if true only testNotifyViolations_current is executed
-    boolean onlyCurrentBlueprint = true; //when is true, check that the method testNotifyViolations_current()  has been enables as test. 
+    boolean onlyCurrentBlueprint = false; //when is true, check that the method testNotifyViolations_current()  has been enables as test. 
     
     //paths to current files
 	//private String pathCurrentBlueprint="./testResources/test_Blueprint_V6_correct.json";

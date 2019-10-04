@@ -17,15 +17,37 @@
  */
 package it.polimi.deib.ds4m.main.movement;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+
+import org.apache.http.HttpStatus;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
+import it.polimi.deib.ds4m.main.model.dataSources.DAL;
+import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
+import it.polimi.deib.ds4m.main.model.methodsInput.DataSourceInput;
+import it.polimi.deib.ds4m.main.model.methodsInput.Method;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
+import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 
 public class VDCManager 
 {
@@ -152,6 +174,195 @@ public class VDCManager
 		
 		return movementsToBeEnacted;
 	} 
+	
+	public static VDC createVDC(String concreteBlueprintJSON, String movementsJSON) throws Exception
+	{
+		//convert the json in object
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+		mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+		
+		JsonNode root; 
+		try {
+			root = mapper.readTree(concreteBlueprintJSON);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			
+//			String message = ;
+//        	System.err.println(message);
+        	
+        	throw new Exception("error in reading the tree of the Blueprint");
+        	
+        	//response.getWriter().println(message);
+			//response.setStatus(HttpStatus.SC_BAD_REQUEST);
+        	
+		}
+		
+		//retrieve DATA MANAGEMENT
+		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
+		if (dataManagementJson ==null)
+		{
+			throw new Exception("the DATA MANAGEMENT Section of the Blueprint is empty");
+
+		}
+		ArrayList<DataManagement> dataManagement; 
+		try {
+			mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+			dataManagement = new ArrayList<DataManagement>(Arrays.asList(mapper.treeToValue(dataManagementJson, DataManagement[].class)));
+		}
+		
+		catch (JsonProcessingException e) 
+		{
+			throw new Exception("error in parsing the DATA MANAGEMENT Section of the Blueprint " + e.getStackTrace().toString());	
+		}
+		
+		//retrieve ABSTRACT_PROPERTIES
+		JsonNode abstractPropertiesJson = root.get("ABSTRACT_PROPERTIES");
+		if (abstractPropertiesJson ==null)
+		{
+			throw new Exception("the ABSTRACT PROPERTIES Section of the Blueprint is empty");	
+		}
+		ArrayList<AbstractProperty> abstractProperties; 
+		try {
+			abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
+		}
+		
+		catch (JsonProcessingException e) 
+		{
+			throw new Exception("error in parsing the ABSTRACT PROPERTIES Section of the Blueprint" + e.getStackTrace().toString());
+		}
+		
+		//retrieve resources (infrastucture)
+		JsonNode infrastructureJSON = root.get("COOKBOOK_APPENDIX").get("infrastructure");
+		if (infrastructureJSON ==null)
+		{
+			throw new Exception("the INFRASTRUCURE Section of the Blueprint is empty");
+		}
+		
+		ArrayList<Infrastructure> infrastructures;
+		try {
+			infrastructures = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(infrastructureJSON, Infrastructure[].class)));
+		}
+		catch (JsonProcessingException e) 
+		{
+			throw new Exception("error in parsing the INFRASTRUCURE Section of the Blueprint");
+		}
+		
+		//retrieve data sources
+		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
+		if (dataSourcesJSON ==null)
+		{
+			throw new Exception("the DATA SOURCES Section of the Blueprint is empty");
+		}
+		ArrayList<DataSource> dataSources;
+		try {
+			dataSources = new ArrayList<DataSource>(Arrays.asList(mapper.treeToValue(dataSourcesJSON, DataSource[].class)));
+		}
+		catch (JsonProcessingException e) 
+		{
+			throw new Exception("error in parsing the DATA SOURCE Section of the Blueprint");
+		}
+		
+		//retrive methods input
+		JsonNode methodsInputsJSON = root.get("INTERNAL_STRUCTURE").get("Methods_Input").get("Methods");
+		if (methodsInputsJSON ==null)
+		{
+			throw new Exception("the Methods_Input Section of the Blueprint is empty");
+		}
+		ArrayList<Method> methodsInputs;
+		try {
+			methodsInputs = new ArrayList<Method>(Arrays.asList(mapper.treeToValue(methodsInputsJSON, Method[].class)));
+		}
+		catch (JsonProcessingException e) 
+		{
+			throw new Exception("error in parsing the Methods_Input Section of the Blueprint");
+		}
+		
+		//link data source in method input with data sources already retrieved in the blueprint
+		try {
+			//for each method in the method input
+			for (Method method : methodsInputs)
+			{
+				//for each data sources input described
+				for (DataSourceInput dataSourceInput : method.getDataSources())
+				{
+					dataSourceInput.linkDatasource(dataSources);
+				}
+			}
+		}
+		catch (Exception e) 
+		{
+			throw new Exception(" the ids in methods input does not match the id in data source: " + e.getMessage());
+		}
+		
+		
+		//retrive DALs
+		JsonNode DALsJSON = root.get("INTERNAL_STRUCTURE").get("DAL_Images");
+		if (DALsJSON ==null)
+		{
+			throw new Exception("the DAL_Images Section of the Blueprint is empty");			
+		}
+		
+		Map<String,DAL> DALs;
+		try {
+			TypeReference<HashMap<String, DAL>> typeRef = new TypeReference<HashMap<String, DAL>>() {};
+			DALs =mapper.readValue(
+				    mapper.treeAsTokens(DALsJSON), 
+				    mapper.getTypeFactory().constructType(typeRef));
+
+		}
+		catch (JsonProcessingException e) 
+		{
+			throw new Exception("error in parsing the DAL_Images Section of the Blueprint");
+		}
+		
+		//for each data source [DAL] creates a fake (initial) infrastructure for the data source, to allow movement
+		//create an array list to it in the VDC object
+		ArrayList<DAL> DALsArrayList = new ArrayList<DAL>();
+		for (DAL DAL: DALs.values())
+		{
+			DAL.createResource(infrastructures);
+			DALsArrayList.add(DAL);
+		}
+		
+		
+		
+	    //retrieve VDC name
+		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
+		String vdcName;
+		try {
+			vdcName = mapper.treeToValue(vdcNameJSON, String.class);
+		}
+		catch (JsonProcessingException e) 
+		{
+			throw new Exception("error in parsing the NAME Section of the Blueprint" + e.getStackTrace().toString());
+		}
+	
+		
+	    //instantiate movement classes for each data source
+		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(infrastructures,movementsJSON,DALsArrayList); 
+	    if (instantiatedMovements==null)
+	    {
+	    	throw new Exception("error in instantiating the data movement actions");
+	    }
+
+	    
+		//set up vdc
+		VDC vdc = new VDC();
+		vdc.setDataManagement(dataManagement);
+		vdc.setAbstractProperties(abstractProperties);
+		vdc.setDataSources(dataSources);
+		vdc.setMovements(instantiatedMovements);
+		vdc.connectAbstractProperties();
+		vdc.setResources(infrastructures);
+		vdc.setId(vdcName);
+		vdc.setMethodsInputs(methodsInputs);
+		vdc.setDALs(DALsArrayList);
+		
+		return vdc;
+	}
 	
 
 }
