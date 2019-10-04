@@ -111,6 +111,8 @@ public class AddVDC extends HttpServlet {
 //			return;
 //		}
 		
+		
+		//questa e' assluta, mettere controllo per test, s enon funziona allora passare a webinf
 		String pathMovementJson= "/Users/mattia/git/decision-system-for-data-and-computation-movement2/testResources/configuration/DS4M_movementClasses.json";
 		
 		 String movementsJSON=null;
