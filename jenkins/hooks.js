@@ -29,7 +29,7 @@ var fs = require('fs');
 
 
 // call the addVDC with the blueprint
-before("/AddVDC > add VDC > 200 > application/json", function (transaction) {
+before("/v2/AddVDC > add VDC > 200 > application/json", function (transaction) {
 	//get the json file to send
 	//var VDC = fs.readFileSync('./testResources/test_Blueprint_V6_correct.json', 'utf8');
 	var VDC = fs.readFileSync('./testResources/test_Blueprint_V7.json', 'utf8');
@@ -39,7 +39,7 @@ before("/AddVDC > add VDC > 200 > application/json", function (transaction) {
 });
 
 //call the notify violations with the same ID of the VDC
-before("/NotifyViolation > notifyViolation > 200 > application/json", function (transaction) {
+before("/v2/NotifyViolation > notifyViolation > 200 > application/json", function (transaction) {
 	//get the json file to send
 	var violations = fs.readFileSync('./testResources/test_violationCorrect.json', 'utf8');
 	
