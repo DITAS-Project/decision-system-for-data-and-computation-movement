@@ -54,6 +54,7 @@ import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
 import it.polimi.deib.ds4m.main.movement.GoalTreeManager;
 import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 import it.polimi.deib.ds4m.main.movement.VDCManager;
+import wiremock.com.jayway.jsonpath.PathNotFoundException;
 
 /**
  * Servlet implementation class NotifyViolation
@@ -294,11 +295,16 @@ public class NotifyViolation extends HttpServlet {
 					violatedVDC.getDALs().add(duplicatedDAL);
 					
 					//update data movements (a new DAL means new data movements)
-					String concreteBlueprintJSON;
+					String concreteBlueprintJSON=null;
 					try {
 						//the function needs the name of the file
 						concreteBlueprintJSON = VDCManager.loadConcreteBlueprint(violatedVDC.getId()+".json");
 					}
+					catch (PathNotFoundException pnfE)
+					{
+						System.err.println("NofifyViolation: " + pnfE.getMessage());
+						System.err.println("NofifyViolation: skip update VDC");
+					}
 					catch (Exception e)
 					{
 						System.err.println("NotifyViolation: " + e.getMessage());
@@ -308,28 +314,33 @@ public class NotifyViolation extends HttpServlet {
 						return;
 					}
 					
-					
-					//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
-					String movementsJSON;
-					try {
-						movementsJSON = MovementsActionsManager.loadMovementClass(this);
-					} catch (Exception e) 
+					//i skip the update if i failed to load the movement class. 
+					// this control is needed because of the PathNotFoundException: i still continue even if the share volume is not accessible
+					if (concreteBlueprintJSON!=null)
 					{
-						System.err.println("NotifyViolation: " + e.getMessage());
-			        	response.getWriter().println("NotifyViolation: " + e.getMessage());
+						//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
+						String movementsJSON;
+						try {
+							movementsJSON = MovementsActionsManager.loadMovementClass(this);
+						} catch (Exception e) 
+						{
+							System.err.println("NotifyViolation: " + e.getMessage());
+							System.err.println("NofifyViolation: skip update VDC");
+				        	response.getWriter().println("NotifyViolation: " + e.getMessage());
+							
+							response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+							return;
+						}
 						
-						response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-						return;
-					}
-					
-					//update the VDC
-					try 
-					{
-						VDCManager.updateVDCmovements(concreteBlueprintJSON, movementsJSON, violatedVDC);
-					} 
-					catch (Exception e)
-					{
-						System.err.println("NotifyViolation: " + e.getMessage());
+						//update the VDC
+						try 
+						{
+							VDCManager.updateVDCmovements(concreteBlueprintJSON, movementsJSON, violatedVDC);
+						} 
+						catch (Exception e)
+						{
+							System.err.println("NotifyViolation: " + e.getMessage());
+						}
 					}
 				}
 				

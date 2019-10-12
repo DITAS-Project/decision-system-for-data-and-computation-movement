@@ -53,6 +53,7 @@ import it.polimi.deib.ds4m.main.model.methodsInput.DataSourceInput;
 import it.polimi.deib.ds4m.main.model.methodsInput.Method;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
+import wiremock.com.jayway.jsonpath.PathNotFoundException;
 
 public class VDCManager 
 {
@@ -443,23 +444,30 @@ public class VDCManager
 	 */
 	public static String loadConcreteBlueprint(String VDC) throws Exception
 	{
-		String path = PathSetting.blueprints_pv + "/" + VDC;
-		//System.out.println(path);
-		File blueprintJSONFile = new File(path);
-
 		String blueprintJson=null;
 		
-		try(BufferedReader blueprintJSONBR = new BufferedReader(new FileReader(blueprintJSONFile)))
-		{
-			blueprintJson = blueprintJSONBR.lines().collect(Collectors.joining("\n"));		
-			blueprintJSONBR.close();
+		if ((new File(PathSetting.blueprints_pv)).exists())
+		{		
+			String path = PathSetting.blueprints_pv + "/" + VDC;
+			//System.out.println(path);
+			File blueprintJSONFile = new File(path);
 			
-		} catch (FileNotFoundException e) 
+			try(BufferedReader blueprintJSONBR = new BufferedReader(new FileReader(blueprintJSONFile)))
+			{
+				blueprintJson = blueprintJSONBR.lines().collect(Collectors.joining("\n"));		
+				blueprintJSONBR.close();
+				
+			} catch (FileNotFoundException e) 
+			{
+				throw new Exception("file not found");
+			} catch (IOException e) 
+			{
+				throw new Exception("problem in reading the concrete blueprint at "+path);
+			}
+		}
+		else
 		{
-			throw new Exception("file not found");
-		} catch (IOException e) 
-		{
-			throw new Exception("problem in reading the concrete blueprint at "+path);
+			throw new PathNotFoundException("Persisten volume not found, load concrete blueprint");
 		}
 
 
