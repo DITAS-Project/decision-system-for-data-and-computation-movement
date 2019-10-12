@@ -122,23 +122,29 @@ public class AddVDC extends HttpServlet {
 		}
 		
 		
-		//create the directory structure if needed
-		new File(PathSetting.blueprints_pv).mkdirs();
-		
-		
-		System.out.println("vdc saved");
-		//once i parsed it and it is correct, i save it
-		try (PrintWriter out = new PrintWriter(PathSetting.blueprints_pv+vdc.getId()+".json")) {
-		    out.println(concreteBlueprintJSON);
-		}
-		catch (java.io.FileNotFoundException e)
-		{
-			String errMessage = "ADDVDC: failed to write the VDC json file in persistent volume";
-			System.err.println(errMessage);
-        	response.getWriter().println(errMessage);
+		//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
+		if ((new File(PathSetting.pv)).exists())
+		{		
+			//create the directory structure if needed
+			new File(PathSetting.blueprints_pv).mkdirs();
 			
-			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-			return;
+			//once i parsed it and it is correct, i save it
+			try (PrintWriter out = new PrintWriter(PathSetting.blueprints_pv+vdc.getId()+".json")) {
+			    out.println(concreteBlueprintJSON);
+			}
+			catch (java.io.FileNotFoundException e)
+			{
+				String errMessage = "ADDVDC: failed to write the VDC json file in persistent volume";
+				System.err.println(errMessage);
+	        	response.getWriter().println(errMessage);
+				
+				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+				return;
+			}
+		}
+		else
+		{
+			System.err.println("AddVdc: folder "+PathSetting.pv+" does not exists, concrete blueprint not saved");
 		}
 		
 		

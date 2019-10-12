@@ -38,54 +38,62 @@ public class BootConfigurator implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 
-		System.out.println("bootConfigurator: Importing concrete blueprints");
-
-		// create the array of VDC
-		ArrayList<VDC> VDCs;
-
-		// read the JSON of movement action classes
-		String movementsJSON = null;
-		try {
-			BufferedReader movementClassesJSONBR = new BufferedReader(new FileReader(PathSetting.movementClassJson));
-			movementsJSON = movementClassesJSONBR.lines().collect(Collectors.joining("\n"));
-			movementClassesJSONBR.close();
-
-		} catch (FileNotFoundException e1) {
-			System.err.println("bootConfigurator: error in reading the movement Classes");
-			return;
-		} catch (IOException e) {
-			System.err.println("bootConfigurator: failed closing the BufferedReader for movement classes");
-		}
-
-		// read all concrete blueprints and instantiate the vdcs
-		Set<String> listBlueprints;
-		int blueprintsCount=0;
-		
-		try {
-			listBlueprints = Utility.listFilesUsingFileWalk(PathSetting.blueprints_pv, 1);
-
-			for (String blueprint : listBlueprints) {
-				String path = PathSetting.blueprints_pv + "/" + blueprint;
-				System.out.println(path);
-				File blueprintJSONFile = new File(path);
-
-				BufferedReader blueprintJSONBR = new BufferedReader(new FileReader(blueprintJSONFile));
-
-				String blueprintJson = blueprintJSONBR.lines().collect(Collectors.joining("\n"));
-
-				VDC vdc = VDCManager.createVDC(blueprintJson, movementsJSON);
-
-				blueprintJSONBR.close();
-				blueprintsCount++;
+		//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
+		if ((new File(PathSetting.pv)).exists())
+		{
+			System.out.println("bootConfigurator: Importing concrete blueprints");
+	
+			// create the array of VDC
+			ArrayList<VDC> VDCs;
+	
+			// read the JSON of movement action classes
+			String movementsJSON = null;
+			try {
+				BufferedReader movementClassesJSONBR = new BufferedReader(new FileReader(PathSetting.movementClassJson));
+				movementsJSON = movementClassesJSONBR.lines().collect(Collectors.joining("\n"));
+				movementClassesJSONBR.close();
+	
+			} catch (FileNotFoundException e1) {
+				System.err.println("bootConfigurator: error in reading the movement Classes");
+				return;
+			} catch (IOException e) {
+				System.err.println("bootConfigurator: failed closing the BufferedReader for movement classes");
 			}
-
-		} catch (IOException e) {
-			System.out.println("bootConfigurator: problem in reading the concrete blueprints");
-		} catch (Exception e) {
-			System.out.println("bootConfigurator: problem in generating the VDC: " + e.getMessage());
+	
+			// read all concrete blueprints and instantiate the vdcs
+			Set<String> listBlueprints;
+			int blueprintsCount=0;
+			
+			try {
+				listBlueprints = Utility.listFilesUsingFileWalk(PathSetting.blueprints_pv, 1);
+	
+				for (String blueprint : listBlueprints) {
+					String path = PathSetting.blueprints_pv + "/" + blueprint;
+					System.out.println(path);
+					File blueprintJSONFile = new File(path);
+	
+					BufferedReader blueprintJSONBR = new BufferedReader(new FileReader(blueprintJSONFile));
+	
+					String blueprintJson = blueprintJSONBR.lines().collect(Collectors.joining("\n"));
+	
+					VDC vdc = VDCManager.createVDC(blueprintJson, movementsJSON);
+	
+					blueprintJSONBR.close();
+					blueprintsCount++;
+				}
+	
+			} catch (IOException e) {
+				System.out.println("bootConfigurator: problem in reading the concrete blueprints");
+			} catch (Exception e) {
+				System.out.println("bootConfigurator: problem in generating the VDC: " + e.getMessage());
+			}
+			
+			System.out.println("imported " + blueprintsCount + " blueprints");
 		}
-		
-		System.out.println("imported " + blueprintsCount + " blueprints");
+		else
+		{
+			System.err.println("bootConfigurator: folder "+PathSetting.pv+" does not exists, concrete blueprints not loaded");
+		}
 
 		System.out.println("importing vdc settings and status");
 
