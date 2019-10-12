@@ -18,6 +18,9 @@
 package it.polimi.deib.ds4m.main.movement;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,6 +30,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.http.HttpStatus;
 
@@ -37,6 +41,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import it.polimi.deib.ds4m.main.configuration.PathSetting;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
@@ -175,6 +180,14 @@ public class VDCManager
 		return movementsToBeEnacted;
 	} 
 	
+	/**
+	 * creates a new vdc from scratch
+	 * 
+	 * @param concreteBlueprintJSON the concrete blueprint where the DAL is describe
+	 * @param movementsJSON the movement action to instantiate
+	 * @return the instantiated DAL
+	 * @throws Exception
+	 */
 	public static VDC createVDC(String concreteBlueprintJSON, String movementsJSON) throws Exception
 	{
 		//convert the json in object
@@ -362,6 +375,95 @@ public class VDCManager
 		vdc.setDALs(DALsArrayList);
 		
 		return vdc;
+	}
+	
+	/**
+	 * update the instantiated movement actions when the list of DAL changes (one or more DAL is added or removed)
+	 * ATTENTION: the list of DALs in vdc must be updated  
+	 * 
+	 * @param concreteBlueprintJSON the concrete blueprint of the VDC
+	 * @param movementsJSON the movement to be instantiated
+	 * @param vdc the VDC to be updated
+	 * @throws Exception
+	 */
+	public static void updateVDCmovements(String concreteBlueprintJSON, String movementsJSON, VDC vdc) throws Exception
+	{
+		//convert the json in object
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+		mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+		
+		JsonNode root; 
+		try {
+			root = mapper.readTree(concreteBlueprintJSON);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();        	
+        	throw new Exception("error in reading the tree of the Blueprint");
+		}
+		
+		//retrieve resources (infrastucture)
+		JsonNode infrastructureJSON = root.get("COOKBOOK_APPENDIX").get("infrastructure");
+		if (infrastructureJSON ==null)
+		{
+			throw new Exception("the INFRASTRUCURE Section of the Blueprint is empty");
+		}
+		
+		ArrayList<Infrastructure> infrastructures;
+		try {
+			infrastructures = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(infrastructureJSON, Infrastructure[].class)));
+		}
+		catch (JsonProcessingException e) 
+		{
+			throw new Exception("error in parsing the INFRASTRUCURE Section of the Blueprint");
+		}
+		
+
+		
+	    //instantiate movement classes for each data source
+		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(infrastructures,movementsJSON,vdc.getDALs()); 
+	    if (instantiatedMovements==null)
+	    {
+	    	throw new Exception("error in instantiating the data movement actions");
+	    }
+
+	    
+		//update up vdc
+		vdc.setMovements(instantiatedMovements);
+
+	}
+	
+	/**
+	 * given a VDC id, it search the abstract blueprint in the persistent volumes, if it exists it returns it. 
+	 * 
+	 * @param VDC the name of the file 
+	 * @return
+	 * @throws Exception 
+	 */
+	public static String loadConcreteBlueprint(String VDC) throws Exception
+	{
+		String path = PathSetting.blueprints_pv + "/" + VDC;
+		//System.out.println(path);
+		File blueprintJSONFile = new File(path);
+
+		String blueprintJson=null;
+		
+		try(BufferedReader blueprintJSONBR = new BufferedReader(new FileReader(blueprintJSONFile)))
+		{
+			blueprintJson = blueprintJSONBR.lines().collect(Collectors.joining("\n"));		
+			blueprintJSONBR.close();
+			
+		} catch (FileNotFoundException e) 
+		{
+			throw new Exception("file not found");
+		} catch (IOException e) 
+		{
+			throw new Exception("problem in reading the concrete blueprint at "+path);
+		}
+
+
+		return blueprintJson ;
 	}
 	
 

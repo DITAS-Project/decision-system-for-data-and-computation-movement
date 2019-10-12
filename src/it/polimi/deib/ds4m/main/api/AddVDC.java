@@ -37,6 +37,7 @@ import org.apache.http.HttpStatus;
 
 import it.polimi.deib.ds4m.main.configuration.PathSetting;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
+import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 import it.polimi.deib.ds4m.main.movement.VDCManager;
 
 /**
@@ -66,71 +67,16 @@ public class AddVDC extends HttpServlet {
 		String concreteBlueprintJSON = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));	
 
 		//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
-		String movementsJSON=null;
-		if ((new File(PathSetting.movementClassJson)).exists())
+		String movementsJSON;
+		try {
+			movementsJSON = MovementsActionsManager.loadMovementClass(this);
+		} catch (Exception e) 
 		{
-			try {
-				BufferedReader movementClassesJSONBR = new BufferedReader(new FileReader(PathSetting.movementClassJson));
-				movementsJSON= movementClassesJSONBR.lines().collect(Collectors.joining("\n"));
-				movementClassesJSONBR.close();
-				
-			} catch (FileNotFoundException e1) 
-			{
-				System.out.println("addVDC: reading from classes movement from webinf");
-				//if it fails the class path might not exists, therefore we might be in the unit test environement, try to load from web inf 
-				try {
-					//retrieve movement classes
-					InputStream inputstream = this.getServletConfig().getServletContext().getResourceAsStream("/WEB-INF/movementClasses.json");
-					BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
-					StringBuilder movementsJSONBuilder = new StringBuilder();
-				    String line;
-				    while ((line = reader.readLine()) != null) {
-				    	movementsJSONBuilder.append(line);
-				    }
-				    reader.close();
-				    movementsJSON = movementsJSONBuilder.toString();
-			    
-				}
-				catch (IOException  e) 
-				{
-					String message = "AddVDC: error in loading the movement action configuration file /n" + e.getStackTrace().toString();
-		        	System.err.println(message);
-		        	response.getWriter().println(message);
-					
-					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-					return;
-				}
-
-
-			} catch (IOException e) {
-				System.out.println("AddVDC: failed closing the BufferedReader for movement classes");
-			}
-		}
-		else//if the volume is not mounted, i retrive it for test from web-inf folder
-		{
-			System.out.println("AddVDC: persistent volume for configuration not found, will load configuration from web inf");
-			try {
-				//retrieve movement classes
-				InputStream inputstream = this.getServletConfig().getServletContext().getResourceAsStream(PathSetting.movementClassWEBINFJson);
-				BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
-				StringBuilder movementsJSONBuilder = new StringBuilder();
-			    String line;
-			    while ((line = reader.readLine()) != null) {
-			    	movementsJSONBuilder.append(line);
-			    }
-			    reader.close();
-			    movementsJSON = movementsJSONBuilder.toString();
-			    
-			}
-			catch (IOException  e) 
-			{
-				String message = "AddVDC: error in loading the movement action configuration file /n" + e.getStackTrace().toString();
-	        	System.err.println(message);
-	        	response.getWriter().println(message);
-				
-				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-				return;
-			}
+			System.err.println("AddVDC: " + e.getMessage());
+        	response.getWriter().println("AddVDC: " + e.getMessage());
+			
+			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			return;
 		}
 
 		//created a VDC from the json files
@@ -140,8 +86,8 @@ public class AddVDC extends HttpServlet {
 			vdc = VDCManager.createVDC(concreteBlueprintJSON, movementsJSON);
 		} catch (Exception e) 
 		{
-			System.err.println(e.getMessage());
-        	response.getWriter().println(e.getMessage());
+			System.err.println("AddVDC: " + e.getMessage());
+        	response.getWriter().println("AddVDC: " + e.getMessage());
 			
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			return;

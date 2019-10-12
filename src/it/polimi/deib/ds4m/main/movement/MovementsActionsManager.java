@@ -17,17 +17,29 @@
  */
 package it.polimi.deib.ds4m.main.movement;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServlet;
+
+import org.apache.http.HttpStatus;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import it.polimi.deib.ds4m.main.configuration.PathSetting;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DAL;
@@ -91,7 +103,7 @@ public class MovementsActionsManager
 						//!infrastructure_target.getIsDataSource() && //if is the initial data source, it cannot be used to move data in, only to take data
 						if (movement.getType().toLowerCase().equals("computationmovement") || movement.getType().toLowerCase().equals("computationduplication") )
 						{
-							//data movement here
+							//computation movement here
 						}
 						
 						
@@ -287,6 +299,59 @@ public class MovementsActionsManager
 	    	else
 	    		return 0;
 	    }
+	}
+	
+	/**
+	 * returns the movement class json
+	 * 
+	 * @param call the servlet object, to be used to read from the web inf in case the persisten volume is not available, if it is null it will no try to read the web inf 
+	 * @return the Movement class json
+	 * @throws Exception
+	 */
+	public static String loadMovementClass(HttpServlet call) throws Exception
+	{
+		String movementsJSON=null;
+		
+		if ((new File(PathSetting.movementClassJson)).exists())
+		{
+			try {
+				BufferedReader movementClassesJSONBR = new BufferedReader(new FileReader(PathSetting.movementClassJson));
+				movementsJSON= movementClassesJSONBR.lines().collect(Collectors.joining("\n"));
+				movementClassesJSONBR.close();
+				
+			} catch (FileNotFoundException e1) 
+			{
+				throw new Exception("movement class file not found");
+
+			} catch (IOException e) {
+				throw new Exception("failed closing the BufferedReader for movement classes");
+			}
+		}
+		else//if the volume is not mounted, i retrieve it for test from web-inf folder
+			if (call != null)//if it is null i will skip try to read from web inf
+		{
+			System.out.println("persistent volume for configuration not found, will load configuration from web inf");
+			try {
+				//retrieve movement classes
+				InputStream inputstream = call.getServletConfig().getServletContext().getResourceAsStream(PathSetting.movementClassWEBINFJson);
+				BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
+				StringBuilder movementsJSONBuilder = new StringBuilder();
+			    String line;
+			    while ((line = reader.readLine()) != null) {
+			    	movementsJSONBuilder.append(line);
+			    }
+			    reader.close();
+			    movementsJSON = movementsJSONBuilder.toString();
+			    
+			}
+			catch (IOException  e) 
+			{
+				throw new Exception("Error in loading the movement action configuration file /n" + e.getStackTrace().toString());
+	        	
+			}
+		}
+		
+		return movementsJSON;
 	}
 
 }

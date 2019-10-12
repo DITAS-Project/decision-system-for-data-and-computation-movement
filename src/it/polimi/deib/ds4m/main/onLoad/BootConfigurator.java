@@ -81,22 +81,12 @@ public class BootConfigurator implements ServletContextListener {
 				listBlueprints = Utility.listFilesUsingFileWalk(PathSetting.blueprints_pv, 1);
 	
 				for (String blueprint : listBlueprints) {
-					String path = PathSetting.blueprints_pv + "/" + blueprint;
-					System.out.println(path);
-					File blueprintJSONFile = new File(path);
-	
-					BufferedReader blueprintJSONBR = new BufferedReader(new FileReader(blueprintJSONFile));
-	
-					String blueprintJson = blueprintJSONBR.lines().collect(Collectors.joining("\n"));
-	
-					VDC vdc = VDCManager.createVDC(blueprintJson, movementsJSON);
-	
-					blueprintJSONBR.close();
+					VDCManager.loadConcreteBlueprint(blueprint);
 					blueprintsCount++;
 				}
 	
 			} catch (IOException e) {
-				System.out.println("bootConfigurator: problem in reading the concrete blueprints");
+				System.out.println("bootConfigurator: problem in reading the concrete blueprints: " + e.getMessage());
 			} catch (Exception e) {
 				System.out.println("bootConfigurator: problem in generating the VDC: " + e.getMessage());
 			}

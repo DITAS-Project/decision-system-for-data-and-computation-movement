@@ -11,15 +11,11 @@ public class DAL
 	private String original_ip;
 	private Infrastructure position;
 	private ArrayList<DataSource> dataSources;
-
-	public DAL() {
-		// TODO Auto-generated constructor stub
-	}
 	
 	
 	/**
 	 * It creates the resource that represent the data source. 
-	 * Notice that the location is set to null since this resource can be only used as source of data movement 
+	 * Note that the location is set to null since this resource can be only used as source of data movement 
 	 * 
 	 * @param infrastructures
 	 */

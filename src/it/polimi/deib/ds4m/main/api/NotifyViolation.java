@@ -48,6 +48,7 @@ import it.polimi.deib.ds4m.main.configuration.PathSetting;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
+import it.polimi.deib.ds4m.main.model.dataSources.DAL;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
 import it.polimi.deib.ds4m.main.movement.GoalTreeManager;
@@ -177,11 +178,13 @@ public class NotifyViolation extends HttpServlet {
 		       //once the movement action has been selected, 
 		       //1-check the amount of space that is used by the sourse DAL
 	    	   
+	    	   System.out.println("ENABLE DAL and DA calls");
+	    	   
 	    	  //grpc call
 	    	   String dalResourceJSON;
 	    	   try {
 		    	   ManagedChannel channel = ManagedChannelBuilder.forAddress(PathSetting.urlDAL, 50054).usePlaintext().build();
-		    	   System.out.println("change dal addtress to parametric");
+		    	   System.out.println("change dal address to parametric");
 		    	   MetricsServiceGrpc.MetricsServiceBlockingStub stub = MetricsServiceGrpc.newBlockingStub(channel);
 		    	   GetDataSourceMetricsReply responseDAL = stub.getDataSourceMetrics(GetDataSourceMetricsRequest.newBuilder().build());
 		    	   dalResourceJSON = responseDAL.getMetrics();
@@ -202,7 +205,6 @@ public class NotifyViolation extends HttpServlet {
 	    	  
 
 	    	   //System.out.println(dalResourceJSON);
-	    	   System.out.println("abilitate DAL and DA calls");
 		       
 		       //2-check if the target node/infrastructure has enough space
 		       
@@ -270,8 +272,64 @@ public class NotifyViolation extends HttpServlet {
 //		        } catch (IOException e) {
 //		            e.printStackTrace();
 //		        }
+				
+				//if it's a computation movement i don't care
+				//if it's a data movement i update the existing dal
+				//if it's a data duplication i add the dal to the dal of the vdc
+				if (movement.getType().equals("DataMovement"))
+				{
+					ArrayList<DAL> DALsViolatedVDCs = violatedVDC.getDALs();
+					movement.getDalToMove().setOriginal_ip("NEW IP");
+					
+				}	
+				else if (movement.getType().equals("DataDuplication"))
+				{
+					//create DAL
+					DAL duplicatedDAL = new DAL();
+					duplicatedDAL.setPosition(movement.getToLinked());
+					duplicatedDAL.setDataSources(movement.getDalToMove().getDataSources());
+					duplicatedDAL.setOriginal_ip("NEW IP");
+					
+					//add dal to vdc
+					violatedVDC.getDALs().add(duplicatedDAL);
+					
+					//update data movements (a new DAL means new data movements)
+					String concreteBlueprintJSON;
+					try {
+						//the function needs the name of the file
+						concreteBlueprintJSON = VDCManager.loadConcreteBlueprint(violatedVDC.getId()+".json");
+					}
+					catch (Exception e)
+					{
+						System.err.println("NotifyViolation: " + e.getMessage());
+			        	response.getWriter().println("NotifyViolation: " + e.getMessage());
+						
+						response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+						return;
+					}
+					
+					
+					//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
+					String movementsJSON;
+					try {
+						movementsJSON = MovementsActionsManager.loadMovementClass(this);
+					} catch (Exception e) 
+					{
+						System.err.println("NotifyViolation: " + e.getMessage());
+			        	response.getWriter().println("NotifyViolation: " + e.getMessage());
+						
+						response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+						return;
+					}
+					
+					//update the VDC
+					VDCManager.updateVDCmovements(concreteBlueprintJSON, movementsJSON, violatedVDC);
+				}
+				
 	        }	
-	        //set answer status
+
+	        
+	        //set answer status to trigger of violations
 	        response.setStatus(HttpStatus.SC_OK);
 	        response.setContentType("application/json");
 	        
