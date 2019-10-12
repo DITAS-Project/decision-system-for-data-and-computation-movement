@@ -65,12 +65,12 @@ public class AddVDC extends HttpServlet {
 		//String concreteBlueprintJSON = request.getReader().toString(); //request.getParameter("ConcreteBlueprint");
 		String concreteBlueprintJSON = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));	
 
-		
-		String pathMovementJson= PathSetting.movementClassJson;
-		
-		 String movementsJSON=null;
+		//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
+		String movementsJSON=null;
+		if ((new File(PathSetting.movementClassJson)).exists())
+		{
 			try {
-				BufferedReader movementClassesJSONBR = new BufferedReader(new FileReader(pathMovementJson ));
+				BufferedReader movementClassesJSONBR = new BufferedReader(new FileReader(PathSetting.movementClassJson));
 				movementsJSON= movementClassesJSONBR.lines().collect(Collectors.joining("\n"));
 				movementClassesJSONBR.close();
 				
@@ -105,7 +105,33 @@ public class AddVDC extends HttpServlet {
 			} catch (IOException e) {
 				System.out.println("AddVDC: failed closing the BufferedReader for movement classes");
 			}
-		
+		}
+		else//if the volume is not mounted, i retrive it for test from web-inf folder
+		{
+
+			try {
+				//retrieve movement classes
+				InputStream inputstream = this.getServletConfig().getServletContext().getResourceAsStream("/WEB-INF/movementClasses.json");
+				BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
+				StringBuilder movementsJSONBuilder = new StringBuilder();
+			    String line;
+			    while ((line = reader.readLine()) != null) {
+			    	movementsJSONBuilder.append(line);
+			    }
+			    reader.close();
+			    movementsJSON = movementsJSONBuilder.toString();
+			    
+			}
+			catch (IOException  e) 
+			{
+				String message = "AddVDC: error in loading the movement action configuration file /n" + e.getStackTrace().toString();
+	        	System.err.println(message);
+	        	response.getWriter().println(message);
+				
+				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+				return;
+			}
+		}
 
 		//created a VDC from the json files
 		VDC vdc;
