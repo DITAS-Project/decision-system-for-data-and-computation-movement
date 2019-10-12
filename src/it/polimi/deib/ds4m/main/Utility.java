@@ -21,7 +21,11 @@ package it.polimi.deib.ds4m.main;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Utility {
 	
@@ -32,5 +36,24 @@ public class Utility {
 			  byte[] encoded = Files.readAllBytes(Paths.get(path));
 			  return new String(encoded, encoding);
 			}
+	
+	/**
+	 * source https://www.baeldung.com/java-list-directory-files returns a list of
+	 * files
+	 * 
+	 * @param dir
+	 *            the path of the directory to visit
+	 * @param depth
+	 *            the level of folder to inspect, to inspect a folder it must be set
+	 *            to 1
+	 * @return
+	 * @throws IOException
+	 */
+	public static Set<String> listFilesUsingFileWalk(String dir, int depth) throws IOException {
+		try (Stream<Path> stream = Files.walk(Paths.get(dir), depth)) {
+			return stream.filter(file -> !Files.isDirectory(file)).map(Path::getFileName).map(Path::toString)
+					.collect(Collectors.toSet());
+		}
+	}
 
 }

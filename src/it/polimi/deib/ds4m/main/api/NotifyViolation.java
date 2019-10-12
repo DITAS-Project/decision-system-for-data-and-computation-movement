@@ -17,9 +17,7 @@
  */
 package it.polimi.deib.ds4m.main.api;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
@@ -31,16 +29,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
 
 
 import com.ditas.ehealth.GetDataSourceMetricsReply;
 import com.ditas.ehealth.GetDataSourceMetricsRequest;
-import com.ditas.ehealth.MetricsService;
 import com.ditas.ehealth.MetricsServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -51,7 +44,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
-
+import it.polimi.deib.ds4m.main.configuration.PathSetting;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
@@ -67,7 +60,6 @@ import it.polimi.deib.ds4m.main.movement.VDCManager;
 @WebServlet("/v2/NotifyViolation")
 public class NotifyViolation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String urlDA_Resources = "http://178.22.69.180:8080/data-analytics/resources/cloudsigma-deployment/usage/";
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -184,47 +176,39 @@ public class NotifyViolation extends HttpServlet {
 		       
 		       //once the movement action has been selected, 
 		       //1-check the amount of space that is used by the sourse DAL
-		       
-		       //call DAL using GRPC //TODO finish implementation connection to DAL - GRPC
-//		       XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-//
-//		       try{
-//
-//		    	   config.setServerURL(new URL("http://178.22.71.88:50054"));
-//		    	   XmlRpcClient client = new XmlRpcClient();
-//		    	   client.setConfig(config);
-//		    	   
-//		    	   // Assuming some.method has a 'String', 'Int', 'Int' signature and returns Int
-//		    	   Object[] params = null;//new Object[]{ new String("Some Text"), new Integer(38),new Integer(0),};
-//
-//		    	   String result = (String) client.execute("getMetrics", params);
-//		    	   System.out.println("Results" + result);
-//		       }
-//		       catch(Exception e)
-//		       {
-//		    	   System.out.println("Exception: " + e.getMessage());
-//		       }
-//
 	    	   
-	    	   
-	    	   ManagedChannel channel = ManagedChannelBuilder.forAddress("178.22.71.88", 50054).usePlaintext().build();			   
+	    	  //grpc call
+	    	   String dalResourceJSON;
+	    	   try {
+		    	   ManagedChannel channel = ManagedChannelBuilder.forAddress(PathSetting.urlDAL, 50054).usePlaintext().build();
+		    	   System.out.println("change dal addtress to parametric");
+		    	   MetricsServiceGrpc.MetricsServiceBlockingStub stub = MetricsServiceGrpc.newBlockingStub(channel);
+		    	   GetDataSourceMetricsReply responseDAL = stub.getDataSourceMetrics(GetDataSourceMetricsRequest.newBuilder().build());
+		    	   dalResourceJSON = responseDAL.getMetrics();
+		    	   
+				   channel.shutdown();
+	    	   }
+	    	   catch (Exception e)
+	    	   {
+		        	String message = "NotifyViolation: DAL not reached";
+		        	System.err.println(message);
+//		        	response.getWriter().println(message);
+//		        	
+//		        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+//		        	response.setContentType("application/json");
+//		        	return;
+	    	   }
 
-	    	   MetricsServiceGrpc.MetricsServiceBlockingStub stub = MetricsServiceGrpc.newBlockingStub(channel);
-			  
-	    	   GetDataSourceMetricsReply responseDAL = stub.getDataSourceMetrics(GetDataSourceMetricsRequest.newBuilder().build());
-			   
-	    	   String dalResourceJSON = responseDAL.getMetrics();
-	    	   
-			   channel.shutdown();
+	    	  
 
-	    	   System.out.println(dalResourceJSON);
+	    	   //System.out.println(dalResourceJSON);
+	    	   System.out.println("abilitate DAL and DA calls");
 		       
 		       //2-check if the target node/infrastructure has enough space
 		       
-		       
 	    	   //call to data analytics
 //				HttpClient client = HttpClientBuilder.create().build();
-//				HttpGet requestDA = new HttpGet(urlDA_Resources);
+//				HttpGet requestDA = new HttpGet(PathSetting.urlDA_Resources);
 //				   
 //				
 //				HttpResponse responseDA = client.execute(requestDA);

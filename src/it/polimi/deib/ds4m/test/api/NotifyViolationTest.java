@@ -24,20 +24,19 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
+import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -48,26 +47,13 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 import it.polimi.deib.ds4m.main.Utility;
+import it.polimi.deib.ds4m.main.configuration.PathSetting;
 import it.polimi.deib.ds4m.main.model.Metric;
 import it.polimi.deib.ds4m.main.model.Violation;
 
 public class NotifyViolationTest 
 {	
-	//set URLS and costants
-	private String urlDS4M_notifyViolation = "http://localhost:8080/ROOT/v2/NotifyViolation";
-	private String urlDS4M_addVDC = "http://localhost:8080/ROOT/v2/AddVDC";
-	//private String URSDS4M_notifyViolation = "http://31.171.247.162:50003/NotifyViolation";
-	//private String URSDS4M_setUp = "http://31.171.247.162:50003/SetUp";
-	private String urlDS4M_RemoveVDC = "http://localhost:8080/ROOT/v2/RemoveVDC";
-	private String urlDS4M_RemoveAllVDC = "http://localhost:8080/ROOT/v2/RemoveAllVDC";
 	
-	
-	private String urlDataMovementEnactor = "/dataEnactor/action";
-	private String urlComputationMovementEnactor = "/dataEnactor/action";
-	
-	//paths to blueprint and violations
-	private String pathCorrectBlueprint="./testResources/test_Blueprint_V7.json"; 
-	private String pathCorrectViolations="./testResources/test_violationCorrect.json";
 	
 	//set mockup server
 	@Rule
@@ -91,10 +77,6 @@ public class NotifyViolationTest
     //if true only testNotifyViolations_current is executed
     boolean onlyCurrentBlueprint = false; //when is true, check that the method testNotifyViolations_current()  has been enables as test. 
     
-    //paths to current files
-	//private String pathCurrentBlueprint="./testResources/test_Blueprint_V6_correct.json";
-	private String pathCurrentBlueprint="./testResources/test_Blueprint_V7.json";
-	private String pathViolationCurrent="./testResources/test_violationCorrect.json";
     
 	//setup to be called to instantiate variables
     @Before
@@ -151,13 +133,35 @@ public class NotifyViolationTest
 		
 		violations.add(violation2);
 		
-	} 
+	}
+    
+    @AfterClass
+	public static void cleanUp() 
+	{
+    	// read all concrete blueprints and instantiate the vdcs
+ 		Set<String> listBlueprints;
+ 		
+ 		try {
+ 			listBlueprints = Utility.listFilesUsingFileWalk(PathSetting.blueprints_pv, 1);
+
+ 			for (String blueprint : listBlueprints) {
+ 				String path = PathSetting.blueprints_pv + blueprint;
+ 				Files.deleteIfExists(Paths.get(path));
+ 			}
+
+ 		} catch (IOException e) {
+ 			System.out.println("bootConfigurator: problem in reading the concrete blueprints");
+ 		} catch (Exception e) {
+ 			System.out.println("bootConfigurator: problem in generating the VDC: " + e.getMessage());
+ 		}
+    	
+	}
     
     private void removeAllVDCs()
     {
 		//set up connection 
         HttpClient client = HttpClientBuilder.create().build();    
-        HttpPost post = new HttpPost(urlDS4M_RemoveAllVDC);
+        HttpPost post = new HttpPost(PathSetting.urlDS4M_RemoveAllVDC);
 
         //connect to service
         try {
@@ -187,7 +191,7 @@ public class NotifyViolationTest
 		
 		try 
 		{
-			concreteBlueprint=Utility.readFile(pathCorrectBlueprint, Charset.forName("UTF-8"));
+			concreteBlueprint=Utility.readFile(PathSetting.pathCorrectBlueprint, Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -198,7 +202,7 @@ public class NotifyViolationTest
 		
 		//set up connection 
         HttpClient client = HttpClientBuilder.create().build();    
-        HttpPost post = new HttpPost(urlDS4M_addVDC);
+        HttpPost post = new HttpPost(PathSetting.urlDS4M_addVDC);
         
         //set the body
         StringEntity params=null;
@@ -248,20 +252,20 @@ public class NotifyViolationTest
 		this.testAddVDC_correct();
 		
         //setup a mock server for data movement
-		stubFor(post(urlEqualTo(urlDataMovementEnactor))
+		stubFor(post(urlEqualTo(PathSetting.urlDataMovementEnactor))
 	            .willReturn(aResponse()
 	                .withHeader("Content-Type", "application/x-www-form-urlencoded")
 	                .withStatus(200)));
 		
 		//set up connection 
         HttpClient client = HttpClientBuilder.create().build();
-        HttpPost post = new HttpPost(urlDS4M_notifyViolation);
+        HttpPost post = new HttpPost(PathSetting.urlDS4M_notifyViolation);
 		
         
         //read violations
         String violationJSON=null;
         try {
-        	violationJSON=Utility.readFile(pathCorrectViolations, Charset.forName("UTF-8"));
+        	violationJSON=Utility.readFile(PathSetting.pathCorrectViolations, Charset.forName("UTF-8"));
         	
 		} catch (IOException e2) 
         {
@@ -319,7 +323,7 @@ public class NotifyViolationTest
 		
 		//set up connection 
         HttpClient client = HttpClientBuilder.create().build();
-        HttpPost post = new HttpPost(urlDS4M_notifyViolation);
+        HttpPost post = new HttpPost(PathSetting.urlDS4M_notifyViolation);
 		
 
         //set the body 
@@ -365,16 +369,8 @@ public class NotifyViolationTest
 		
 		this.testAddVDC_correct();
 		
-        //setup a mock server -> not needed here, we test api of DS4M
-//		stubFor(post(urlEqualTo(urlDataMovementEnactor))
-//	            .willReturn(aResponse()
-//	                .withHeader("Content-Type", "application/x-www-form-urlencoded")
-//	                .withStatus(200)
-//	                .withBody("ack")));
-		
-		
         HttpClient client = HttpClientBuilder.create().build();
-        HttpPost post = new HttpPost(urlDS4M_notifyViolation);
+        HttpPost post = new HttpPost(PathSetting.urlDS4M_notifyViolation);
 
 		this.setUp();
         
@@ -435,20 +431,20 @@ public class NotifyViolationTest
 		this.testAddVDC_current();
 		
         //setup a mock server for data movement
-		stubFor(post(urlEqualTo(urlDataMovementEnactor))
+		stubFor(post(urlEqualTo(PathSetting.urlDataMovementEnactor))
 	            .willReturn(aResponse()
 	                .withHeader("Content-Type", "application/x-www-form-urlencoded")
 	                .withStatus(200)));
 		
 		//set up connection 
         HttpClient client = HttpClientBuilder.create().build();
-        HttpPost post = new HttpPost(urlDS4M_notifyViolation);
+        HttpPost post = new HttpPost(PathSetting.urlDS4M_notifyViolation);
 		
 
         //read file
         String violations=null;        
         try {
-			violations=Utility.readFile(pathViolationCurrent, Charset.forName("UTF-8"));
+			violations=Utility.readFile(PathSetting.pathViolationCurrent, Charset.forName("UTF-8"));
 		} catch (IOException e2) 
         {
 			e2.printStackTrace();
@@ -491,7 +487,7 @@ public class NotifyViolationTest
 		
 		try 
 		{
-			concreteBlueprint=Utility.readFile(pathCurrentBlueprint, Charset.forName("UTF-8"));
+			concreteBlueprint=Utility.readFile(PathSetting.pathCurrentBlueprint, Charset.forName("UTF-8"));
 		} catch (IOException e) 
 		{
 			System.err.println("error in reading file blueprint");
@@ -501,7 +497,7 @@ public class NotifyViolationTest
 		
 		//set up connection 
         HttpClient client = HttpClientBuilder.create().build();    
-        HttpPost post = new HttpPost(urlDS4M_addVDC);
+        HttpPost post = new HttpPost(PathSetting.urlDS4M_addVDC);
 		
         //set the body
         StringEntity params=null;

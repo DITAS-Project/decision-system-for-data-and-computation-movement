@@ -18,19 +18,16 @@
 package it.polimi.deib.ds4m.main.api;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,25 +35,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpStatus;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import it.polimi.deib.ds4m.main.Utility;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
+import it.polimi.deib.ds4m.main.configuration.PathSetting;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
-import it.polimi.deib.ds4m.main.model.dataSources.DAL;
-import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
-import it.polimi.deib.ds4m.main.model.methodsInput.DataSourceInput;
-import it.polimi.deib.ds4m.main.model.methodsInput.Method;
-import it.polimi.deib.ds4m.main.model.movement.Movement;
-import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
-import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 import it.polimi.deib.ds4m.main.movement.VDCManager;
 
 /**
@@ -84,36 +64,9 @@ public class AddVDC extends HttpServlet {
 		//retrieve concrete blueprint
 		//String concreteBlueprintJSON = request.getReader().toString(); //request.getParameter("ConcreteBlueprint");
 		String concreteBlueprintJSON = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));	
+
 		
-		
-		//retrive the movement class
-//		String movementsJSON;
-//		try {
-//			//retrieve movement classes
-//			InputStream inputstream = this.getServletConfig().getServletContext().getResourceAsStream("/WEB-INF/movementClasses.json");
-//			BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
-//			StringBuilder movementsJSONBuilder = new StringBuilder();
-//		    String line;
-//		    while ((line = reader.readLine()) != null) {
-//		    	movementsJSONBuilder.append(line);
-//		    }
-//		    reader.close();
-//		    movementsJSON = movementsJSONBuilder.toString();
-//		    
-//		}
-//		catch (IOException  e) 
-//		{
-//			String message = "AddVDC: error in loading the movement action configuration file /n" + e.getStackTrace().toString();
-//        	System.err.println(message);
-//        	response.getWriter().println(message);
-//			
-//			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-//			return;
-//		}
-		
-		
-		//questa e' assluta, mettere controllo per test, s enon funziona allora passare a webinf
-		String pathMovementJson= "/Users/mattia/git/decision-system-for-data-and-computation-movement2/testResources/configuration/DS4M_movementClasses.json";
+		String pathMovementJson= PathSetting.movementClassJson;
 		
 		 String movementsJSON=null;
 			try {
@@ -123,10 +76,34 @@ public class AddVDC extends HttpServlet {
 				
 			} catch (FileNotFoundException e1) 
 			{
-				System.out.println("bootConfigurator: error in reading the movement Classes");
-				return;
+				System.out.println("addVDC: reading from classes movement from webinf");
+				//if it fails the class path might not exists, therefore we might be in the unit test environement, try to load from web inf 
+				try {
+					//retrieve movement classes
+					InputStream inputstream = this.getServletConfig().getServletContext().getResourceAsStream("/WEB-INF/movementClasses.json");
+					BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
+					StringBuilder movementsJSONBuilder = new StringBuilder();
+				    String line;
+				    while ((line = reader.readLine()) != null) {
+				    	movementsJSONBuilder.append(line);
+				    }
+				    reader.close();
+				    movementsJSON = movementsJSONBuilder.toString();
+			    
+				}
+				catch (IOException  e) 
+				{
+					String message = "AddVDC: error in loading the movement action configuration file /n" + e.getStackTrace().toString();
+		        	System.err.println(message);
+		        	response.getWriter().println(message);
+					
+					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+					return;
+				}
+
+
 			} catch (IOException e) {
-				System.out.println("bootConfigurator: failed closing the BufferedReader for movement classes");
+				System.out.println("AddVDC: failed closing the BufferedReader for movement classes");
 			}
 		
 
@@ -143,6 +120,27 @@ public class AddVDC extends HttpServlet {
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
+		
+		
+		//create the directory structure if needed
+		new File(PathSetting.blueprints_pv).mkdirs();
+		
+		
+		System.out.println("vdc saved");
+		//once i parsed it and it is correct, i save it
+		try (PrintWriter out = new PrintWriter(PathSetting.blueprints_pv+vdc.getId()+".json")) {
+		    out.println(concreteBlueprintJSON);
+		}
+		catch (java.io.FileNotFoundException e)
+		{
+			String errMessage = "ADDVDC: failed to write the VDC json file in persistent volume";
+			System.err.println(errMessage);
+        	response.getWriter().println(errMessage);
+			
+			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			return;
+		}
+		
 		
 		//if it is not set create a collection of VDCs
 		ArrayList<VDC> VDCs;
