@@ -323,7 +323,7 @@ public class NotifyViolation extends HttpServlet {
 					}
 					
 					//update the VDC
-					VDCManager.updateVDCmovements(concreteBlueprintJSON, movementsJSON, violatedVDC);
+					VDCManager.updateVDCmovements(concreteBlueprintJSON, movementsJSON, violatedVDC); 
 				}
 				
 	        }	
