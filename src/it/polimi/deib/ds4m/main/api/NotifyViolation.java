@@ -90,7 +90,7 @@ public class NotifyViolation extends HttpServlet {
 		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
 		mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 		
-		//retrieve the application requirements
+		//retrieve the list of VDC
 		ArrayList<VDC> VDCs = (ArrayList<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
 		
 		//retrieve parameter (the list of violations)
@@ -325,7 +325,7 @@ public class NotifyViolation extends HttpServlet {
 						} catch (Exception e) 
 						{
 							System.err.println("NotifyViolation: " + e.getMessage());
-							System.err.println("NofifyViolation: skip update VDC");
+							System.err.println("NotifyViolation: skip update VDC");
 				        	response.getWriter().println("NotifyViolation: " + e.getMessage());
 							
 							response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
