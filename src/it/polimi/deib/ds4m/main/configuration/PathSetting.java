@@ -17,6 +17,8 @@ public class PathSetting
 	//path to cmovement class file
 	public final static String movementClassJson= "/etc/ditas/DS4M_movementClasses.json";
 	//public final static String movementClassJson= "/Users/mattia/git/decision-system-for-data-and-computation-movement2/testResources/configuration/DS4M_movementClasses.json";
+	public final static String movementClassWEBINFJson= "/WEB-INF/DS4M_movementClasses.json";
+	
 	
 	//path to shared, persistent volume volume
 	public final static String pv= "/var/ditas/vdm/";

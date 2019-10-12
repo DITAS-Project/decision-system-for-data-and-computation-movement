@@ -108,10 +108,10 @@ public class AddVDC extends HttpServlet {
 		}
 		else//if the volume is not mounted, i retrive it for test from web-inf folder
 		{
-
+			System.out.println("AddVDC: persistent volume for configuration not found, will load configuration from web inf");
 			try {
 				//retrieve movement classes
-				InputStream inputstream = this.getServletConfig().getServletContext().getResourceAsStream("/WEB-INF/movementClasses.json");
+				InputStream inputstream = this.getServletConfig().getServletContext().getResourceAsStream(PathSetting.movementClassWEBINFJson);
 				BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
 				StringBuilder movementsJSONBuilder = new StringBuilder();
 			    String line;
