@@ -51,6 +51,10 @@ import it.polimi.deib.ds4m.main.configuration.PathSetting;
 import it.polimi.deib.ds4m.main.model.Metric;
 import it.polimi.deib.ds4m.main.model.Violation;
 
+/**
+ * @author Mattia Salnitri
+ * this class is a set of test for notifyViolation API and addVDC API
+ */
 public class NotifyViolationTest 
 {	
 	
@@ -150,9 +154,9 @@ public class NotifyViolationTest
  			}
 
  		} catch (IOException e) {
- 			System.out.println("bootConfigurator: problem in reading the concrete blueprints");
+ 			System.out.println("NotifyViolationTest: problem in reading the concrete blueprints");
  		} catch (Exception e) {
- 			System.out.println("bootConfigurator: problem in generating the VDC: " + e.getMessage());
+ 			System.out.println("NotifyViolationTest: problem in generating the VDC: " + e.getMessage());
  		}
     	
 	}
@@ -228,6 +232,7 @@ public class NotifyViolationTest
             assertEquals(0,
             		response.getStatusLine().getStatusCode(),
             	     HttpStatus.SC_OK);
+            
 
             
         } catch (IOException e) {

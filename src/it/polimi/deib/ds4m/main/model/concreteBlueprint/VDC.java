@@ -34,7 +34,9 @@ public class VDC
 	private ArrayList<AbstractProperty> abstractProperties;
 	private ArrayList<DataSource> dataSources;
 	private String id;
-	private ArrayList<Infrastructure> resources;
+	private ArrayList<Infrastructure> infrastructures;
+	private Infrastructure currentInfrastructure;
+	
 	private  ArrayList<Method> methodsInputs;
 	private ArrayList<DAL> DALs;
 	
@@ -173,20 +175,6 @@ public class VDC
 	}
 
 	/**
-	 * @return the resources
-	 */
-	public ArrayList<Infrastructure> getResources() {
-		return resources;
-	}
-
-	/**
-	 * @param resources the resources to set
-	 */
-	public void setResources(ArrayList<Infrastructure> resources) {
-		this.resources = resources;
-	}
-
-	/**
 	 * @return the methodsInputs
 	 */
 	public ArrayList<Method> getMethodsInputs() {
@@ -212,6 +200,34 @@ public class VDC
 	 */
 	public void setDALs(ArrayList<DAL> dALs) {
 		DALs = dALs;
+	}
+
+	/**
+	 * @return the currentInfrastructure
+	 */
+	public Infrastructure getCurrentInfrastructure() {
+		return currentInfrastructure;
+	}
+
+	/**
+	 * @param currentInfrastructure the currentInfrastructure to set
+	 */
+	public void setCurrentInfrastructure(Infrastructure currentInfrastructure) {
+		this.currentInfrastructure = currentInfrastructure;
+	}
+
+	/**
+	 * @return the infrastructures
+	 */
+	public ArrayList<Infrastructure> getInfrastructures() {
+		return infrastructures;
+	}
+
+	/**
+	 * @param infrastructures the infrastructures to set
+	 */
+	public void setInfrastructures(ArrayList<Infrastructure> infrastructures) {
+		this.infrastructures = infrastructures;
 	}
 	
 	

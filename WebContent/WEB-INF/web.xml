@@ -9,25 +9,9 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  
   <listener>
-   <listener-class>
+    <listener-class>
       it.polimi.deib.ds4m.main.onLoad.BootConfigurator 
    </listener-class>
-</listener>
-  
-  <!-- 
-      <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>ROOT</web-resource-name>
-            <url-pattern>/*</url-pattern>
-        </web-resource-collection>
-
-        <user-data-constraint>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
-
-    </security-constraint>
-   -->
-   
+  </listener>
 </web-app>

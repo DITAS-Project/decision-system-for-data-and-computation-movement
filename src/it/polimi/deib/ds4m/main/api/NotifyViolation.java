@@ -55,6 +55,7 @@ import it.polimi.deib.ds4m.main.movement.GoalTreeManager;
 import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 import it.polimi.deib.ds4m.main.movement.VDCManager;
 import wiremock.com.jayway.jsonpath.PathNotFoundException;
+import wiremock.org.eclipse.jetty.server.handler.MovedContextHandler;
 
 /**
  * Servlet implementation class NotifyViolation
@@ -90,7 +91,7 @@ public class NotifyViolation extends HttpServlet {
 		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
 		mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 		
-		//retrieve the application requirements
+		//retrieve the list of VDC
 		ArrayList<VDC> VDCs = (ArrayList<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
 		
 		//retrieve parameter (the list of violations)
@@ -196,11 +197,11 @@ public class NotifyViolation extends HttpServlet {
 	    	   {
 		        	String message = "NotifyViolation: DAL not reached";
 		        	System.err.println(message);
-//		        	response.getWriter().println(message);
-//		        	
-//		        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-//		        	response.setContentType("application/json");
-//		        	return;
+		        	response.getWriter().println(message);
+		        	
+		        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		        	response.setContentType("application/json");
+		        	return;
 	    	   }
 
 	    	  
@@ -274,12 +275,32 @@ public class NotifyViolation extends HttpServlet {
 //		            e.printStackTrace();
 //		        }
 				
-				//if it's a computation movement i don't care
-				//if it's a data movement i update the existing dal
-				//if it's a data duplication i add the dal to the dal of the vdc
-				if (movement.getType().equals("DataMovement"))
+				//if it's a computation movement 
+				if (movement.getType().equals("ComputationMovement"))
 				{
-					ArrayList<DAL> DALsViolatedVDCs = violatedVDC.getDALs();
+					violatedVDC.setCurrentInfrastructure(movement.getToLinked());
+				}
+				else if (movement.getType().equals("ComputationDuplication"))
+				{
+					//add a new vdc, with a different name?
+						//deep copy VDC
+						//load the blueprint, load the classes of movement actions
+						//instantiate it calls the VDCmanager.cretaeVDC()
+						//change the current infrastructure with the one in the movement
+					//add the new VDC to the list of blueprints
+					
+					String errMessage = "NotifyViolation: ComputationDuplication not supported currently";
+					System.err.println(errMessage );
+		        	response.getWriter().println(errMessage);
+					
+					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+					return;
+				}
+				
+				//if it's a data movement i update the existing dal
+				//if it's a data duplication i add the dal to the dal of the vdc				
+				else if (movement.getType().equals("DataMovement"))
+				{
 					movement.getDalToMove().setOriginal_ip("NEW IP");
 					
 				}	
@@ -325,7 +346,7 @@ public class NotifyViolation extends HttpServlet {
 						} catch (Exception e) 
 						{
 							System.err.println("NotifyViolation: " + e.getMessage());
-							System.err.println("NofifyViolation: skip update VDC");
+							System.err.println("NotifyViolation: skip update VDC");
 				        	response.getWriter().println("NotifyViolation: " + e.getMessage());
 							
 							response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);

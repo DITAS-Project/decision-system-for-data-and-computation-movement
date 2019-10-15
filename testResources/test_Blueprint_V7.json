@@ -919,6 +919,10 @@
             "api_type":"cloudsigma",
             "keypair_id":"keypair_uuid"
          },
+        "extra_properties": {
+            "owner": "ApplicationDeveloper",
+            "ditas_default": "true"
+        },
          "resources":[]
       },
       {

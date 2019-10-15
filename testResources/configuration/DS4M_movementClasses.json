@@ -120,6 +120,28 @@
                             "value":0.3
                         }
                     ]
+            },
+            {
+                "type":"ComputationMovement",
+                "fromType":"edge",
+                "toType":"cloud",
+                "restTime":"12",
+                "positiveImpacts":["fastDataProcess"],
+                "negativeImpacts":[],
+                "transformations":[],
+                "costs":
+                    [
+                        {
+                            "type":"monetary",
+                            "unit":"dollars/MB",
+                            "value":50
+                        },
+                        {
+                            "type":"time",
+                            "unit":"ms/MB",
+                            "value":0.3
+                        }
+                    ]
             }
     ]
 }

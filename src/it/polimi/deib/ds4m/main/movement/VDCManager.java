@@ -264,6 +264,21 @@ public class VDCManager
 			throw new Exception("error in parsing the INFRASTRUCURE Section of the Blueprint");
 		}
 		
+		//set the default infrastructure th the current one
+		Infrastructure current = null;
+		for (Infrastructure inf:infrastructures)
+		{
+			if (inf.getExtra_properties().getDitas_default())
+			{
+				current=inf;
+				break;
+			}
+		}
+		
+		if (current==null)
+			throw new Exception("Cannot find the default infrastructure");
+		
+		
 		//retrieve data sources
 		JsonNode dataSourcesJSON = root.get("INTERNAL_STRUCTURE").get("Data_Sources");
 		if (dataSourcesJSON ==null)
@@ -370,7 +385,8 @@ public class VDCManager
 		vdc.setDataSources(dataSources);
 		vdc.setMovements(instantiatedMovements);
 		vdc.connectAbstractProperties();
-		vdc.setResources(infrastructures);
+		vdc.setInfrastructures(infrastructures);
+		vdc.setCurrentInfrastructure(current);
 		vdc.setId(vdcName);
 		vdc.setMethodsInputs(methodsInputs);
 		vdc.setDALs(DALsArrayList);
