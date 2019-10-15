@@ -38,6 +38,7 @@ public class PathSetting
 	//public final static String URLSDS4M_setUp = "http://31.171.247.162:50003/SetUp";
 	public final static String urlDS4M_RemoveVDC = "http://localhost:8080/ROOT/v2/RemoveVDC";
 	public final static String urlDS4M_RemoveAllVDC = "http://localhost:8080/ROOT/v2/RemoveAllVDC";
+	public final static String urlDS4M_GetVDCInfo = "http://localhost:8080/ROOT/v2/GetVDCInfo";
 	
 	//*URLS for tests
 	//paths to blueprint and violations

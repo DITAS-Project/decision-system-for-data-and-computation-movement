@@ -31,6 +31,7 @@ public class Infrastructure
 	private String name;
 	private String type;//cloud edge
 	//private ArrayList<Characteristic> characteristics;
+	private ExtraPropertiesInfrastructure  extra_properties;
 	
 	@JsonIgnore
 	private Boolean isDataSource = false;
@@ -114,6 +115,18 @@ public class Infrastructure
             append(isDataSource).
             toHashCode();
     }
+	/**
+	 * @return the extra_properties
+	 */
+	public ExtraPropertiesInfrastructure getExtra_properties() {
+		return extra_properties;
+	}
+	/**
+	 * @param extra_properties the extra_properties to set
+	 */
+	public void setExtra_properties(ExtraPropertiesInfrastructure extra_properties) {
+		this.extra_properties = extra_properties;
+	}
 
 
 }
