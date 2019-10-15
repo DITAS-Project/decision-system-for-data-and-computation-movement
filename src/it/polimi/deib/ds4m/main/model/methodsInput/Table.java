@@ -1,12 +1,15 @@
 package it.polimi.deib.ds4m.main.model.methodsInput;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Table {
-	
+public class Table implements Serializable
+{
+
+	private static final long serialVersionUID = 5404781628373855590L;
 	private String table_id;
 	private ArrayList<Column> columns;
 

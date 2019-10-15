@@ -1,11 +1,11 @@
 package it.polimi.deib.ds4m.main.model.methodsInput;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-public class Method {
+public class Method implements Serializable {
 	
+	private static final long serialVersionUID = 2746658122122576097L;
 	private String method_id;	
 	private ArrayList<DataSourceInput> dataSources;
 

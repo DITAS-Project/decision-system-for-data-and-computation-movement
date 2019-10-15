@@ -17,10 +17,13 @@
  */
 package it.polimi.deib.ds4m.main.model.movement;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Transformation 
+public class Transformation implements Serializable 
 {
+	private static final long serialVersionUID = 120514704067320285L;
+
 	private String type;
 	
 	private ArrayList<String> positiveImpacts;

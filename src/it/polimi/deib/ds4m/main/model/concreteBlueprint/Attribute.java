@@ -17,12 +17,15 @@
  */
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class Attribute 
+public class Attribute implements Serializable 
 {
+	private static final long serialVersionUID = -8152777356610526895L;
+	
 	private String id;
 	private String description;
 	private String type;

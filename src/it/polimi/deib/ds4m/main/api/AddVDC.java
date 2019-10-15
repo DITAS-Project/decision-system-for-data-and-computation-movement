@@ -20,10 +20,12 @@ package it.polimi.deib.ds4m.main.api;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -132,6 +134,37 @@ public class AddVDC extends HttpServlet {
 		
 		//add the VDC
 		VDCs.add(vdc);
+		
+		
+		//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
+		if ((new File(PathSetting.pv)).exists())
+		{		
+			//create the directory structure if needed
+			new File(PathSetting.statusSerialize_pv).mkdirs();
+			
+			//save VDCs list
+			ObjectOutputStream oos = null;
+			FileOutputStream fout = null;
+			try{
+			    fout = new FileOutputStream(PathSetting.statusSerializeSer, false);
+			    oos = new ObjectOutputStream(fout);
+			    oos.writeObject(VDCs);
+			} catch (Exception ex) 
+			{
+			    ex.printStackTrace();
+			} finally 
+			{
+			    if(oos != null){
+			        oos.close();
+			    } 
+			}
+		}
+		else
+		{
+			System.err.println("AddVdc: folder "+PathSetting.pv+" does not exists, status not saved");
+		}
+	
+		
 		
 		response.setStatus(HttpStatus.SC_OK);
 		response.setContentType("application/json");

@@ -18,19 +18,20 @@
 package it.polimi.deib.ds4m.main.model.dataSources;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import it.polimi.deib.ds4m.main.model.resources.Characteristic;
 import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DataSource 
+public class DataSource implements Serializable
 {
+
+	private static final long serialVersionUID = 3412112704137751040L;
 	private String id;
 	private String type;
 	private String classDataSource;

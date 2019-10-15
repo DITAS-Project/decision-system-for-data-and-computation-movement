@@ -17,9 +17,12 @@
  */
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
+import java.io.Serializable;
 
-public class DataManagement 
+public class DataManagement implements Serializable
 {
+	private static final long serialVersionUID = -6877662954239747722L;
+	
 	String method_id;
 	Attributes attributes;
 	/**

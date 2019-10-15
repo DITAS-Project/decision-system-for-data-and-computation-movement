@@ -17,13 +17,16 @@
  */
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Attributes 
+public class Attributes  implements Serializable
 {
+	private static final long serialVersionUID = 2447760511181174657L;
+	
 	ArrayList<Attribute> dataUtility;
 	//ArrayList<Attribute> security;//TODO fix array
 	//ArrayList<Attribute> privacy;//commented because the value of attribute is a list

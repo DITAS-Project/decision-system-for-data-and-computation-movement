@@ -17,6 +17,7 @@
  */
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,8 +28,10 @@ import it.polimi.deib.ds4m.main.model.methodsInput.Method;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 
-public class VDC 
+public class VDC implements Serializable
 {	
+	private static final long serialVersionUID = 3890941145555125425L;
+	
 	//vector of requirements
 	private ArrayList<DataManagement> dataManagement;
 	private ArrayList<AbstractProperty> abstractProperties;

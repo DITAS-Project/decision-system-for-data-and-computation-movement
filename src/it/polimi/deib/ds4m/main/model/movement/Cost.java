@@ -17,19 +17,20 @@
  */
 package it.polimi.deib.ds4m.main.model.movement;
 
+import java.io.Serializable;
+
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class Cost 
+public class Cost implements Serializable
 {
+
+	private static final long serialVersionUID = 1478691478418671279L;
 	private String type;
 	private String unit;
 	private double value;
 	
-	
 	public Cost() 
-	{
-		
-	}
+	{}
 	
 	
 	public Cost(String type, String unit, double value) 

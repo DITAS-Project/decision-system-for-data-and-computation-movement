@@ -2,11 +2,13 @@ package it.polimi.deib.ds4m.main.onLoad;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,10 +44,36 @@ public class BootConfigurator implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 
-		//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
-		if ((new File(PathSetting.pv)).exists())
+		if ((new File(PathSetting.statusSerializeSer)).exists())
 		{
-			System.out.println("bootConfigurator: Importing concrete blueprints");
+			System.out.println("BootConfigurator: importing vdc settings and status");
+			try
+	        {    
+	            // Reading the object from a file 
+	            FileInputStream file = new FileInputStream(PathSetting.statusSerializeSer); 
+	            ObjectInputStream in = new ObjectInputStream(file); 
+	              
+	            // Method for deserialization of object 
+	            ArrayList<VDC> VDCs = (ArrayList<VDC>)in.readObject(); 
+	              
+	            in.close(); 
+	            file.close(); 
+
+	        } 
+	        catch(IOException ex) 
+	        { 
+	            System.out.println("IOException is caught"); 
+	        } 
+	          
+	        catch(ClassNotFoundException ex) 
+	        { 
+	            System.out.println("ClassNotFoundException is caught"); 
+	        } 
+		} 
+		//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
+		else if ((new File(PathSetting.pv)).exists())
+		{
+			System.out.println("BootConfigurator: Importing concrete blueprints");
 	
 			// create the array of VDC
 			ArrayList<VDC> VDCs;
@@ -61,15 +89,15 @@ public class BootConfigurator implements ServletContextListener {
 					movementClassesJSONBR.close();
 		
 				} catch (FileNotFoundException e1) {
-					System.err.println("bootConfigurator: error in reading the movement Classes");
+					System.err.println("BootConfigurator: error in reading the movement Classes");
 					return;
 				} catch (IOException e) {
-					System.err.println("bootConfigurator: failed closing the BufferedReader for movement classes");
+					System.err.println("BootConfigurator: failed closing the BufferedReader for movement classes");
 				}
 			}
 			else//if the volume is not mounted, i skip the boot load
 			{
-				System.err.println("bootConfigurator: folder "+PathSetting.pv+" does not exists, concrete blueprints not loaded");
+				System.err.println("BootConfigurator: folder "+PathSetting.pv+" does not exists, concrete blueprints not loaded");
 				return;
 			}
 	
@@ -86,19 +114,18 @@ public class BootConfigurator implements ServletContextListener {
 				}
 	
 			} catch (IOException e) {
-				System.out.println("bootConfigurator: problem in reading the concrete blueprints: " + e.getMessage());
+				System.out.println("BootConfigurator: problem in reading the concrete blueprints: " + e.getMessage());
 			} catch (Exception e) {
-				System.out.println("bootConfigurator: problem in generating the VDC: " + e.getMessage());
+				System.out.println("BootConfigurator: problem in generating the VDC: " + e.getMessage());
 			}
 			
-			System.out.println("imported " + blueprintsCount + " blueprints");
+			System.out.println("BootConfigurator: imported " + blueprintsCount + " blueprints");
 		}
 		else
 		{
-			System.err.println("bootConfigurator: folder "+PathSetting.pv+" does not exists, concrete blueprints not loaded");
+			System.err.println("BootConfigurator: folder "+PathSetting.pv+" does not exists, concrete blueprints not loaded");
 		}
 
-		System.out.println("importing vdc settings and status");
 
 	}
 

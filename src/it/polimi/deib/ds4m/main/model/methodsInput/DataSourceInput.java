@@ -1,5 +1,6 @@
 package it.polimi.deib.ds4m.main.model.methodsInput;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -8,8 +9,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DataSourceInput {
+public class DataSourceInput implements Serializable
+{
 	
+	private static final long serialVersionUID = -6606936309196932674L;
 	public String dataSource_id;
 	@JsonIgnore
 	private DataSource dataSource=null;

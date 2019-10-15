@@ -17,8 +17,12 @@
  */
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
-public class GoalTrees 
+import java.io.Serializable;
+
+public class GoalTrees implements Serializable
 {
+
+	private static final long serialVersionUID = 5687787318067164794L;
 	TreeStructure dataUtility;
 	TreeStructure security;
 	TreeStructure privacy;

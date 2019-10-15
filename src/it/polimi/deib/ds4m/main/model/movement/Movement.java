@@ -17,6 +17,7 @@
  */
 package it.polimi.deib.ds4m.main.model.movement;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,8 +26,9 @@ import it.polimi.deib.ds4m.main.model.dataSources.DAL;
 import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class Movement 
+public class Movement implements Serializable
 {
+	private static final long serialVersionUID = -453139816550873541L;
 	private String type; //DataMovement,DataDuplication, ComputationMovement, ComputationDuplication
 	private String fromType;//cloud/edge
 	private String toType;//cloud/esdge

@@ -1,10 +1,13 @@
 package it.polimi.deib.ds4m.main.model.resources;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ExtraPropertiesInfrastructure 
+public class ExtraPropertiesInfrastructure implements Serializable 
 {
+	private static final long serialVersionUID = -6493757737293325163L;
 	//true if it is the first infrastructure where the VDC is deployed
 	private Boolean ditas_default;
 

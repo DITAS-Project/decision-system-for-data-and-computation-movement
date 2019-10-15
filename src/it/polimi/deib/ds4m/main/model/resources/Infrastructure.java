@@ -17,6 +17,7 @@
  */
 package it.polimi.deib.ds4m.main.model.resources;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,9 +26,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Infrastructure 
+public class Infrastructure implements Serializable
 {
-	
+	private static final long serialVersionUID = 7239433682393186493L;
 	private String name;
 	private String type;//cloud edge
 	//private ArrayList<Characteristic> characteristics;

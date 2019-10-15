@@ -17,8 +17,12 @@
  */
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
-public class AbstractProperty 
+import java.io.Serializable;
+
+public class AbstractProperty implements Serializable 
 {
+	private static final long serialVersionUID = -3843155824279862029L;
+	
 	String method_id;
 	GoalTrees goalTrees;
 	/**

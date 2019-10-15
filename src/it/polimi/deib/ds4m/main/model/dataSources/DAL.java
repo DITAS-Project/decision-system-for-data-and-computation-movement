@@ -1,13 +1,15 @@
 package it.polimi.deib.ds4m.main.model.dataSources;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DAL 
+public class DAL implements Serializable
 {
+	private static final long serialVersionUID = 8797394367743432926L;
 	private String original_ip;
 	private Infrastructure position;
 	private ArrayList<DataSource> dataSources;

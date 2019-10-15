@@ -18,6 +18,8 @@ public class PathSetting
 	public final static String movementClassJson= "/etc/ditas/DS4M_movementClasses.json";
 	//public final static String movementClassJson= "/Users/mattia/git/decision-system-for-data-and-computation-movement2/testResources/configuration/DS4M_movementClasses.json";
 	public final static String movementClassWEBINFJson= "/WEB-INF/DS4M_movementClasses.json";
+	//path to folder that contains serialized status 
+		public final static String statusSerializeSer= "/var/ditas/vdm/DS4M/status/status.ser";
 	
 	
 	//path to shared, persistent volume volume
@@ -29,6 +31,9 @@ public class PathSetting
 	//path to concrete blueprint folder
 	public final static String blueprints_pv= "/var/ditas/vdm/DS4M/blueprints/";
 	//public final static String blueprints_pv="/Users/mattia/git/decision-system-for-data-and-computation-movement2/testResources/pvTest/DS4M/blueprints";
+	
+	//path to folder that contains serialized status 
+	public final static String statusSerialize_pv= "/var/ditas/vdm/DS4M/status/";
 	
 	
 	//***URLS 

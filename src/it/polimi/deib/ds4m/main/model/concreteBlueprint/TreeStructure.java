@@ -17,6 +17,7 @@
  */
 package it.polimi.deib.ds4m.main.model.concreteBlueprint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -26,9 +27,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @JsonIgnoreProperties(value = { "attributesLinked" })
-public class TreeStructure 
+public class TreeStructure  implements Serializable
 {
 	
+	private static final long serialVersionUID = 3205680962179501758L;
 	//tree structure
 	String type;//type of decoposition
 	ArrayList<TreeStructure> leaves; //the leaves of the goal
