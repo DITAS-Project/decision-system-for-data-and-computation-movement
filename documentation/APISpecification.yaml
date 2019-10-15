@@ -410,6 +410,25 @@ paths:
         200:
           description: "Input processed correctly"
 
+  /v2/GetVDCInfo/{id}:
+    post:
+      summary: "Gei VDC information"
+      description: "The method receives in input an ID of a VDC and returns the infrastructure wher it is executed."
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          minimum: 1
+          description: the ID of the VDC
+      produces:
+      - "application/json"
+      responses:
+        500:
+          description: "Internal error"
+        200:
+          description: "Input processed correctly"
+
 definitions:        
   violations:
     type: "array"
