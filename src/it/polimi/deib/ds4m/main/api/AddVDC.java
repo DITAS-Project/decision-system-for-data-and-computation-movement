@@ -77,22 +77,18 @@ public class AddVDC extends HttpServlet {
 		
 		String VDCID=request.getHeader("VDCID");
 		
-//		//retrieve vdc id from parameter
-//		String VDCID = request.getParameter("VDCID");
-//		System.out.println("VDC id: "+VDCID);
-//		
-//		//if the VDC already exists the skip it
-//		for (VDC vdc : VDCs)
-//		{
-//			if (vdc.getId().equals(VDCID))
-//			{
-//				response.getWriter().println("AddVDC: VDC already present, ignored");
-//				response.setStatus(HttpStatus.SC_OK);
-//				response.setContentType("application/json");
-//				return;
-//			}
-//				
-//		}
+		//if the VDC already exists the skip it
+		for (VDC vdc : VDCs)
+		{
+			if (vdc.getId().equals(VDCID))
+			{
+				response.getWriter().println("AddVDC: VDC already present, ignored");
+				response.setStatus(HttpStatus.SC_OK);
+				response.setContentType("application/json");
+				return;
+			}
+				
+		}
 		
 		String concreteBlueprintJSON = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));	
 

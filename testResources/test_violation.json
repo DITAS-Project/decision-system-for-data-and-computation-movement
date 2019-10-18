@@ -1,6 +1,6 @@
 [
 	{
-		"vdcId": "osr_hospital_vdc",
+		"vdcId": "VDC_2",
 		"methodId": "getAllValuesForBloodTestComponent",
 		"metrics": [
 			{
