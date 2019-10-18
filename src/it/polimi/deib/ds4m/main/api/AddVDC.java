@@ -100,7 +100,7 @@ public class AddVDC extends HttpServlet {
 		{
 			System.err.println("AddVDC: " + e.getMessage());
         	response.getWriter().println("AddVDC: " + e.getMessage());
-			
+			 
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
