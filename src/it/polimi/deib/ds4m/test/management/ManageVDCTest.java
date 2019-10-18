@@ -131,6 +131,7 @@ public class ManageVDCTest {
 	{
 		//*** set up other VDC ( it takes the complete one, not necessary)
 		VDC vdc = ManageMovementsActionsTest.setUpVDC();
+		vdc.setId("VDC_2");
 
 		
 		//create a collection of vdcs

@@ -368,6 +368,8 @@ public class NotifyViolation extends HttpServlet {
 	        }	
 
 	        
+	        
+	        
 	        //set answer status to trigger of violations
 	        response.setStatus(HttpStatus.SC_OK);
 	        response.setContentType("application/json");

@@ -203,16 +203,9 @@ public class VDCManager
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			
-//			String message = ;
-//        	System.err.println(message);
-        	
         	throw new Exception("error in reading the tree of the Blueprint");
-        	
-        	//response.getWriter().println(message);
-			//response.setStatus(HttpStatus.SC_BAD_REQUEST);
-        	
 		}
+		
 		
 		//retrieve DATA MANAGEMENT
 		JsonNode dataManagementJson = root.get("DATA_MANAGEMENT");
@@ -238,42 +231,72 @@ public class VDCManager
 		{
 			throw new Exception("the ABSTRACT PROPERTIES Section of the Blueprint is empty");	
 		}
+		
 		ArrayList<AbstractProperty> abstractProperties; 
 		try {
 			abstractProperties = new ArrayList<AbstractProperty>(Arrays.asList(mapper.treeToValue(abstractPropertiesJson, AbstractProperty[].class)));
 		}
-		
 		catch (JsonProcessingException e) 
 		{
 			throw new Exception("error in parsing the ABSTRACT PROPERTIES Section of the Blueprint" + e.getStackTrace().toString());
 		}
 		
 		//retrieve resources (infrastucture)
-		JsonNode infrastructureJSON = root.get("COOKBOOK_APPENDIX").get("infrastructure");
+		JsonNode infrastructureJSON = root.get("COOKBOOK_APPENDIX").get("Deployment").get("infrastructures");
 		if (infrastructureJSON ==null)
 		{
 			throw new Exception("the INFRASTRUCURE Section of the Blueprint is empty");
 		}
 		
 		ArrayList<Infrastructure> infrastructures;
+		
+//previous version for "resource part without a map in JSON"
+//////
+//		try {
+//			
+//			infrastructures = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(infrastructureJSON, Infrastructure[].class)));
+//			
+//		}
+//		catch (JsonProcessingException e) 
+//		{
+//			throw new Exception("error in parsing the INFRASTRUCURE Section of the Blueprint");
+//		}
+//		catch (Exception e) 
+//		{
+//			e.printStackTrace();
+//			throw new Exception("error in parsing the INFRASTRUCURE Section of the Blueprint");
+//		}
+
+		
+		Map<String,Infrastructure> infrastructuresMap;
 		try {
-			infrastructures = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(infrastructureJSON, Infrastructure[].class)));
+			TypeReference<HashMap<String, Infrastructure>> typeRef = new TypeReference<HashMap<String, Infrastructure>>() {};
+			infrastructuresMap =mapper.readValue(
+				    mapper.treeAsTokens(infrastructureJSON), 
+				    mapper.getTypeFactory().constructType(typeRef));
+
 		}
 		catch (JsonProcessingException e) 
 		{
-			throw new Exception("error in parsing the INFRASTRUCURE Section of the Blueprint");
+			throw new Exception("error in parsing the Infrastructure Section of the Blueprint");
 		}
 		
-		//set the default infrastructure th the current one
+		//create the array list with the infrastructures
+		infrastructures = new ArrayList<Infrastructure>();
+		for (Infrastructure infra: infrastructuresMap.values())
+			infrastructures.add(infra);
+		
+		//set the default infrastructure the current one
 		Infrastructure current = null;
 		for (Infrastructure inf:infrastructures)
 		{
-			if (inf.getExtra_properties().getDitas_default())
+			if (inf.getExtra_properties().getDitas_default()!=null && inf.getExtra_properties().getDitas_default())
 			{
 				current=inf;
 				break;
 			}
 		}
+
 		
 		if (current==null)
 			throw new Exception("Cannot find the default infrastructure");
@@ -309,6 +332,7 @@ public class VDCManager
 			throw new Exception("error in parsing the Methods_Input Section of the Blueprint");
 		}
 		
+		
 		//link data source in method input with data sources already retrieved in the blueprint
 		try {
 			//for each method in the method input
@@ -325,7 +349,6 @@ public class VDCManager
 		{
 			throw new Exception(" the ids in methods input does not match the id in data source: " + e.getMessage());
 		}
-		
 		
 		//retrive DALs
 		JsonNode DALsJSON = root.get("INTERNAL_STRUCTURE").get("DAL_Images");
@@ -356,8 +379,6 @@ public class VDCManager
 			DALsArrayList.add(DAL);
 		}
 		
-		
-		
 	    //retrieve VDC name
 		JsonNode vdcNameJSON = root.get("INTERNAL_STRUCTURE").get("Overview").get("name");
 		String vdcName;
@@ -368,7 +389,6 @@ public class VDCManager
 		{
 			throw new Exception("error in parsing the NAME Section of the Blueprint" + e.getStackTrace().toString());
 		}
-	
 		
 	    //instantiate movement classes for each data source
 		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(infrastructures,movementsJSON,DALsArrayList); 
@@ -421,7 +441,7 @@ public class VDCManager
 		}
 		
 		//retrieve resources (infrastucture)
-		JsonNode infrastructureJSON = root.get("COOKBOOK_APPENDIX").get("infrastructure");
+		JsonNode infrastructureJSON = root.get("COOKBOOK_APPENDIX").get("Resources").get("infrastructures");
 		if (infrastructureJSON ==null)
 		{
 			throw new Exception("the INFRASTRUCURE Section of the Blueprint is empty");
@@ -436,8 +456,6 @@ public class VDCManager
 			throw new Exception("error in parsing the INFRASTRUCURE Section of the Blueprint");
 		}
 		
-
-		
 	    //instantiate movement classes for each data source
 		ArrayList<Movement> instantiatedMovements = MovementsActionsManager.instantiateMovementActions(infrastructures,movementsJSON,vdc.getDALs()); 
 	    if (instantiatedMovements==null)
@@ -445,9 +463,9 @@ public class VDCManager
 	    	throw new Exception("error in instantiating the data movement actions");
 	    }
 
-	    
 		//update up vdc
 		vdc.setMovements(instantiatedMovements);
+
 
 	}
 	

@@ -31,6 +31,7 @@ public class Infrastructure implements Serializable
 	private static final long serialVersionUID = 7239433682393186493L;
 	private String name;
 	private String type;//cloud edge
+	private String id;
 	//private ArrayList<Characteristic> characteristics;
 	private ExtraPropertiesInfrastructure  extra_properties;
 	
@@ -127,6 +128,18 @@ public class Infrastructure implements Serializable
 	 */
 	public void setExtra_properties(ExtraPropertiesInfrastructure extra_properties) {
 		this.extra_properties = extra_properties;
+	}
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
 	}
 
 

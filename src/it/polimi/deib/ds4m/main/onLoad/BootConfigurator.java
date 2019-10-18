@@ -6,22 +6,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-
-import org.apache.http.HttpStatus;
 
 import it.polimi.deib.ds4m.main.Utility;
 import it.polimi.deib.ds4m.main.configuration.PathSetting;
@@ -43,7 +34,7 @@ public class BootConfigurator implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
-
+		
 		if ((new File(PathSetting.statusSerializeSer)).exists())
 		{
 			System.out.println("BootConfigurator: importing vdc settings and status");
@@ -56,6 +47,9 @@ public class BootConfigurator implements ServletContextListener {
 	            // Method for deserialization of object 
 	            ArrayList<VDC> VDCs = (ArrayList<VDC>)in.readObject(); 
 	              
+	            //set the list of loaded VDCs in the servlet context
+	            arg0.getServletContext().setAttribute("VDCs", VDCs);
+	            
 	            in.close(); 
 	            file.close(); 
 
@@ -73,10 +67,10 @@ public class BootConfigurator implements ServletContextListener {
 		//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
 		else if ((new File(PathSetting.pv)).exists())
 		{
-			System.out.println("BootConfigurator: Importing concrete blueprints");
+			System.out.println("BootConfigurator: status file does not exists, importing concrete blueprints");
 	
 			// create the array of VDC
-			ArrayList<VDC> VDCs;
+			ArrayList<VDC> VDCs= new ArrayList<VDC>();
 	
 			// read the JSON of movement action classes
 			//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
@@ -106,12 +100,18 @@ public class BootConfigurator implements ServletContextListener {
 			int blueprintsCount=0;
 			
 			try {
+				
 				listBlueprints = Utility.listFilesUsingFileWalk(PathSetting.blueprints_pv, 1);
 	
 				for (String blueprint : listBlueprints) {
-					VDCManager.loadConcreteBlueprint(blueprint);
+					String concreteBlueprintJSON = VDCManager.loadConcreteBlueprint(blueprint);
+					VDC vdc = VDCManager.createVDC(concreteBlueprintJSON, movementsJSON);
+					VDCs.add(vdc);
 					blueprintsCount++;
 				}
+				
+	            //set the list of loaded VDCs in the servlet context
+	            arg0.getServletContext().setAttribute("VDCs", VDCs);
 	
 			} catch (IOException e) {
 				System.out.println("BootConfigurator: problem in reading the concrete blueprints: " + e.getMessage());

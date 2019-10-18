@@ -42,6 +42,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.Utility;
+import it.polimi.deib.ds4m.main.configuration.PathSetting;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
@@ -61,8 +62,8 @@ public class ManageMovementsActionsTest
 	
 	//paths to blueprint and violations
 	//private static String pathCorrectBlueprint="./testResources/test_Blueprint_V6_correct.json";
-	private static String pathCorrectBlueprint="./testResources/test_Blueprint_V7.json";
-	private static String pathCorrectMovementClasses="./testResources/configuration/DS4M_movementClasses.json";
+	//private static String pathCorrectBlueprint="./testResources/test_Blueprint_V7.json";
+	//private static String pathCorrectMovementClasses="./testResources/configuration/DS4M_movementClasses.json";
 	
 	/**
 	 * 
@@ -78,7 +79,7 @@ public class ManageMovementsActionsTest
 		
 		try 
 		{
-			concreteBlueprintJSON=Utility.readFile(pathCorrectBlueprint, Charset.forName("UTF-8"));
+			concreteBlueprintJSON=Utility.readFile(PathSetting.pathCorrectBlueprint, Charset.forName("UTF-8"));
 			
 		} catch (IOException e) 
 		{
@@ -168,7 +169,7 @@ public class ManageMovementsActionsTest
 
 		
 		//retrieve movement classes
-	    String movementsJSON = Utility.readFile(pathCorrectMovementClasses, Charset.forName("UTF-8"));
+	    String movementsJSON = Utility.readFile(PathSetting.pathCorrectMovementActions, Charset.forName("UTF-8"));
 	    
 	    //instantiate movement classes for each data source 
 	    ArrayList<Movement> movements = MovementsActionsManager.instantiateMovementActions(infrastructures,movementsJSON,DALsArrayList);
@@ -394,7 +395,7 @@ public class ManageMovementsActionsTest
 				
 				try 
 				{
-					concreteBlueprintJSON=Utility.readFile(pathCorrectBlueprint, Charset.forName("UTF-8"));
+					concreteBlueprintJSON=Utility.readFile(PathSetting.pathCorrectBlueprint, Charset.forName("UTF-8"));
 					
 				} catch (IOException e) 
 				{
@@ -405,7 +406,7 @@ public class ManageMovementsActionsTest
 				//store info
 			    String movementsJSON;
 				try {
-					movementsJSON = Utility.readFile(pathCorrectMovementClasses, Charset.forName("UTF-8"));
+					movementsJSON = Utility.readFile(PathSetting.pathCorrectMovementActions, Charset.forName("UTF-8"));
 				} catch (IOException e) {
 					return null;
 				}

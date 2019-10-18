@@ -1,0 +1,1618 @@
+{
+	"_id": "ac136762-66dc-4e9d-ac5b-60c6ee590193",
+    "INTERNAL_STRUCTURE": {
+        "Overview": {
+            "name": "Computation blueprints for SPART MANUFACTURING plant",
+            "description": "Computations blueprints able to get data from the 3 ESTARTA 315 FV machines working on the SPART MANUFATURING plant. Expose 3 methods.",
+            "tags": [
+                {
+                    "method_id": "GetStreamingData",
+                    "tags": [
+                        "machine",
+                        "data",
+                        "json",
+                        "stream",
+                        "streaming"
+                    ]
+                },
+                {
+                    "method_id": "GetSimplifiedDiagnostic",
+                    "tags": [
+                        "machine",
+                        "diagnostic",
+                        "anomaly detection"
+                    ]
+                },
+                {
+                    "method_id": "GetFullDiagnostic",
+                    "tags": [
+                        "machine",
+                        "diagnostic",
+                        "anomaly detection"
+                    ]
+                }
+            ]
+        },
+        "Data_Sources": [
+            {
+                "id": "MachineTimeseriesDatabase - Kelly",
+                "description": "Machine timeseries database (InfluxDB) for Kelly (HW11)",
+                "location": "edge",
+                "class": "time-series database",
+                "type": "InfluxDB",
+                "parameters": {
+                    "ip": "172.16.33.125",
+                    "port": "8086",
+                    "user": "defaultdbuser ",
+                    "password": "****",
+                    "database": "defaultdb"
+                },
+                "schema": {
+                    "TO-DO": "[Borja - To define the schema of the database. Check Javi Escartin's CSV data examples to devise the future influxDB structure]"
+                }
+            },
+            {
+                "id": "MachineTimeseriesDatabase - Slater",
+                "description": "Machine timeseries database (InfluxDB) for Slater (HW15)",
+                "location": "edge",
+                "class": "time-series database",
+                "type": "InfluxDB",
+                "parameters": {
+                    "ip": "172.16.32.215",
+                    "port": "8086",
+                    "user": "defaultdbuser ",
+                    "password": "****",
+                    "database": "defaultdb"
+                },
+                "schema": {
+                    "TO-DO": "[Borja - To define the schema of the database. Check Javi Escaqrtin's CSV data examples to devise the future influxDB structure]"
+                }
+            },
+            {
+                "id": "MachineTimeseriesDatabase - Zack",
+                "description": "Machine timeseries database (InfluxDB) for Zack (HW16)",
+                "location": "edge",
+                "class": "time-series database",
+                "type": "InfluxDB",
+                "parameters": {
+                    "ip": "172.16.33.202",
+                    "port": "8086",
+                    "user": "defaultdbuser ",
+                    "password": "****",
+                    "database": "defaultdb"
+                },
+                "schema": {
+                    "TO-DO": "[Borja - To define the schema of the database. Check Javi Escaqrtin's CSV data examples to devise the future influxDB structure]"
+                }
+            },
+            {
+                "id": "InboxStreamingAPI - Kelly",
+                "description": "In-box streaming API for Kelly served directly from the interoperability module on the smart box (HW11)",
+                "location": "edge",
+                "class": "data stream",
+                "type": "rest",
+                "parameters": {
+                    "url": "http://172.16.33.125:7888/stream?machines=XXC_MBXSLL"
+                }
+            },
+            {
+                "id": "InboxStreamingAPI - Slater",
+                "description": "In-box streaming API for Slater served directly from the interoperability module on the smart box (HW15)",
+                "location": "edge",
+                "class": "data stream",
+                "type": "rest",
+                "parameters": {
+                    "url": "http://172.16.32.215:7888/stream?machines=CMS_LJ3Z4P"
+                }
+            },
+            {
+                "id": "InboxStreamingAPI - Zack",
+                "description": "In-box streaming API for Zack served directly from the interoperability module on the smart box (HW16)",
+                "location": "edge",
+                "class": "data stream",
+                "type": "rest",
+                "parameters": {
+                    "url": "http://172.16.33.202:7888/stream?machines=CMX_LQLS26"
+                }
+            }
+        ],
+        "Methods_Input": {
+            "Methods": [
+                {
+                    "method_id": "GetStreamingData",
+                    "dataSources": [
+                        {
+                            "dataSource_id": "InboxStreamingAPI - Kelly",
+                            "tables": []
+                        },
+                        {
+                            "dataSource_id": "InboxStreamingAPI - Slater",
+                            "tables": []
+                        },
+                        {
+                            "dataSource_id": "InboxStreamingAPI - Zack",
+                            "tables": []
+                        }
+                    ]
+                },
+                {
+                    "method_id": "GetSimplifiedDiagnostic",
+                    "dataSources": [
+                        {
+                            "dataSource_id": "MachineTimeseriesDatabase - Kelly",
+                            "dataSource_type": "time-series",
+                            "database": [
+                                {
+                                    "database_id": "influxdb-kelly",
+                                    "tables": [
+                                        {
+                                            "table_id": "I_XXC_MBXSLL_AW8HY7",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_XXC_MBXSLL_FS38ZU",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_XXC_MBXSLL_UKZVHZ",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_XXC_MBXSLL_66SZ4X",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_XXC_MBXSLL_V3TRK1",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_XXC_MBXSLL_ARKS8V",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_XXC_MBXSLL_68SBRS",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "dataSource_id": "MachineTimeseriesDatabase - Slater",
+                            "dataSource_type": "time-series",
+                            "database": [
+                                {
+                                    "database_id": "influxdb-slater",
+                                    "tables": [
+                                        {
+                                            "table_id": "I_CMS_LJ3Z4P_AW8HY7",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMS_LJ3Z4P_FS38ZU",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMS_LJ3Z4P_UKZVHZ",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMS_LJ3Z4P_66SZ4X",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMS_LJ3Z4P_V3TRK1",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMS_LJ3Z4P_ARKS8V",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMS_LJ3Z4P_68SBRS",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "dataSource_id": "MachineTimeseriesDatabase - Zack",
+                            "dataSource_type": "time-series",
+                            "database": [
+                                {
+                                    "database_id": "influxdb-zack",
+                                    "tables": [
+                                        {
+                                            "table_id": "I_CMX_LQLS26_AW8HY7",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMX_LQLS26_FS38ZU",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMX_LQLS26_UKZVHZ",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMX_LQLS26_66SZ4X",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMX_LQLS26_V3TRK1",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMX_LQLS26_ARKS8V",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMX_LQLS26_68SBRS",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "method_id": "GetFullDiagnostic",
+                    "dataSources": [
+                        {
+                            "dataSource_id": "MachineTimeseriesDatabase - Kelly",
+                            "dataSource_type": "time-series",
+                            "database": [
+                                {
+                                    "database_id": "influxdb-kelly",
+                                    "tables": [
+                                        {
+                                            "table_id": "I_XXC_MBXSLL_AW8HY7",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_XXC_MBXSLL_FS38ZU",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_XXC_MBXSLL_UKZVHZ",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_XXC_MBXSLL_66SZ4X",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_XXC_MBXSLL_V3TRK1",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_XXC_MBXSLL_ARKS8V",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_XXC_MBXSLL_68SBRS",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "dataSource_id": "MachineTimeseriesDatabase - Slater",
+                            "dataSource_type": "time-series",
+                            "database": [
+                                {
+                                    "database_id": "influxdb-slater",
+                                    "tables": [
+                                        {
+                                            "table_id": "I_CMS_LJ3Z4P_AW8HY7",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMS_LJ3Z4P_FS38ZU",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMS_LJ3Z4P_UKZVHZ",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMS_LJ3Z4P_66SZ4X",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMS_LJ3Z4P_V3TRK1",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMS_LJ3Z4P_ARKS8V",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMS_LJ3Z4P_68SBRS",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "dataSource_id": "MachineTimeseriesDatabase - Zack",
+                            "dataSource_type": "time-series",
+                            "database": [
+                                {
+                                    "database_id": "influxdb-zack",
+                                    "tables": [
+                                        {
+                                            "table_id": "I_CMX_LQLS26_AW8HY7",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMX_LQLS26_FS38ZU",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMX_LQLS26_UKZVHZ",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMX_LQLS26_66SZ4X",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMX_LQLS26_V3TRK1",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMX_LQLS26_ARKS8V",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "table_id": "I_CMX_LQLS26_68SBRS",
+                                            "columns": [
+                                                {
+                                                    "column_id": "time",
+                                                    "computeDataUtility": false
+                                                },
+                                                {
+                                                    "column_id": "value",
+                                                    "computeDataUtility": false
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "DAL_Images": {
+            "streaming-dal": {
+                "internal_port": 30100,
+                "external_port": 30100,
+                "image": "153.92.30.56:5050/streaming-dal:latest",
+                "cluster_original_ips": {
+                	"spart-fog-infrastructure": "192.168.30.32",
+                	"spart-edge-infrastructure": "192.168.30.32"
+                },
+                "original_ip": "212.8.121.134"
+            },
+            "influxdb-dal-local": {
+                "internal_port": 30200,
+                "external_port": 30200,
+                "image": "153.92.30.56:5050/influxdb-dal-local:latest",
+                "cluster_original_ips": {
+                	"spart-fog-infrastructure": "192.168.30.32",
+                	"spart-edge-infrastructure": "192.168.30.32"
+                },
+                "original_ip": "212.8.121.134"
+            }
+        },
+        "VDC_Images": {
+            "caf": {
+                "internal_port": 1888,
+                "image": "153.92.30.56:5050/computation-vdc:latest"
+            }
+        },
+        "Identity_Access_Management": {
+            "jwks_uri": "",
+            "iam_endpoint": ""
+        },
+        "Testing_Output_Data": [
+            {
+                "method_id": "GetStreamingData",
+                "zip_data": "TO-DO URL to a zip file with data samples",
+                "attributes": [
+                    "machine",
+                    "group",
+                    "data"
+                ]
+            },
+            {
+                "method_id": "GetSimplifiedDiagnostic",
+                "zip_data": "TO-DO URL to a zip file with data samples"
+            },
+            {
+                "method_id": "GetFullDiagnostic",
+                "zip_data": "TO-DO URL to a zip file with data samples"
+            }
+        ]
+    },
+    "DATA_MANAGEMENT": [
+        {
+            "method_id": "GetStreamingData",
+            "attributes": {
+                "dataUtility": [
+                    {
+                        "id": "availability_95",
+                        "description": "Availability 95",
+                        "type": "Availability",
+                        "properties": {
+                            "availability": {
+                                "unit": "percentage",
+                                "minimum": 95
+                            }
+                        }
+                    },
+                    {
+                        "id": "timeliness_065",
+                        "description": "Timeliness 0.65",
+                        "type": "Timeliness",
+                        "properties": {
+                            "timeliness": {
+                                "maximum": 65,
+                                "unit": "percentage"
+                            }
+                        }
+                    },
+                    {
+                        "id": "throughtput_05",
+                        "description": "throughtput",
+                        "type": "throughtput",
+                        "properties": {
+                            "throughtput": {
+                                "minimum": 0.5,
+                                "unit": "MB/s"
+                            }
+                        }
+                    },
+                    {
+                        "id": "precision_08",
+                        "description": "Precision 0.8",
+                        "type": "Precision",
+                        "properties": {
+                            "precision": {
+                                "minimum": 0.8,
+                                "unit": "none"
+                            }
+                        }
+                    },
+                    {
+                        "id": "accuracy_09",
+                        "description": "Accuracy 0.9",
+                        "type": "Accuracy",
+                        "properties": {
+                            "accuracy": {
+                                "minimum": 90,
+                                "unit": "percentage"
+                            }
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "id": "encryption_AES128",
+                        "description": "Encryption AES 128",
+                        "type": "TransportEncryption",
+                        "properties": {
+                            "protocol": {
+                                "unit": "enum",
+                                "value": "TLS"
+                            },
+                            "algorithm": {
+                                "unit": "list",
+                                "value": [
+                                    "TLS_AES_256_GCM_SHA384",
+                                    "TLS_AES_128_GCM_SHA256",
+                                    "TLS_AES_128_CCM_8_SHA256",
+                                    "TLS_AES_128_CCM_SHA256"
+                                ]
+                            },
+                            "keyLength": {
+                                "unit": "number",
+                                "value": 128
+                            }
+                        }
+                    },
+                    {
+                        "id": "accessControl_direct",
+                        "description": "Access Control Direct",
+                        "type": "AccessControl",
+                        "properties": {
+                            "Protocol": {
+                                "value": "Direct, OAuth"
+                            }
+                        }
+                    }
+                ],
+                "privacy": []
+            }
+        },
+        {
+            "method_id": "GetSimplifiedDiagnostic",
+            "attributes": {
+                "dataUtility": [
+                    {
+                        "id": "availability_90",
+                        "description": "Availability 90",
+                        "type": "Availability",
+                        "properties": {
+                            "availability": {
+                                "unit": "percentage",
+                                "minimum": 90
+                            }
+                        }
+                    },
+                    {
+                        "id": "responseTime_2",
+                        "description": "ResponseTime 2",
+                        "type": "ResponseTime",
+                        "properties": {
+                            "responseTime": {
+                                "maximum": 2,
+                                "unit": "second"
+                            }
+                        }
+                    },
+                    {
+                        "id": "timeliness_99",
+                        "description": "Timeliness",
+                        "type": "Timeliness",
+                        "properties": {
+                            "timeliness": {
+                                "minimum": 99,
+                                "unit": "percentage"
+                            }
+                        }
+                    },
+                    {
+                        "id": "volume_1200",
+                        "description": "volume 10000",
+                        "type": "Volume",
+                        "properties": {
+                            "volume": {
+                                "value": "10000",
+                                "unit": "tuple"
+                            }
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "id": "encryption_AES128",
+                        "description": "Encryption AES 128",
+                        "type": "TransportEncryption",
+                        "properties": {
+                            "protocol": {
+                                "unit": "enum",
+                                "value": "TLS"
+                            },
+                            "algorithm": {
+                                "unit": "list",
+                                "value": [
+                                    "TLS_AES_256_GCM_SHA384",
+                                    "TLS_AES_128_GCM_SHA256",
+                                    "TLS_AES_128_CCM_8_SHA256",
+                                    "TLS_AES_128_CCM_SHA256"
+                                ]
+                            },
+                            "keyLength": {
+                                "unit": "number",
+                                "value": 128
+                            }
+                        }
+                    },
+                    {
+                        "id": "accessControl_direct",
+                        "description": "Access control Direct",
+                        "type": "AccessControl",
+                        "properties": {
+                            "Protocol": {
+                                "value": "Direct, OAuth"
+                            }
+                        }
+                    }
+                ],
+                "privacy": []
+            }
+        },
+        {
+            "method_id": "GetFullDiagnostic",
+            "attributes": {
+                "dataUtility": [
+                    {
+                        "id": "availability_99",
+                        "description": "Availability 99",
+                        "type": "Availability",
+                        "properties": {
+                            "availability": {
+                                "unit": "percentage",
+                                "minimum": 99
+                            }
+                        }
+                    },
+                    {
+                        "id": "timeliness_90",
+                        "description": "Timeliness 90",
+                        "type": "Timeliness",
+                        "properties": {
+                            "timeliness": {
+                                "minimum": 90,
+                                "unit": "percentage"
+                            }
+                        }
+                    },
+                    {
+                        "id": "volume_7776000",
+                        "description": "volume 7776000",
+                        "type": "Volume",
+                        "properties": {
+                            "volume": {
+                                "value": "7776000",
+                                "unit": "none"
+                            }
+                        }
+                    },
+                    {
+                        "id": "responseTime_4",
+                        "description": "ResponseTime 4",
+                        "type": "ResponseTime",
+                        "properties": {
+                            "responseTime": {
+                                "maximum": 4,
+                                "unit": "second"
+                            }
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "id": "encryption_AES128",
+                        "description": "Encryption AES 128",
+                        "type": "TransportEncryption",
+                        "properties": {
+                            "protocol": {
+                                "unit": "enum",
+                                "value": "TLS"
+                            },
+                            "algorithm": {
+                                "unit": "list",
+                                "value": [
+                                    "TLS_AES_256_GCM_SHA384",
+                                    "TLS_AES_128_GCM_SHA256",
+                                    "TLS_AES_128_CCM_8_SHA256",
+                                    "TLS_AES_128_CCM_SHA256"
+                                ]
+                            },
+                            "keyLength": {
+                                "unit": "number",
+                                "value": 128
+                            }
+                        }
+                    },
+                    {
+                        "id": "accessControl_direct",
+                        "description": "Access control Direct",
+                        "type": "AccessControl",
+                        "properties": {
+                            "Protocol": {
+                                "value": "Direct, OAuth"
+                            }
+                        }
+                    }
+                ],
+                "privacy": []
+            }
+        }
+    ],
+    "ABSTRACT_PROPERTIES": [
+        {
+            "method_id": "GetStreamingData",
+            "goalTrees": {
+                "dataUtility": {
+                    "type": "AND",
+                    "children": [
+                        {
+                            "type": "AND",
+                            "leaves": [
+                                {
+                                    "id": "serviceAvailable",
+                                    "description": "Service available",
+                                    "weight": 1,
+                                    "attributes": [
+                                        "availability_95"
+                                    ]
+                                },
+                                {
+                                    "id": "FastDataStreaming",
+                                    "description": "Fast data streaming",
+                                    "weight": 1,
+                                    "attributes": [
+                                        "throughtput_05"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "AND",
+                            "leaves": [
+                                {
+                                    "id": "timeliness",
+                                    "description": "Timeliness",
+                                    "weight": 1,
+                                    "attributes": [
+                                        "timeliness_065"
+                                    ]
+                                },
+                                {
+                                    "id": "consistency",
+                                    "description": "consistency",
+                                    "weight": 1,
+                                    "attributes": [
+                                        "precision_08",
+                                        "accuracy_09"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "security": {
+                    "type": "AND",
+                    "leaves": [
+                        {
+                            "id": "TrasportEncryption",
+                            "description": "Secure data trasport",
+                            "weight": 1,
+                            "attributes": [
+                                "encryption_AES128"
+                            ]
+                        },
+                        {
+                            "id": "AccessControl",
+                            "description": "Secure access",
+                            "weight": 1,
+                            "attributes": [
+                                "accessControl_direct"
+                            ]
+                        }
+                    ]
+                },
+                "privacy": {}
+            }
+        }
+    ],
+    "COOKBOOK_APPENDIX": {
+        "Resources": {
+            "name": "ideko-resources-cloudsigma",
+            "description": "IDEKO resources at Cloudsigma available to our clients",
+            "infrastructures": [
+                {
+                    "name": "infr-cloudsigma",
+                    "type": "cloud",
+                    "provider": {
+                        "api_endpoint": "https://fra.cloudsigma.com/api/2.0",
+                        "api_type": "cloudsigma",
+                        "credentials": {
+                            "username": "apps@ideko.es",
+                            "password": "J4sj3HH3vd"
+                        },
+                        "secret_id": ""
+                    },
+                    "extra_properties": {
+                        "owner": "DataAdministrator",
+                        "kubeadm_preinstalled_image": "true"
+                    },
+                    "resources": [
+                        {
+                            "name": "ideko-c1",
+                            "cpu": 4000,
+                            "ram": 4096,
+                            "disk": 40960,
+                            "drives": [
+                                {
+                                    "name": "ideko-c1-d1",
+                                    "size": 10000,
+                                    "type": "SSD"
+                                }
+                            ],
+                            "image_id": "560420b4-3f54-4670-ba1c-a8cd0b2a7f3e",
+                            "role": "master",
+                            "extra_properties": {
+                                "cloudsigma_boot_drive_type": "custom"
+                            }
+                        },
+                        {
+                            "name": "ideko-c2",
+                            "cpu": 8000,
+                            "ram": 4096,
+                            "disk": 40960,
+                            "drives": [
+                                {
+                                    "name": "ideko-c2-d1",
+                                    "size": 70000,
+                                    "type": "SSD"
+                                }
+                            ],
+                            "image_id": "560420b4-3f54-4670-ba1c-a8cd0b2a7f3e",
+                            "role": "slave",
+                            "extra_properties": {
+                                "cloudsigma_boot_drive_type": "custom"
+                            }
+                        },
+                        {
+                            "name": "ideko-c3",
+                            "cpu": 8000,
+                            "ram": 12000,
+                            "disk": 40000,
+                            "drives": [
+                                {
+                                    "name": "ideko-c3-d1",
+                                    "size": 70000,
+                                    "type": "SSD"
+                                }
+                            ],
+                            "image_id": "560420b4-3f54-4670-ba1c-a8cd0b2a7f3e",
+                            "role": "slave",
+                            "extra_properties": {
+                                "cloudsigma_boot_drive_type": "custom"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "spart-fog-infrastructure",
+                    "type": "fog",
+                    "provider": {
+                        "api_endpoint": "212.8.121.134",
+                        "api_type": "kubernetes",
+                        "credentials": {
+                            "config": {
+                                "apiVersion": "v1",
+                                "clusters": [
+                                    {
+                                        "cluster": {
+                                            "certificate-authority-data": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5RENDQWJDZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRFNU1Ea3lNREE1TVRRMU9Wb1hEVEk1TURreE56QTVNVFExT1Zvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTENlCnRyZ1k4aFBYdmVFT09PUXFpcUFmbUg5cjdvWksyR2dyaEROcEh6cFBNLzY2YU9ncktLMnlZckk4QVZuSHk2dEcKMnQ3RU1UTnpCS0lwY0dhQStSeVFOSEtYM2hQNDhEVjZFNUNDVWJPMktVcmhaQWVWaTFCU1NWRWpQK1hCYkpBNgpCTnFxaHh3bUZNV3hIOHBUeC9XWThnM1NvODUrNlhFaDlBazFwVm04MHdYOFdpY3BEOWJTNXJqZWNMdkdwM0xCCnNPdE52YlMrNFptVVp6NFlLOGg2UHExZWU1UTA4WDdEcTh5WTUzSnRxSkpibWRpZzVmQS9zekZrZE1DN3F0SC8KTTBqTU9BbTVtdFVkYXJncEs0Q3VFM2k3WktkL3J5cUY2b0pQZVExTVZhK3k2RWpFNSszaDJaNXd2N0FTWEx5dwp6Z2N4MlY2d2h3OHVNYjZ2MVhjQ0F3RUFBYU1qTUNFd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFEQXVNdEJ2TXVwOTdOT1krcFljQnFjTlhMOWYKVlN0ajd6aTcvVVFXd0pvdjRhU3lweFJETXVodHkrZXc3ZEE2M1dmRTdwUlI4ZWliUkF2NmtpclRjZWVlenRucQpBdXV4TzVhSVlTalFrYlI2VTIyRkRpeEkzYkRwb0EzbWZMQ252THZLOXBjdzAxUHRwSDI5UEdvRjlZMFlOcEx6Cm9hd2ltNWpqN0hqTllFZ3NsY2k4b0hlWnZ3b1RFWWFROWtyODUyNWRWdTJxQTBWU0tEZXFRbHhqYlBhTzRUNE0KV2dodmNTUU93Mmc1VWlyc0ZyV2RoOXVXampMbnJicEQrejFndVYzN1E0LzM0azk3NzZPcnJlQXJueVRSRzB0UAoya3U1YldRK1B5K1k5aWpBdWgwK2J0TU9QOXdhZVcwV1JSNTcvbTRSKzlkejc4TXViWWJCaDBSU2pCUT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=",
+                                            "server": "https://212.8.121.134:36443"
+                                        },
+                                        "name": "kubernetes"
+                                    }
+                                ],
+                                "contexts": [
+                                    {
+                                        "context": {
+                                            "cluster": "kubernetes",
+                                            "user": "kubernetes-admin"
+                                        },
+                                        "name": "kubernetes-admin@kubernetes"
+                                    }
+                                ],
+                                "current-context": "kubernetes-admin@kubernetes",
+                                "kind": "Config",
+                                "preferences": {},
+                                "users": [
+                                    {
+                                        "name": "kubernetes-admin",
+                                        "user": {
+                                            "client-certificate-data": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM4akNDQWRxZ0F3SUJBZ0lJQVphcXVaRzZOQ1l3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB4T1RBNU1qQXdPVEUwTlRsYUZ3MHlNREE1TVRrd09URTFNVE5hTURReApGekFWQmdOVkJBb1REbk41YzNSbGJUcHRZWE4wWlhKek1Sa3dGd1lEVlFRREV4QnJkV0psY201bGRHVnpMV0ZrCmJXbHVNSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQTBPaHJJbjUzdk1YcVFaNmcKNVFuSm1vb0YyellxcmVNbW1LdnltNkhYQmlZSHhzQ3NNM0dwaGdxbmNrWWd4d1BHQm1DdFpqS2t0MDIvOTQxWQpWUUpTSUhvd1JHdzcxcDNua3pmVEdjVkdha2EzQy9zS294NzV1NjVycnY2V1p5ZGsybnN0NXg1WEhNZHlSeW14CnpYbXFzVVBKeVhQQW5URjNLR2VRdW41MDN6WTFiVGxjdFZoaWhxZXVsL1p5c2lNNXczbXFCRFRsY21wUWE5QU8KdnRNSGw2UlNzSzhxVTlNRTJYWnJpdURlL2FsalZSL04rU09sNnFQMmVzRVplOGpYRHY5b0hXaDdYQURlcHNvdQorMUN1T21ueUpTYjRhUmc2QWJVN0R6YzB2aXFJSjJpOEwrb0dGLy9Yam9mUm42aG11WCtRQyt5ZjIyL2Q4WldlCjU1bFI4UUlEQVFBQm95Y3dKVEFPQmdOVkhROEJBZjhFQkFNQ0JhQXdFd1lEVlIwbEJBd3dDZ1lJS3dZQkJRVUgKQXdJd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFKVWFiSk51K0lBc1NENlI1YzVZMSt4ZmRwQ3psOWVBelJvQgp5c3A2RTVNMjlwSmtOUFliWFg1SWE0ZElOd0NEaEdDMTBYV2g0L2RjRjZPMGVQMFgwOWJxckNlTlBxUzU1Y3loCjZTRkVybk5SY2JsTXlXR2gxeTFHdy9hZERMRk1pQVNMNGFQZHhLUXVONzNjRWpxaEZVejFEdTdISlNDNWZFN24KRFVVRGk1dWlsRHJKZ01mQjFFT3Fta0NScElUbDFqQUd1VHRWaUF1WDc3TEdCYk9rYkhPRXJSYzBidVhsTkYxVwpyTnZTSmRMZXhJTCtkLzhEamdFQWpIblpyWDBtZm5YYjlZUzhrQ3VqQ2dHaGNhOXZjWXJJbmgvdVdGSkFxUUlGCkorSG1zTkF3dTNvblJlT3R0c2xtSUVPNisxQ2V0WCtNQk5Ua0pObWtDYzZKbnJ4U01Dbz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=",
+                                            "client-key-data": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFcEFJQkFBS0NBUUVBME9ockluNTN2TVhxUVo2ZzVRbkptb29GMnpZcXJlTW1tS3Z5bTZIWEJpWUh4c0NzCk0zR3BoZ3FuY2tZZ3h3UEdCbUN0WmpLa3QwMi85NDFZVlFKU0lIb3dSR3c3MXAzbmt6ZlRHY1ZHYWthM0Mvc0sKb3g3NXU2NXJydjZXWnlkazJuc3Q1eDVYSE1keVJ5bXh6WG1xc1VQSnlYUEFuVEYzS0dlUXVuNTAzelkxYlRsYwp0VmhpaHFldWwvWnlzaU01dzNtcUJEVGxjbXBRYTlBT3Z0TUhsNlJTc0s4cVU5TUUyWFpyaXVEZS9hbGpWUi9OCitTT2w2cVAyZXNFWmU4alhEdjlvSFdoN1hBRGVwc291KzFDdU9tbnlKU2I0YVJnNkFiVTdEemMwdmlxSUoyaTgKTCtvR0YvL1hqb2ZSbjZobXVYK1FDK3lmMjIvZDhaV2U1NWxSOFFJREFRQUJBb0lCQUVaQWtwNmo5dkkxZ0VTVwo2clo3SngvZ0lINEtaaW5aeElYODlQWWZZNmIrclFqS2pGNDBiL1RTcW1MRWNJdGNtb0JVakp0Y2xvWEtFSzlZCkNnZDBZMWZtbjBxek55QkNNN2tQUWQ5ZHR3TlFTb2d0NFBMZ0hNMWZwM2pPeHBkajZRZUwrdkRKQkRSNllkVEsKa2E5dXBkYzgyNlB5V0NqRWxMU3l0em53QXE5NCtGSnh0SXpDL3hPN1Z3dDhNZ2xQNXQ0dThDTDYvSjViQ25WZwpiVDZaRFVhQzRmUFBMbExTQTNhS0gwL3FzTVFMbkV6UCthVU8va2lvQmlXaWdGaGRkenViN1FqMTBoN0xMcnNhCjY2ajNLNVNjRUU1MkFQbE1ERWtrYU44TVRpUTRDYkVWR045elFscERCOFc4TlBMWVNZSU8wSmdoc1pBd3g5U0kKUlRjaHVoRUNnWUVBK2tBeHZ5cDR0dStSWmIrRGxJcUNlL1MxUkY1K3ROT2h6SWZmWDFwV0NsRFN1anhXdVZFMwprQzhJdmVoWlBrdmNWamdpMGhpSko0alVueEdjaXVldGNrSE1IS25rK1NEQ3N5MVhqb25uOVpPb3FDTnROM0FUCjRqS051cStzUnhPT2RIWW9Ca0RaMGhURjB3RllSbTI3UDJxWTRzeEVkT3NBZnIvUWxGNDFtZTBDZ1lFQTFiVVMKeHpuZTN1TjZxTFptYTlhTTd6aGVVRjVBQVF5NENObnR3REJMamRvREQ4eHFLbUxpNzViS2ZYREtnTjdSd0dqTgpHUzc5clVGNnl1TVcyYjdwejRtNzcyaS9ZQjdReHlzN0wvZ0R2VElhR3JDS0U5NzVZZStaeHZyc3dSUTYxS252CjhsMUZyem9HZ0YzaTgvZjc4cXhTcnlwM1pZcklDK0hvKzdqT1I1VUNnWUI1R0ZFNlFUSVN5OUNlM05LdU1XdzgKMFVoWjRpUU1HcENqNldmVXUyRUJNdVVWeTVibnEvNW9IZXBzQXlBVVBoOUw5WFFjR0ZWZU5SODJMZzZEUk9LdwpkRmh4MG1DRGtTL0dCbjNrOHFTMU9CT1g4VFNyYStlalFIVkd6alZlVzM5R3FkcHFWRDFUSkV3cDgrK2tmUHJzCkVBZ1ZUMlVjOG83Vnhyb0c0YU9zYlFLQmdRQ0lJTW1QWWt1WFN1dk5JRExwcWtjbjhvNFJQNWdoa3dwL2lPSXIKTkJoTWlYeTl5WVl1N2NLRXYxYkl4Tm9aY05YSGJIcUkraWZZL3diS3loQzZMeVFjY1MzbmVKKy9DS0lRM0hiZApQV3lVVFovWE5IRWY2ejZMcGVZY202WEg3Nnp4M2pYYitwSHk1bEZSMzN3N3o5RUxhYjFabXdGbkN4b1doNWF6CkVhdEVhUUtCZ1FEaldHaFFGT1NvSWRZTzBhYXl0bnhxM3ZLcDViSHA3d2NhZkVXb0JoMFZGKzkxbTNKQThYcTAKaWtVbDRUdFl3eXdmanFvSUs5dEdQTkthazMzVXB0QW81eWRyRnV0bzZUdEZEMVdrZHBLd2NHTStWMnQ5Tk9HdApiWFdLQlFKYngrbytwQXFzRnlTUWpmNWlYZ2JPVE4yUzA4VDkvSzNCQkJPemZRdC9yaWtieFE9PQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo="
+                                        }
+                                    }
+                                ]
+                            },
+                            "registries_secret": "docker-registries"
+                        }
+                    },
+                    "extra_properties": {
+                        "owner": "ApplicationDeveloper",
+                        "ditas_default": "true",
+                        "available_ports_range": "30000-30005"
+                    },
+                    "resources": [
+                        {
+                            "name": "spart-fog-server-1",
+                            "cpu": 1830,
+                            "ip": "212.8.121.134",
+                            "ram": 8000,
+                            "disk": 480000,
+                            "drives": [],
+                            "role": "master"
+                        }
+                    ]
+                },
+                {
+                    "name": "spart-edge-infrastructure",
+                    "type": "edge",
+                    "provider": {
+                        "api_endpoint": "212.8.121.134",
+                        "api_type": "kubernetes",
+                        "credentials": {
+                            "config": {
+                                "apiVersion": "v1",
+                                "clusters": [
+                                    {
+                                        "cluster": {
+                                            "certificate-authority-data": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5RENDQWJDZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRFNU1Ea3lNREV5TVRRek9Gb1hEVEk1TURreE56RXlNVFF6T0Zvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTUtmCmxZV2x2bTlmenJVbmV2V05TcTgrZUdicWIzMDFyaWIwTHJxaDlNTFYwdmRMYWM5V1hYMk9KM1ZZd2tocGxTbkwKaUQ0VXl1bGxDbjNKV2cvek9IcFBkeUZIam5jMEcwUjlpTFJ3Qko2bGFHcDlmQjZZemRDZ3gyRjRlVFdIVzc3QQpyamE2K1pHa1F3K0tBWTVMemJOSytjelRqM3ZOZDR2OC9HUU84a1hPZXRwcytEWk5wdk5qWmlnaVRrMTB3alY3CllsTlhZa21jOWJYK2ZrdG5nYUlRTmU1SFNMZllNcDhRRFFXV05NbkZ4NjRSNS9QeEZCbHJzVmtkZmYvams5M3YKaUFDdktqZkU5R0lBeGt4Nzlua3BYSHV6L1c2T3p4M1l6VDZOMG9NYzBJUnRXZHZtOUgyekU5VjR5SWVjakRPdQpNTHdnQ3F3Mk81bk5CQkhKekZzQ0F3RUFBYU1qTUNFd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFJdnJCRlk3RWVBVXBmZVF4MHRKWTVXU1BTK3AKaWRrcG9BSzRWVGRCN3llRU5ZY0tZSGhCNkpLelF3TytUakh4dE5Sa2JyS3FWRnk0WVhnNjZ0Q3ArSUFPK29aUwo3QWRoQ1FBWE9xYnloTjEyWmpPbVBVUnErM0ZzOE5QWE5qcnY0Um9CWmpIT1RzeUdWUEFpT2F2eWxGY0Z5WXhnCkFCelh0aDV5d0p6TlFUTGF0M2M1M2ZRRmRKOXdZcXhwOFlmRFFFYTZRZTAyaFY1ekRkanhva0I4aG9HS3htTzAKa0U2REV4NzZDSUp0YXFIelh0TUt2MUlBL1IwSEFzT0I0eldDTWsyc0oyZnl6cDdoKzhhTG9NeFlBa3kxT2RMKwpyaUdBM2NUUlpIbldWaFRHSkxsOXdnbkVib1dGK3ViM3VtQlBOODduVjlLQ3BGdTBSb05udHhoNWcwaz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=",
+                                            "server": "https://212.8.121.134:36444"
+                                        },
+                                        "name": "kubernetes"
+                                    }
+                                ],
+                                "contexts": [
+                                    {
+                                        "context": {
+                                            "cluster": "kubernetes",
+                                            "user": "kubernetes-admin"
+                                        },
+                                        "name": "kubernetes-admin@kubernetes"
+                                    }
+                                ],
+                                "current-context": "kubernetes-admin@kubernetes",
+                                "kind": "Config",
+                                "preferences": {},
+                                "users": [
+                                    {
+                                        "name": "kubernetes-admin",
+                                        "user": {
+                                            "client-certificate-data": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM4akNDQWRxZ0F3SUJBZ0lJYlorMHRLNm1tbkl3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB4T1RBNU1qQXhNakUwTXpoYUZ3MHlNREE1TVRreE1qRTBORFZhTURReApGekFWQmdOVkJBb1REbk41YzNSbGJUcHRZWE4wWlhKek1Sa3dGd1lEVlFRREV4QnJkV0psY201bGRHVnpMV0ZrCmJXbHVNSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXRTT01PaklCYnkzb0JSQWgKd0JRbzU3am9Kd3hoYTh4MGZWR0tWeGtSRlpvMjVHSVQ0RHJIaGhhb1JxRXpNUERyM2J3TWxwOFM3Mmt1S0h6Vwp6MkRtNk9JV3Z2WDFLaTVXUVl5QUxlMXI4WGRyN0JTWGFTNEhyM3RTc295dnAzTmRNbHRFaThGMU8rOGZPZVFyCmZYalNnUy9QWDhET0QwR2lLUkVOU2hBczhDU3h4NFU1YUxOMkNCNWVaM3BpSW1NTW9XbGZEN2cxZTBBRStQRkQKM2wzTnZSV2lPOWRzajJ5enl3UEp1Sk12ZWlML0pNZHIwblVlTzVFNnowbGpINzZYUmZqaVNlSFFJM0xReWNjMQpHNzVLVzVyUWVaK0JSamErVTN0V3lHSW1memVJK1FDcDVjTVFoY3hxWUpQcU5tL2VSK1RWdkRnNU5oMENTcGNxCkkxRFJGUUlEQVFBQm95Y3dKVEFPQmdOVkhROEJBZjhFQkFNQ0JhQXdFd1lEVlIwbEJBd3dDZ1lJS3dZQkJRVUgKQXdJd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFBN1dHOVRWRThVMUZaOWZTcmNNeWxJekcxWHBXa1Z6cU5UdQpGRlo4RlhpdW03ZlJZRmd2R0JKNXJhS3QwK0RqU2JRT2t2aXNpalNySFhYU2V3ZWZpcXBiZkdPYmFpQWZjZGNSCjRrM3dNSlc3R2dGZTBqbHVYeVJpdmRTbFNQRWFWKzNlWUdEbzRZVzJFV1d2OXd1eXc2eEI5cEtENkFsSDZFZGUKWXNCcTFXNUJsd2hJcG9HeWcwV0xsV2FvVi9sSHBlVlZXdXNPQVQvV2xEK04zMEtRcDc3c1V3TUQ5aXRNbERUVQpnNVZ3d21sc2FTUzJPYWpYcmo1WE9sVk9GQ2hqM0VpcFdCYTJpaDArSTk2a3FtWTJSL2M2cktsZVJ4RGs5UEorClk2YlY5akRqZVZPTG50N3hFdWpFN2JvL3Z3dTZ4dGJuTEVBWVZObGw1bjg0WXM3Zm91VT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=",
+                                            "client-key-data": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFb3dJQkFBS0NBUUVBdFNPTU9qSUJieTNvQlJBaHdCUW81N2pvSnd4aGE4eDBmVkdLVnhrUkZabzI1R0lUCjREckhoaGFvUnFFek1QRHIzYndNbHA4Uzcya3VLSHpXejJEbTZPSVd2dlgxS2k1V1FZeUFMZTFyOFhkcjdCU1gKYVM0SHIzdFNzb3l2cDNOZE1sdEVpOEYxTys4Zk9lUXJmWGpTZ1MvUFg4RE9EMEdpS1JFTlNoQXM4Q1N4eDRVNQphTE4yQ0I1ZVozcGlJbU1Nb1dsZkQ3ZzFlMEFFK1BGRDNsM052UldpTzlkc2oyeXp5d1BKdUpNdmVpTC9KTWRyCjBuVWVPNUU2ejBsakg3NlhSZmppU2VIUUkzTFF5Y2MxRzc1S1c1clFlWitCUmphK1UzdFd5R0ltZnplSStRQ3AKNWNNUWhjeHFZSlBxTm0vZVIrVFZ2RGc1TmgwQ1NwY3FJMURSRlFJREFRQUJBb0lCQVFDZHROUnErb3liSXNuRwpWclE3eXBHT3BrT2hjN3NDSXVFdEZxZ3Vpc21BR0dOQVZrL2R3dTlpUkNuQVRLc0lLa29CSksrRkYveGhheDdmCjYwa1BCdHdqMkd4YldFTmF0VHN1R01pa3MvaHVKRDVYTGRwaG5jemRNSzdnZTNLWGhPNllZRFAreGJGdlBCTGcKMFZJNEROQ2gzMkZhaWNBZU1sT2dFNU9SYnlIZzlXcU5LTk4zcnRlQ0dReFlBT2lPc1NqVHhZanZDWVNDTElBVgo2UzJzenpzeTZwU3h6VmtMR2Z0UnN4VWdIeHdNMDNtVWdPWGZKUkFYOWxRTWdQU2E3OTM4N3hyeFlQYlBEZENtCnMybWJONGV5Y1lPZmVyS2JWRjFQeG9HbHgwQmUweStpZVlOZVREN3NKQUdnVkZ4QUpyYkV5VGVyWnphd1VIZTIKNm5JUTVWaWhBb0dCQU5BTCtJNFd2cWZjeUtYZWFrSWJTTldqcGthQVg2cUR0QlRiNUlrY1NWWUFvQThBSTF4egpXeTUwQ3htS21EaFhSZHNLTWc1ZjBUQStjSUNkclB1UHR6QjdKcXk5OUlMVE5RUUx3TE1IME5WenRQUEpxV2V1CnRIRlAzNkVSOVdDaXBxZ0hmZm4yZCt6VVFIN29CQXVWRHViU0grTWpDeEo5My9JVkZwc3VuUHRwQW9HQkFON2oKMkthMHBYSWZieFlFZzhPbzVQWVNHU0NrWjJRWGxLK0VyZjRmemh2c0M0T1hYVFUxQ21oaFdOdmg3RFowcEpjZQpGZGg4MmlQVkNLbEdrRE5XMllvOTNaNTlkNVVKTUdaUTFLVzNhTHI5cTV1aTZ0b0tEQkFoYWRicng2RktoVWlGCnJ3clZjckpYdmxCdE1wR0xTWGlEcnFwTWVvN1FwanFOT1NDcVJjN05Bb0dBZVZSQjVEdUhmTVhaamtJam5lSGoKbkJRUVNGVmRkVWZSb2NpTGd4cW4raXZyTEZSY1N2SkxYcy8yR1RNbWl0VDZ2RDg1NmdBZk13OTI5TXIvc3NXaApnL2lPR1hlK1BQMkhrWkI1Rk8rZDdwM0lEZFN4b3ZIVDhiRXZMZlFYTWdBcFNSejFidTA2Q3pmTlZUVmlCbzhyClhabDFWelY4bzVBZEprVCtKZ29OS3VFQ2dZQUVsYU1yS3FRTWlPRDhEdk8yM281M0VVQTdENmFneEd0bWdOQWoKWGZ3YlR1dWR0VXRSZ05uSjg5YWtEeTJRb1MyUmZpanMzd1NOb0NBaGV6WVVHRUU1T3JTSVFnUm5xRnk2ZmdjaApzWGdTQUkyN0VjcksyVklPTXVHK2JmTVpPak1ybnJSUEFMenZOaWJQK0s4RmwxdlhncjNnK3RtNmZrZ3RCQ0tjCnJXUHFNUUtCZ0ZHd3FSRjFKY3l4dW9RYlE1cjNCaG1iWnhKVUxuWEMweCs2L1VaRUp1UUR2NmVpcE1waVl6V1gKYU9Ga2I4WXdweEZqdk1yWnVsOVRLaCt1K1pITjJ3c1J3MnQzVnNhUjAycE85c29FVGc5WEFNRytWQ1UxR2pleApxelBhQU5waDJVZGMzM2hqUVUyOU1nNlJBZk1LcmpWemF1VDdwVnd5VWRsbklDTThsbHhQCi0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg=="
+                                        }
+                                    }
+                                ]
+                            },
+                            "registries_secret": "docker-registries"
+                        }
+                    },
+                    "extra_properties": {
+                        "owner": "ApplicationDeveloper",
+                        "available_ports_range": "30006-30011"
+                    },
+                    "resources": [
+                        {
+                            "name": "spart-edge-server-1",
+                            "cpu": 1830,
+                            "ram": 4000,
+                            "ip": "212.8.121.134",
+                            "disk": 120000,
+                            "drives": [],
+                            "role": "master"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "EXPOSED_API": {
+        "openapi": "3.0.0",
+        "info": {
+            "title": "Computation blueprints for SPART MANUFACTURING plant (IDEKO use case)",
+            "description": "Computations blueprints able to get data from the 3 ESTARTA 315 FV machines working on the SPART MANUFATURING plant. Expose 3 methods.",
+            "version": "0.0.1"
+        },
+        "paths": {
+            "/GetStreamingData": {
+                "get": {
+                    "summary": "Returns the streaming data for the parameters given. MachinesIds can be a comma-separated list of machines.",
+                    "operationId": "GetStreamingData",
+                    "parameters": [
+                        {
+                            "in": "query",
+                            "name": "machines",
+                            "required": true,
+                            "schema": {
+                                "type": "string"
+                            }
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/GetStreamingDataResponse"
+                                    }
+                                },
+                                "application/octet-stream": {
+                                    "schema": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        },
+                        "default": {
+                            "description": "Unexpected error",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/ErrorResponse"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "x-data-sources": [
+                        "Streaming API"
+                    ]
+                }
+            },
+            "/GetSimplifiedDiagnostic": {
+                "get": {
+                    "summary": "Returns a simplified view of the state of the machines in the plant. A list of comma separated machine ids can be passed.",
+                    "operationId": "GetSimplifiedDiagnostic",
+                    "parameters": [
+                        {
+                            "in": "query",
+                            "name": "machines",
+                            "required": true,
+                            "schema": {
+                                "type": "string"
+                            }
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/GetSimplifiedDiagnostic"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "x-data-sources": [
+                        "InfluxDB"
+                    ]
+                }
+            },
+            "/GetFullDiagnostic": {
+                "get": {
+                    "summary": "Returns a complete view of the states of the machines in the plant. A list of comma separated machine ids can be passed.",
+                    "operationId": "GetFullDiagnostic",
+                    "parameters": [
+                        {
+                            "in": "query",
+                            "name": "machines",
+                            "required": true,
+                            "schema": {
+                                "type": "string"
+                            }
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/GetFullDiagnostic"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "x-data-sources": [
+                        "InfluxDB"
+                    ]
+                }
+            }
+        },
+        "components": {
+            "schemas": {
+                "ErrorResponse": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "integer"
+                        },
+                        "code": {
+                            "type": "integer"
+                        },
+                        "message": {
+                            "type": "string"
+                        },
+                        "link": {
+                            "type": "string"
+                        },
+                        "developerMessage": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "GetStreamingDataResponse": {
+                    "type": "object",
+                    "properties": {
+                        "machine": {
+                            "type": "string"
+                        },
+                        "group": {
+                            "type": "string"
+                        },
+                        "data": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "additionalProperties": {
+                                        "type": "integer"
+                                    },
+                                    "timestamp": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "GetSimplifiedDiagnostic": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "string",
+                            "enum": [
+                                "OK",
+                                "ALERT",
+                                "WARNING"
+                            ]
+                        },
+                        "timestamp": {
+                            "type": "number",
+                            "example": 1550584972266
+                        },
+                        "cause": {
+                            "type": "object",
+                            "properties": {
+                                "raw": {
+                                    "type": "string"
+                                },
+                                "metric": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "number"
+                                },
+                                "unit": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "GetFullDiagnostic": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "string",
+                            "enum": [
+                                "OK",
+                                "ALERT",
+                                "WARNING"
+                            ]
+                        },
+                        "timestamp": {
+                            "type": "number",
+                            "example": 1550584972266
+                        },
+                        "cause": {
+                            "type": "object",
+                            "properties": {
+                                "raw": {
+                                    "type": "string"
+                                },
+                                "metric": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "number"
+                                },
+                                "unit": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "signals": {
+                            "type": "object",
+                            "properties": {
+                                "additionalProperties": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "number"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

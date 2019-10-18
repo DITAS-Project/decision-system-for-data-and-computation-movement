@@ -208,6 +208,9 @@ public class NotifyViolationTest
         HttpClient client = HttpClientBuilder.create().build();    
         HttpPost post = new HttpPost(PathSetting.urlDS4M_addVDC);
         
+        //set the header with the name ofg the VDC
+        post.addHeader("VDCID", "VDC_2");
+        
         //set the body
         StringEntity params=null;
 		try {
@@ -504,6 +507,9 @@ public class NotifyViolationTest
         HttpClient client = HttpClientBuilder.create().build();    
         HttpPost post = new HttpPost(PathSetting.urlDS4M_addVDC);
 		
+        //set the header with the name ofg the VDC
+        post.addHeader("VDCID", "VDC_2");
+        
         //set the body
         StringEntity params=null;
 		try {

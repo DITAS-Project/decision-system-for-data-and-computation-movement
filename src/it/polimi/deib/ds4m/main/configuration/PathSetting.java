@@ -19,7 +19,7 @@ public class PathSetting
 	//public final static String movementClassJson= "/Users/mattia/git/decision-system-for-data-and-computation-movement2/testResources/configuration/DS4M_movementClasses.json";
 	public final static String movementClassWEBINFJson= "/WEB-INF/DS4M_movementClasses.json";
 	//path to folder that contains serialized status 
-		public final static String statusSerializeSer= "/var/ditas/vdm/DS4M/status/status.ser";
+	public final static String statusSerializeSer= "/var/ditas/vdm/DS4M/status/status.ser";
 	
 	
 	//path to shared, persistent volume volume
@@ -47,12 +47,13 @@ public class PathSetting
 	
 	//*URLS for tests
 	//paths to blueprint and violations
-	public final static String pathCorrectBlueprint="./testResources/test_Blueprint_V7.json"; 
+	public final static String pathCorrectBlueprint="./testResources/test_Blueprint_V8.json"; 
 	public final static String pathCorrectViolations="./testResources/test_violationCorrect.json";
+	public final static String pathCorrectMovementActions="./testResources/configuration/DS4M_movementClasses.json";
 	
     //paths to current files
 	//private String pathCurrentBlueprint="./testResources/test_Blueprint_V6_correct.json";
-	public final static String pathCurrentBlueprint="./testResources/test_Blueprint_V7.json";
+	public final static String pathCurrentBlueprint="./testResources/test_Blueprint_V8.json";
 	public final static String pathViolationCurrent="./testResources/test_violationCorrect.json";
 	
 	//*URL components

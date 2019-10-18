@@ -83,7 +83,7 @@ public class GetVDCInfo extends HttpServlet {
 			if (vdc.getId().equals(VDCid))
 			{
 				
-				response.getWriter().println(mapper.writeValueAsString(vdc.getCurrentInfrastructure().getName()));
+				response.getWriter().println(mapper.writeValueAsString(vdc.getCurrentInfrastructure().getId()));
 				response.setStatus(HttpStatus.SC_OK);
 				response.setContentType("application/json");
 				return;

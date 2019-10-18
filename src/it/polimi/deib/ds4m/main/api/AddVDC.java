@@ -63,9 +63,37 @@ public class AddVDC extends HttpServlet {
 	@SuppressWarnings("unchecked") 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException 
 	{
+		//retrieve the list of VDCs
+		//if it is not set create a collection of VDCs
+		ArrayList<VDC> VDCs;
+		if  (this.getServletConfig().getServletContext().getAttribute("VDCs") == null)
+		{
+			VDCs = new ArrayList<VDC>();
+			this.getServletConfig().getServletContext().setAttribute("VDCs", VDCs);
+		}
+		else
+			VDCs = (ArrayList<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
 		
-		//retrieve concrete blueprint
-		//String concreteBlueprintJSON = request.getReader().toString(); //request.getParameter("ConcreteBlueprint");
+		
+		String VDCID=request.getHeader("VDCID");
+		
+//		//retrieve vdc id from parameter
+//		String VDCID = request.getParameter("VDCID");
+//		System.out.println("VDC id: "+VDCID);
+//		
+//		//if the VDC already exists the skip it
+//		for (VDC vdc : VDCs)
+//		{
+//			if (vdc.getId().equals(VDCID))
+//			{
+//				response.getWriter().println("AddVDC: VDC already present, ignored");
+//				response.setStatus(HttpStatus.SC_OK);
+//				response.setContentType("application/json");
+//				return;
+//			}
+//				
+//		}
+		
 		String concreteBlueprintJSON = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));	
 
 		//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
@@ -80,6 +108,8 @@ public class AddVDC extends HttpServlet {
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
+		
+		System.out.println("ADDVDC: parsed movements");
 
 		//created a VDC from the json files
 		VDC vdc;
@@ -95,6 +125,9 @@ public class AddVDC extends HttpServlet {
 			return;
 		}
 		
+		
+		// i change the name with the name in the parameter
+		vdc.setId(VDCID);
 		
 		//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
 		if ((new File(PathSetting.pv)).exists())
@@ -121,20 +154,8 @@ public class AddVDC extends HttpServlet {
 			System.err.println("AddVdc: folder "+PathSetting.pv+" does not exists, concrete blueprint not saved");
 		}
 		
-		
-		//if it is not set create a collection of VDCs
-		ArrayList<VDC> VDCs;
-		if  (this.getServletConfig().getServletContext().getAttribute("VDCs") == null)
-		{
-			VDCs = new ArrayList<VDC>();
-			this.getServletConfig().getServletContext().setAttribute("VDCs", VDCs);
-		}
-		else
-			VDCs = (ArrayList<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
-		
 		//add the VDC
 		VDCs.add(vdc);
-		
 		
 		//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
 		if ((new File(PathSetting.pv)).exists())
