@@ -123,7 +123,8 @@ public class AddVDC extends HttpServlet {
 		
 		
 		// i change the name with the name in the parameter
-		vdc.setId(VDCID);
+		if (VDCID!=null)//this check is for test environment(integration)
+			vdc.setId(VDCID);
 		
 		//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
 		if ((new File(PathSetting.pv)).exists())

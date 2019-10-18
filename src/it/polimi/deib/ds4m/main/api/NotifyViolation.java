@@ -142,8 +142,6 @@ public class NotifyViolation extends HttpServlet {
 		        	return;
 		        }
 		        
-		        //filter dm actions that operates on data sources used by the method who generate the conflicts
-		        //NOT NEEDED?
 		        
 		        //order the dm action using a strategy
 		        MovementsActionsManager.orderMovementAction(movementsToBeEnacted, "MONETARY");
@@ -178,25 +176,32 @@ public class NotifyViolation extends HttpServlet {
 	    	  //grpc call
 	    	   String dalResourceJSON;
 	    	   
-	    	   
-	    	   try {
-		    	   ManagedChannel channel = ManagedChannelBuilder.forAddress(PathSetting.urlDAL, 50054).usePlaintext().build();
-		    	   System.out.println("change dal address to parametric");
-		    	   MetricsServiceGrpc.MetricsServiceBlockingStub stub = MetricsServiceGrpc.newBlockingStub(channel);
-		    	   GetDataSourceMetricsReply responseDAL = stub.getDataSourceMetrics(GetDataSourceMetricsRequest.newBuilder().build());
-		    	   dalResourceJSON = responseDAL.getMetrics();
-		    	   
-				   channel.shutdown();
+	    	   //if empty is it a test i skip connection with DAL
+	    	   if ( movement.getDalToMove().getOriginal_ip()!=null && (!movement.getDalToMove().getOriginal_ip().equals("")) )
+	    	   {	    		   
+		    	   try {
+			    	   //ManagedChannel channel = ManagedChannelBuilder.forAddress(PathSetting.urlDAL, 50054).usePlaintext().build();
+		    		   ManagedChannel channel = ManagedChannelBuilder.forAddress(movement.getDalToMove().getOriginal_ip(), 50054).usePlaintext().build();
+			    	   MetricsServiceGrpc.MetricsServiceBlockingStub stub = MetricsServiceGrpc.newBlockingStub(channel);
+			    	   GetDataSourceMetricsReply responseDAL = stub.getDataSourceMetrics(GetDataSourceMetricsRequest.newBuilder().build());
+			    	   dalResourceJSON = responseDAL.getMetrics();
+			    	   
+					   channel.shutdown();
+		    	   }
+		    	   catch (Exception e)
+		    	   {
+			        	String message = "NotifyViolation: DAL not reached";
+			        	System.err.println(message);
+			        	response.getWriter().println(message);
+			        	
+			        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			        	response.setContentType("application/json");
+			        	return;
+		    	   }
 	    	   }
-	    	   catch (Exception e)
+	    	   else
 	    	   {
-		        	String message = "NotifyViolation: DAL not reached";
-		        	System.err.println(message);
-		        	response.getWriter().println(message);
-		        	
-		        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-		        	response.setContentType("application/json");
-		        	return;
+	    		   System.out.println("NotifyViolation: URL dal empty, skipped connection");
 	    	   }
 
 	    	  
@@ -240,6 +245,7 @@ public class NotifyViolation extends HttpServlet {
 				
 				System.out.println(mapper.writeValueAsString(movementEnaction));
 				
+				Boolean performedCallDME = false; 
 		       
 				//System.out.println("DS4M: Violation processed, movement action enacted");
 		        
@@ -297,8 +303,9 @@ public class NotifyViolation extends HttpServlet {
 				else if (movement.getType().equals("DataMovement"))
 				{
 			        //update the moved dal with new position
-			        movement.getDalToMove().setPosition(movement.getToLinked());   
-					movement.getDalToMove().setOriginal_ip("NEW IP");
+			        movement.getDalToMove().setPosition(movement.getToLinked());  
+			        if ( performedCallDME)//add this for tests
+			        	movement.getDalToMove().setOriginal_ip("NEW IP");
 					
 				}	
 				else if (movement.getType().equals("DataDuplication"))
@@ -307,7 +314,8 @@ public class NotifyViolation extends HttpServlet {
 					DAL duplicatedDAL = new DAL();
 					duplicatedDAL.setPosition(movement.getToLinked());
 					duplicatedDAL.setDataSources(movement.getDalToMove().getDataSources());
-					duplicatedDAL.setOriginal_ip("NEW IP");
+					if ( performedCallDME)//add this for tests
+			        	duplicatedDAL.setOriginal_ip("NEW IP");
 					
 					//add dal to vdc
 					violatedVDC.getDALs().add(duplicatedDAL);
