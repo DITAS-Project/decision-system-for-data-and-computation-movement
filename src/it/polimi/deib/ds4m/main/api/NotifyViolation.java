@@ -162,15 +162,8 @@ public class NotifyViolation extends HttpServlet {
 		        }
 		        
 		        //select first data movement action	        
-		        //TODO: take the first one since they are ordered
 		        Movement movement = movementsToBeEnacted.get(0);
-		       
-		        //update the moved dal with new position
-		        movement.getDalToMove().setPosition(movement.getToLinked());
-		        
-		       
-		       //TODO differentiate between data and computation movements
-		        
+		      		        
 		       //transform the selected movement actions in element to be sent  
 	    	   MovementEnaction movementEnaction = new MovementEnaction();
 	    	   movementEnaction.importMovement(movement, violatedVDC.getMethodsInputs());
@@ -184,6 +177,8 @@ public class NotifyViolation extends HttpServlet {
 	    	   
 	    	  //grpc call
 	    	   String dalResourceJSON;
+	    	   
+	    	   
 	    	   try {
 		    	   ManagedChannel channel = ManagedChannelBuilder.forAddress(PathSetting.urlDAL, 50054).usePlaintext().build();
 		    	   System.out.println("change dal address to parametric");
@@ -301,6 +296,8 @@ public class NotifyViolation extends HttpServlet {
 				//if it's a data duplication i add the dal to the dal of the vdc				
 				else if (movement.getType().equals("DataMovement"))
 				{
+			        //update the moved dal with new position
+			        movement.getDalToMove().setPosition(movement.getToLinked());   
 					movement.getDalToMove().setOriginal_ip("NEW IP");
 					
 				}	
