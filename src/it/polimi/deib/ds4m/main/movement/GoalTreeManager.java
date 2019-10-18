@@ -121,7 +121,8 @@ public class GoalTreeManager {
 			{
 				for (Map.Entry<String, Property>  property : attribute.getProperties().entrySet())
 				{
-					if (property.getKey().toString().toLowerCase().equals(metric.getKey().toLowerCase()))//check the violation name is the same. TODO: when i will include multiple violation  before this i will need a "foreach" for each violation 
+					if (property.getKey().toString().toLowerCase().equals(metric.getKey().toLowerCase()))//check the violation name is the same. 
+						//TODO: when i will include multiple violations  before this i will need a "foreach" for each violation 
 						//i assume that if ""minimum or maximum are set then value is a number ( Double)
 						if (property.getValue().getMinimum()!=null && property.getValue().getMaximum()==null && property.getValue().getMinimum() >= Double.parseDouble(metric.getValue()))
 							violatedGoals.add(leaf);//skip duplicated goals, no problems for false positives since all properties are in AND.

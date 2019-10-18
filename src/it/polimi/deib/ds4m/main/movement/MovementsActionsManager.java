@@ -98,12 +98,16 @@ public class MovementsActionsManager
 					//set target and source
 					for (Movement movement: newMovements)
 					{
-						//TODO now I do only data movement. When I will include computation movement, I will need to differentiate between the two types
 						//computation movement:
-						//!infrastructure_target.getIsDataSource() && //if is the initial data source, it cannot be used to move data in, only to take data
 						if (movement.getType().toLowerCase().equals("computationmovement") || movement.getType().toLowerCase().equals("computationduplication") )
 						{
-							//computation movement here
+							//i create the mobvement only if both infrastructures are not dummy ( created as placeholder for original DAL)
+							if (infrastructure_target.getId()!=null && infrastrucure_source.getId()!=null)
+							{
+								movement.setFromLinked(infrastrucure_source);
+								movement.setToLinked(infrastructure_target);
+								movements.add(movement);
+							}
 						}
 						
 						
@@ -113,7 +117,6 @@ public class MovementsActionsManager
 							//for each DAL
 							for (DAL dal :DALs) 
 							{
-								//TODO
 								if (		
 										(!(infrastrucure_source.getIsDataSource()) || movement.getType().toLowerCase().equals("dataduplication")) && //if the source infrastructure is a data source, i can only duplicate from it 
 										

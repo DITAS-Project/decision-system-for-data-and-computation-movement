@@ -106,6 +106,7 @@ public class BootConfigurator implements ServletContextListener {
 				for (String blueprint : listBlueprints) {
 					String concreteBlueprintJSON = VDCManager.loadConcreteBlueprint(blueprint);
 					VDC vdc = VDCManager.createVDC(concreteBlueprintJSON, movementsJSON);
+					vdc.setId(blueprint.substring(0,blueprint.lastIndexOf(".")));
 					VDCs.add(vdc);
 					blueprintsCount++;
 				}

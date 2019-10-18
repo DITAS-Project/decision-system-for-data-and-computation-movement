@@ -126,7 +126,7 @@
                 "fromType":"edge",
                 "toType":"cloud",
                 "restTime":"12",
-                "positiveImpacts":["fastDataProcess"],
+                "positiveImpacts":["timeliness"],
                 "negativeImpacts":[],
                 "transformations":[],
                 "costs":

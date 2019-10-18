@@ -58,7 +58,7 @@ public class PathSetting
 	
 	//*URL components
 	public final static String urlDataMovementEnactor = "/dataEnactor/action";
-	public final static String urlComputationMovementEnactor = "http://localhost:8090";
+	public final static String urlComputationMovementEnactor = "http://localhost:8085";
 	public final static String urlDAL = "178.22.71.88";
 	private static final String urlDA_Resources = "http://178.22.69.180:8080/data-analytics/resources/cloudsigma-deployment/usage/";
 	

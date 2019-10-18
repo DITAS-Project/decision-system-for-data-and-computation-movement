@@ -73,9 +73,11 @@ public class MovementEnaction
 	{
 		this.from = movement.getFromLinked().getName();
 		this.to = movement.getToLinked().getName();
-		this.type = movement.getType();
-		this.DALid = movement.getDalToMove().getOriginal_ip();
+		this.type = movement.getType();		
 		this.methodsInputs=methodsInputs;
+		//If it's a computation movement there is no reference to DAL
+		if (movement.getDalToMove()!=null)
+			this.DALid = movement.getDalToMove().getOriginal_ip();
 		
 		
 		if (transformations==null)

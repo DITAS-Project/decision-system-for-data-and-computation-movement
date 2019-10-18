@@ -159,6 +159,18 @@ public class NotifyViolation extends HttpServlet {
 		        	return;
 		        }
 		        
+		        
+		        if (movementsToBeEnacted.size()==0)
+		        {
+		        	String message = "NotifyViolation: No movement actions to be enacted";
+		        	System.err.println(message);
+		        	response.getWriter().println(message);
+		        	
+		        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		        	response.setContentType("application/json");
+		        	return;
+		        }
+		        
 		        //select first data movement action	        
 		        Movement movement = movementsToBeEnacted.get(0);
 		      		        
@@ -173,64 +185,65 @@ public class NotifyViolation extends HttpServlet {
 	    	   
 	    	   System.out.println("ENABLE DAL and DA calls");
 	    	   
-	    	  //grpc call
-	    	   String dalResourceJSON;
+	    	   String dalResourceJSON=null;
 	    	   
-	    	   //if empty is it a test i skip connection with DAL
-	    	   if ( movement.getDalToMove().getOriginal_ip()!=null && (!movement.getDalToMove().getOriginal_ip().equals("")) )
-	    	   {	    		   
-		    	   try {
-			    	   //ManagedChannel channel = ManagedChannelBuilder.forAddress(PathSetting.urlDAL, 50054).usePlaintext().build();
+	    	   //i perform the call only if it is a data movement or data duplication
+	    	   if (movement.getType().equals("DataDuplication") || movement.getType().equals("DataMovement"))
+	    	   {  
+		     	   //if empty is it a test i skip connection with DAL
+		     	   if ( movement.getDalToMove().getOriginal_ip()!=null && (!movement.getDalToMove().getOriginal_ip().equals("")) )
+		     	   {	    		   
+		     		   try {
+		        	   //ManagedChannel channel = ManagedChannelBuilder.forAddress(PathSetting.urlDAL, 50054).usePlaintext().build();
 		    		   ManagedChannel channel = ManagedChannelBuilder.forAddress(movement.getDalToMove().getOriginal_ip(), 50054).usePlaintext().build();
-			    	   MetricsServiceGrpc.MetricsServiceBlockingStub stub = MetricsServiceGrpc.newBlockingStub(channel);
-			    	   GetDataSourceMetricsReply responseDAL = stub.getDataSourceMetrics(GetDataSourceMetricsRequest.newBuilder().build());
-			    	   dalResourceJSON = responseDAL.getMetrics();
-			    	   
-					   channel.shutdown();
-		    	   }
-		    	   catch (Exception e)
-		    	   {
-			        	String message = "NotifyViolation: DAL not reached";
-			        	System.err.println(message);
-			        	response.getWriter().println(message);
-			        	
-			        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-			        	response.setContentType("application/json");
-			        	return;
-		    	   }
-	    	   }
-	    	   else
-	    	   {
-	    		   System.out.println("NotifyViolation: URL dal empty, skipped connection");
-	    	   }
+		        	   MetricsServiceGrpc.MetricsServiceBlockingStub stub = MetricsServiceGrpc.newBlockingStub(channel);
+		        	   GetDataSourceMetricsReply responseDAL = stub.getDataSourceMetrics(GetDataSourceMetricsRequest.newBuilder().build());
+		        	   dalResourceJSON = responseDAL.getMetrics();
+		        	   
+		    		   channel.shutdown();
+		     		   }
+			    	   catch (Exception e)
+			    	   {
+				        	String message = "NotifyViolation: DAL not reached";
+				        	System.err.println(message);
+				        	response.getWriter().println(message);
+				        	
+				        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+				        	response.setContentType("application/json");
+				        	return;
+			    	   }
 
-	    	  
-
-	    	   //System.out.println(dalResourceJSON);
-		       
-		       //2-check if the target node/infrastructure has enough space
-		       
-	    	   //call to data analytics
-//				HttpClient client = HttpClientBuilder.create().build();
-//				HttpGet requestDA = new HttpGet(PathSetting.urlDA_Resources);
-//				   
-//				
-//				HttpResponse responseDA = client.execute(requestDA);
+		     	   }
+		     	   else
+		     	   {
+		     		   System.out.println("NotifyViolation: URL dal empty, skipped connection");
+		     	   }
+			       
+			       //2-check if the target node/infrastructure has enough space
+			       
+		    	   //call to data analytics
+//					HttpClient client = HttpClientBuilder.create().build();
+//					HttpGet requestDA = new HttpGet(PathSetting.urlDA_Resources);
+//					   
 //					
-//				System.out.println("\nSending 'GET' request to URL : " + urlDA_Resources);
-//				System.out.println("Response Code : " + 
-//						responseDA.getStatusLine().getStatusCode());
-//				
-//				BufferedReader rd = new BufferedReader(
-//				               new InputStreamReader(responseDA.getEntity().getContent()));
-//				
-//				StringBuffer result = new StringBuffer();
-//				String line = "";
-//				while ((line = rd.readLine()) != null) {
-//					result.append(line);
-//				}
-//				
-//				System.out.println(result.toString());
+//					HttpResponse responseDA = client.execute(requestDA);
+//						
+//					System.out.println("\nSending 'GET' request to URL : " + urlDA_Resources);
+//					System.out.println("Response Code : " + 
+//							responseDA.getStatusLine().getStatusCode());
+//					
+//					BufferedReader rd = new BufferedReader(
+//					               new InputStreamReader(responseDA.getEntity().getContent()));
+//					
+//					StringBuffer result = new StringBuffer();
+//					String line = "";
+//					while ((line = rd.readLine()) != null) {
+//						result.append(line);
+//					}
+//					
+//					System.out.println(result.toString());
+	    	   }
+
 				
 				//end call data analytics
 		       
@@ -280,6 +293,15 @@ public class NotifyViolation extends HttpServlet {
 				if (movement.getType().equals("ComputationMovement"))
 				{
 					violatedVDC.setCurrentInfrastructure(movement.getToLinked());
+					
+					String call = PathSetting.urlComputationMovementEnactor+"/vdc/"+
+							violatedVDC.getId()+
+							"?sourceInfra="+movement.getFromLinked().getId()+ //fe0b7fdf-4a0f-4b7f-a4eb-d9afe106d005
+							"&targetInfra="+movement.getToLinked().getId();
+					
+					//dovrebbe prendermi l'azione con l'inftrastuttura di partenza, ma quaando ho fatto il fotro sul null id non mi genera le azioni correttamente 
+
+					System.out.println("Nofifyviolation: call CME: "+call);
 				}
 				else if (movement.getType().equals("ComputationDuplication"))
 				{
@@ -411,4 +433,5 @@ public class NotifyViolation extends HttpServlet {
 			response.setContentType("application/json");
 		}
 	}
+
 }
