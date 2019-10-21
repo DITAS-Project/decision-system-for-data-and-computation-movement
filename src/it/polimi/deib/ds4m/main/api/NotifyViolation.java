@@ -29,8 +29,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import com.ditas.ehealth.GetDataSourceMetricsReply;
 import com.ditas.ehealth.GetDataSourceMetricsRequest;
@@ -301,6 +305,34 @@ public class NotifyViolation extends HttpServlet {
 					//dovrebbe prendermi l'azione con l'inftrastuttura di partenza, ma quando ho fatto il for sul null id non mi genera le azioni correttamente 
 
 					System.out.println("Nofifyviolation: call CME: "+call);
+					
+					
+					
+			        //call to computation movement enactors
+			        HttpClient client = HttpClientBuilder.create().build();
+			        
+			        //this is for tests
+			        //HttpPost post = new HttpPost("http://localhost:8089/dataEnactor/action");
+			        
+			        //call to dma in kubernetes
+			        //HttpPost post = new HttpPost(call);
+			        HttpPut httpPut = new HttpPut(call);
+			        
+			        // Create some NameValuePair for HttpPost parameters
+			        try {
+			            //post.setEntity(new UrlEncodedFormEntity(arguments));
+			            @SuppressWarnings("unused")
+						HttpResponse responseDE = client.execute(httpPut);//response empty
+	
+			            //Print out the response of the data movement
+			           // System.out.println("Answer of DME: "+EntityUtils.toString(responseDE.getEntity()));
+			            
+			            
+			        } catch (IOException e) 
+			        {
+			            System.out.println("Computation Movement Enactor not reached");
+			        }
+					
 				}
 				else if (movement.getType().equals("ComputationDuplication"))
 				{
