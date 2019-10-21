@@ -193,8 +193,10 @@ public class NotifyViolation extends HttpServlet {
 	    	   //i perform the call only if it is a data movement or data duplication
 	    	   if (movement.getType().equals("DataDuplication") || movement.getType().equals("DataMovement"))
 	    	   {  
+	    		   
+	    		   System.out.println("skip data movement");
 		     	   //if empty is it a test i skip connection with DAL
-		     	   if ( movement.getDalToMove().getOriginal_ip()!=null && (!movement.getDalToMove().getOriginal_ip().equals("")) )
+		     	   if (false && movement.getDalToMove().getOriginal_ip()!=null && (!movement.getDalToMove().getOriginal_ip().equals("")) )
 		     	   {	    		   
 		     		   try {
 		        	   //ManagedChannel channel = ManagedChannelBuilder.forAddress(PathSetting.urlDAL, 50054).usePlaintext().build();
@@ -261,36 +263,7 @@ public class NotifyViolation extends HttpServlet {
 				
 				System.out.println(mapper.writeValueAsString(movementEnaction));
 				
-				Boolean performedCallDME = false; 
-		       
-				//System.out.println("DS4M: Violation processed, movement action enacted");
-		        
-		        //call to movement enactors
-//		        HttpClient client = HttpClientBuilder.create().build();
-//		        
-//		        //this is for tests
-//		        //HttpPost post = new HttpPost("http://localhost:8089/dataEnactor/action");
-//		        
-//		        //call to dma in kubernetes
-//		        HttpPost post = new HttpPost("http://dme:8080/DataMovementEnactor/EnactMovement");
-//		        
-		        //System.out.println(mapper.writeValueAsString(movementsEnaction));
-//		        
-//		        // Create some NameValuePair for HttpPost parameters
-//		        List<NameValuePair> arguments = new ArrayList<>(3);
-//		        arguments.add(new BasicNameValuePair("movementsEnaction", mapper.writeValueAsString(movementsEnaction)));
-//		        try {
-//		            post.setEntity(new UrlEncodedFormEntity(arguments));
-//		            @SuppressWarnings("unused")
-//					HttpResponse responseDE = client.execute(post);//response empty
-//
-//		            //Print out the response of the data movement
-//		            System.out.println("Answer of DME: "+EntityUtils.toString(responseDE.getEntity()));
-//		            
-//		            
-//		        } catch (IOException e) {
-//		            e.printStackTrace();
-//		        }
+
 				
 				//if it's a computation movement 
 				if (movement.getType().equals("ComputationMovement"))
@@ -299,38 +272,23 @@ public class NotifyViolation extends HttpServlet {
 					
 					String call = PathSetting.urlComputationMovementEnactor+"/vdc/"+
 							violatedVDC.getId()+
-							"?sourceInfra="+movement.getFromLinked().getId()+ //fe0b7fdf-4a0f-4b7f-a4eb-d9afe106d005
+							"?sourceInfra="+movement.getFromLinked().getId()+ 
 							"&targetInfra="+movement.getToLinked().getId();
-					
-					//dovrebbe prendermi l'azione con l'inftrastuttura di partenza, ma quando ho fatto il for sul null id non mi genera le azioni correttamente 
 
 					System.out.println("Nofifyviolation: call CME: "+call);
-					
-					
 					
 			        //call to computation movement enactors
 			        HttpClient client = HttpClientBuilder.create().build();
 			        
-			        //this is for tests
-			        //HttpPost post = new HttpPost("http://localhost:8089/dataEnactor/action");
-			        
-			        //call to dma in kubernetes
-			        //HttpPost post = new HttpPost(call);
+			        //call CME
 			        HttpPut httpPut = new HttpPut(call);
 			        
-			        // Create some NameValuePair for HttpPost parameters
 			        try {
-			            //post.setEntity(new UrlEncodedFormEntity(arguments));
 			            @SuppressWarnings("unused")
 						HttpResponse responseDE = client.execute(httpPut);//response empty
-	
-			            //Print out the response of the data movement
-			           // System.out.println("Answer of DME: "+EntityUtils.toString(responseDE.getEntity()));
-			            
-			            
 			        } catch (IOException e) 
 			        {
-			            System.out.println("Computation Movement Enactor not reached");
+			            System.out.println("Computation Movement Enactor not reached");//for test purposes don't stop execution 
 			        }
 					
 				}
@@ -355,20 +313,25 @@ public class NotifyViolation extends HttpServlet {
 				//if it's a data duplication i add the dal to the dal of the vdc				
 				else if (movement.getType().equals("DataMovement"))
 				{
+					String answerDME = MovementsActionsManager.DMECall(movementEnaction);
+					
+					
 			        //update the moved dal with new position
 			        movement.getDalToMove().setPosition(movement.getToLinked());  
-			        if ( performedCallDME)//add this for tests
-			        	movement.getDalToMove().setOriginal_ip("NEW IP");
+			        if (answerDME!="")//add this for tests
+			        	movement.getDalToMove().setOriginal_ip(answerDME);
 					
 				}	
 				else if (movement.getType().equals("DataDuplication"))
 				{
+					String answerDME = MovementsActionsManager.DMECall(movementEnaction);
+					
 					//create DAL
 					DAL duplicatedDAL = new DAL();
 					duplicatedDAL.setPosition(movement.getToLinked());
 					duplicatedDAL.setDataSources(movement.getDalToMove().getDataSources());
-					if ( performedCallDME)//add this for tests
-			        	duplicatedDAL.setOriginal_ip("NEW IP");
+					if ( answerDME!="")//add this for tests
+			        	duplicatedDAL.setOriginal_ip(answerDME);
 					
 					//add dal to vdc
 					violatedVDC.getDALs().add(duplicatedDAL);

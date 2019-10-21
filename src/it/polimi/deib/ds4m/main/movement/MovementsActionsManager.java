@@ -24,6 +24,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,17 +35,28 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServlet;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.configuration.PathSetting;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.Attribute;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DAL;
 import it.polimi.deib.ds4m.main.model.movement.Cost;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
+import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
 import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 
 /**
@@ -178,6 +190,7 @@ public class MovementsActionsManager
 			{
 				for(TreeStructure goal: violatedGoals)
 				{
+					
 					if (impact.equals(goal.getID()) &&// check if the goal is present
 							(	//in case the movement is a data movement
 									!(movement.getType().toLowerCase().equals("dataduplication") || movement.getType().toLowerCase().equals("datamovement")) ||
@@ -362,6 +375,54 @@ public class MovementsActionsManager
 		}
 		
 		return movementsJSON;
+	}
+	
+	public static String DMECall(MovementEnaction movementEnaction)
+	{
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);//to serialize arrays with only one element
+		mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+        
+        //call to movement enactors
+        HttpClient client = HttpClientBuilder.create().build();
+        
+        //call to dma in kubernetes
+        HttpPost post = new HttpPost("http://178.22.69.180:8111/dme/init_movement/");
+        
+        post.setHeader("Accept", "application/json");
+        post.setHeader("Content-type", "application/json");
+
+        String jsonBody;
+		try {
+			jsonBody = mapper.writeValueAsString(movementEnaction);
+			StringEntity entity = new StringEntity(jsonBody);
+			post.setEntity(entity);
+			//System.out.println(jsonBody);
+		} 
+		catch (JsonProcessingException e1) 
+		{
+			System.err.println("DMECall: error in parsing the call to DME");
+			jsonBody="";
+		} catch (UnsupportedEncodingException e) 
+		{
+			System.err.println("DMECall: error in encoding the call to DME");
+		}
+        
+        try {
+			HttpResponse responseDE = client.execute(post);//response empty
+
+            //Print out the response of the data movement
+            System.out.println("Answer of DME: "+EntityUtils.toString(responseDE.getEntity()));
+            
+            return EntityUtils.toString(responseDE.getEntity());
+            
+            
+        } catch (IOException e) 
+        {
+        	System.err.println("DMECall: error in calling to DME");
+            return "";
+        }
+        
 	}
 
 }
