@@ -3,7 +3,6 @@ package it.polimi.deib.ds4m.test.api;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Set;
@@ -12,7 +11,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.AfterClass;
 import org.junit.Rule;
@@ -39,10 +37,6 @@ public class GetVDCInfoTest
 	@Test
 	public void testNotify_correct()
 	{
-		NotifyViolationTest nvTest = new NotifyViolationTest();
-		boolean b = nvTest.addVDC_current;
-		
-		
 		//set up connection to ds4m, tonget info
         HttpClient client = HttpClientBuilder.create().build();    
         HttpPost post = new HttpPost(PathSetting.urlDS4M_GetVDCInfo+"/VDC_2");

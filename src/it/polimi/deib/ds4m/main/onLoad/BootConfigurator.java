@@ -32,6 +32,7 @@ public class BootConfigurator implements ServletContextListener {
 	public void contextDestroyed(ServletContextEvent arg0) {
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		

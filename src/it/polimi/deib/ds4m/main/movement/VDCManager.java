@@ -22,8 +22,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,8 +29,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.apache.http.HttpStatus;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -189,6 +185,7 @@ public class VDCManager
 	 * @return the instantiated DAL
 	 * @throws Exception
 	 */
+	@SuppressWarnings("deprecation")
 	public static VDC createVDC(String concreteBlueprintJSON, String movementsJSON) throws Exception
 	{
 		//convert the json in object
@@ -423,6 +420,7 @@ public class VDCManager
 	 * @param vdc the VDC to be updated
 	 * @throws Exception
 	 */
+	@SuppressWarnings("deprecation")
 	public static void updateVDCmovements(String concreteBlueprintJSON, String movementsJSON, VDC vdc) throws Exception
 	{
 		//convert the json in object

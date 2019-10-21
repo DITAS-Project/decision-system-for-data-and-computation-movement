@@ -18,7 +18,6 @@
 package it.polimi.deib.ds4m.main.model.resources;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

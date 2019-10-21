@@ -170,7 +170,8 @@ public class NotifyViolationTest
         //connect to service
         try {
         	
-            HttpResponse response = client.execute(post);//response empty
+            //HttpResponse response = client.execute(post);//response empty
+            client.execute(post);//response empty
 
             // Print out the response message
             //System.out.println(EntityUtils.toString(response.getEntity()));

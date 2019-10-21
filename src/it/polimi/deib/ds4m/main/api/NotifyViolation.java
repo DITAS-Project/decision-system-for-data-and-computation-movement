@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.HttpClientBuilder;
 
@@ -87,6 +86,7 @@ public class NotifyViolation extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	//@SuppressWarnings("unchecked")
+	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		//create the json parser
@@ -95,6 +95,7 @@ public class NotifyViolation extends HttpServlet {
 		mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 		
 		//retrieve the list of VDC
+		@SuppressWarnings("unchecked")
 		ArrayList<VDC> VDCs = (ArrayList<VDC>) this.getServletConfig().getServletContext().getAttribute("VDCs");
 		
 		//retrieve parameter (the list of violations)
@@ -188,41 +189,41 @@ public class NotifyViolation extends HttpServlet {
 	    	   
 	    	   System.out.println("ENABLE DAL and DA calls");
 	    	   
-	    	   String dalResourceJSON=null;
+//	    	   String dalResourceJSON=null;
 	    	   
 	    	   //i perform the call only if it is a data movement or data duplication
 	    	   if (movement.getType().equals("DataDuplication") || movement.getType().equals("DataMovement"))
 	    	   {  
 	    		   
 	    		   System.out.println("skip data movement");
-		     	   //if empty is it a test i skip connection with DAL
-		     	   if (false && movement.getDalToMove().getOriginal_ip()!=null && (!movement.getDalToMove().getOriginal_ip().equals("")) )
-		     	   {	    		   
-		     		   try {
-		        	   //ManagedChannel channel = ManagedChannelBuilder.forAddress(PathSetting.urlDAL, 50054).usePlaintext().build();
-		    		   ManagedChannel channel = ManagedChannelBuilder.forAddress(movement.getDalToMove().getOriginal_ip(), 50054).usePlaintext().build();
-		        	   MetricsServiceGrpc.MetricsServiceBlockingStub stub = MetricsServiceGrpc.newBlockingStub(channel);
-		        	   GetDataSourceMetricsReply responseDAL = stub.getDataSourceMetrics(GetDataSourceMetricsRequest.newBuilder().build());
-		        	   dalResourceJSON = responseDAL.getMetrics();
-		        	   
-		    		   channel.shutdown();
-		     		   }
-			    	   catch (Exception e)
-			    	   {
-				        	String message = "NotifyViolation: DAL not reached";
-				        	System.err.println(message);
-				        	response.getWriter().println(message);
-				        	
-				        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-				        	response.setContentType("application/json");
-				        	return;
-			    	   }
-
-		     	   }
-		     	   else
-		     	   {
-		     		   System.out.println("NotifyViolation: URL dal empty, skipped connection");
-		     	   }
+//		     	   //if empty is it a test i skip connection with DAL
+//		     	   if (movement.getDalToMove().getOriginal_ip()!=null && (!movement.getDalToMove().getOriginal_ip().equals("")) )
+//		     	   {	    		   
+//		     		   try {
+//		        	   //ManagedChannel channel = ManagedChannelBuilder.forAddress(PathSetting.urlDAL, 50054).usePlaintext().build();
+//		    		   ManagedChannel channel = ManagedChannelBuilder.forAddress(movement.getDalToMove().getOriginal_ip(), 50054).usePlaintext().build();
+//		        	   MetricsServiceGrpc.MetricsServiceBlockingStub stub = MetricsServiceGrpc.newBlockingStub(channel);
+//		        	   GetDataSourceMetricsReply responseDAL = stub.getDataSourceMetrics(GetDataSourceMetricsRequest.newBuilder().build());
+//		        	   dalResourceJSON = responseDAL.getMetrics();
+//		        	   
+//		    		   channel.shutdown();
+//		     		   }
+//			    	   catch (Exception e)
+//			    	   {
+//				        	String message = "NotifyViolation: DAL not reached";
+//				        	System.err.println(message);
+//				        	response.getWriter().println(message);
+//				        	
+//				        	response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+//				        	response.setContentType("application/json");
+//				        	return;
+//			    	   }
+//
+//		     	   }
+//		     	   else
+//		     	   {
+//		     		   System.out.println("NotifyViolation: URL dal empty, skipped connection");
+//		     	   }
 			       
 			       //2-check if the target node/infrastructure has enough space
 			       

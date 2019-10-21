@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -50,7 +49,6 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.configuration.PathSetting;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.Attribute;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.dataSources.DAL;
@@ -377,6 +375,7 @@ public class MovementsActionsManager
 		return movementsJSON;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static String DMECall(MovementEnaction movementEnaction)
 	{
 		ObjectMapper mapper = new ObjectMapper();
