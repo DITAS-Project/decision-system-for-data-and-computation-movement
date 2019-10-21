@@ -55,7 +55,6 @@ import it.polimi.deib.ds4m.main.movement.GoalTreeManager;
 import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 import it.polimi.deib.ds4m.main.movement.VDCManager;
 import wiremock.com.jayway.jsonpath.PathNotFoundException;
-import wiremock.org.eclipse.jetty.server.handler.MovedContextHandler;
 
 /**
  * Servlet implementation class NotifyViolation
@@ -299,7 +298,7 @@ public class NotifyViolation extends HttpServlet {
 							"?sourceInfra="+movement.getFromLinked().getId()+ //fe0b7fdf-4a0f-4b7f-a4eb-d9afe106d005
 							"&targetInfra="+movement.getToLinked().getId();
 					
-					//dovrebbe prendermi l'azione con l'inftrastuttura di partenza, ma quaando ho fatto il fotro sul null id non mi genera le azioni correttamente 
+					//dovrebbe prendermi l'azione con l'inftrastuttura di partenza, ma quando ho fatto il for sul null id non mi genera le azioni correttamente 
 
 					System.out.println("Nofifyviolation: call CME: "+call);
 				}

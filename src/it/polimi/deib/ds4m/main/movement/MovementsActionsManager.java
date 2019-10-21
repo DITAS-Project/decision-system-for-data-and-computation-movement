@@ -179,7 +179,14 @@ public class MovementsActionsManager
 				for(TreeStructure goal: violatedGoals)
 				{
 					if (impact.equals(goal.getID()) &&// check if the goal is present
-						movementEnactable(movement, vdc)	//add it is the infrastructure source of the movement is among the 
+							(	//in case the movement is a data movement
+									!(movement.getType().toLowerCase().equals("dataduplication") || movement.getType().toLowerCase().equals("datamovement")) ||
+									movementEnactable(movement, vdc) //	(dataduplication || datamovement) -> movementEnactable
+									//in case the movement is a computation movement
+						)
+							&&
+							( !(movement.getType().toLowerCase().equals("computationmovement") || movement.getType().toLowerCase().equals("computationduplication")) ||
+									vdc.getCurrentInfrastructure().equals(movement.getFromLinked())) // (computationmovement ||computationduplication) -> the source infrastructure is the current one
 						)
 						
 						movementsToBeEnacted.add(movement);
