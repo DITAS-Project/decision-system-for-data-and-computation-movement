@@ -18,6 +18,7 @@
 
 package it.polimi.deib.ds4m.main;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -30,6 +31,14 @@ import java.util.stream.Stream;
 public class Utility {
 	
 	
+	/**
+	 * read a file form a specified path
+	 * 
+	 * @param path the path of the file to read
+	 * @param encoding the encoding of the file to read
+	 * @return the content of the file
+	 * @throws IOException
+	 */
 	public static String readFile(String path, Charset encoding) 
 			  throws IOException 
 			{
@@ -54,6 +63,26 @@ public class Utility {
 			return stream.filter(file -> !Files.isDirectory(file)).map(Path::getFileName).map(Path::toString)
 					.collect(Collectors.toSet());
 		}
+	}
+	
+	
+	/**
+	 * removes all files in a directory (not recursive)
+	 * 
+	 * @param pathToDir
+	 */
+	public static boolean removeAllFiles(String pathToDir)
+	{
+		File dir = new java.io.File(pathToDir);
+		
+		if (!dir.exists())
+			return false;
+		
+		for(File file: dir.listFiles()) 
+		    if (!file.isDirectory()) 
+		        file.delete();
+		
+		return true;
 	}
 
 }
