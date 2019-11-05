@@ -22,17 +22,18 @@ import java.util.ArrayList;
 import it.polimi.deib.ds4m.main.model.methodsInput.DataSourceInput;
 import it.polimi.deib.ds4m.main.model.methodsInput.Method;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
-import it.polimi.deib.ds4m.main.model.movement.Transformation;
 
 public class MovementEnaction 
 {
 	private String from;
 	private String to;
-	private ArrayList<String> transformations;
+	//private ArrayList<String> transformations;
 	private String type;
 	private String DALid;
-	//private  ArrayList<Method> methodsInputs;
+	private  ArrayList<Method> methodsInputs;
 	private ArrayList<DataSourceInput> dataSources;
+	
+	
 	
 	/**
 	 * @return the from
@@ -58,40 +59,30 @@ public class MovementEnaction
 	public void setTo(String to) {
 		this.to = to;
 	}
-	/**
-	 * @return the transformations
-	 */
-	public ArrayList<String> getTransformations() {
-		return transformations;
-	}
-	/**
-	 * @param transformations the transformations to set
-	 */
-	public void setTransformations(ArrayList<String> transformations) {
-		this.transformations = transformations;
-	}
+
 	
 	public void importMovement (Movement movement, ArrayList<Method> methodsInputs) 
 	{
 		this.from = movement.getFromLinked().getName();
 		this.to = movement.getToLinked().getName();
 		this.type = movement.getType();		
-		//TODO: put the method inpus, after demo
-		//this.methodsInputs=methodsInputs;
+
+
+		this.setMethodsInputs(methodsInputs);
 		this.setDataSources(methodsInputs.get(1).getDataSources());
 		//If it's a computation movement there is no reference to DAL
 		if (movement.getDalToMove()!=null)
-			this.DALid = movement.getDalToMove().getOriginal_ip();
+			this.DALid = movement.getDalToMove().getId();
 		
 		
-		if (transformations==null)
-			transformations = new ArrayList<String>();
-		
-		if (movement.getTransformations()!=null)	
-			for(Transformation transformationMovement : movement.getTransformations())
-			{
-				transformations.add(transformationMovement.getType());
-			}
+//		if (transformations==null)
+//			transformations = new ArrayList<String>();
+//		
+//		if (movement.getTransformations()!=null)	
+//			for(Transformation transformationMovement : movement.getTransformations())
+//			{
+//				transformations.add(transformationMovement.getType());
+//			}
 	}
 	/**
 	 * @return the type
@@ -122,5 +113,11 @@ public class MovementEnaction
 	}
 	public void setDataSources(ArrayList<DataSourceInput> dataSources) {
 		this.dataSources = dataSources;
+	}
+	public ArrayList<Method> getMethodsInputs() {
+		return methodsInputs;
+	}
+	public void setMethodsInputs(ArrayList<Method> methodsInputs) {
+		this.methodsInputs = methodsInputs;
 	}
 }

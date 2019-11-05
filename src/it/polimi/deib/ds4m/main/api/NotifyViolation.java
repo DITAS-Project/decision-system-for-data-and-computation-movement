@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -260,9 +261,6 @@ public class NotifyViolation extends HttpServlet {
 				//-which dal to move
 				//-which part to move (method input)
 				
-		       
-				
-				System.out.println(mapper.writeValueAsString(movementEnaction));
 				
 
 				
@@ -314,25 +312,34 @@ public class NotifyViolation extends HttpServlet {
 				//if it's a data duplication i add the dal to the dal of the vdc				
 				else if (movement.getType().equals("DataMovement"))
 				{
-					String answerDME = MovementsActionsManager.DMECall(movementEnaction);
+					System.out.println(mapper.writeValueAsString(movementEnaction));
+					
+					MovementsActionsManager.DMECall(movementEnaction);
+					
+					//answer call DME ignored 
 					
 					
 			        //update the moved dal with new position
-			        movement.getDalToMove().setPosition(movement.getToLinked());  
-			        if (answerDME!="")//add this for tests
-			        	movement.getDalToMove().setOriginal_ip(answerDME);
+//			        movement.getDalToMove().setPosition(movement.getToLinked());  
+//			        if (answerDME!="")//add this for tests
+//			        	movement.getDalToMove().setOriginal_ip(answerDME);
 					
 				}	
 				else if (movement.getType().equals("DataDuplication"))
 				{
-					String answerDME = MovementsActionsManager.DMECall(movementEnaction);
+					System.out.println(mapper.writeValueAsString(movementEnaction));
+					
+					MovementsActionsManager.DMECall(movementEnaction);
+					
+					//answer DME ignored
 					
 					//create DAL
 					DAL duplicatedDAL = new DAL();
 					duplicatedDAL.setPosition(movement.getToLinked());
 					duplicatedDAL.setDataSources(movement.getDalToMove().getDataSources());
-					if ( answerDME!="")//add this for tests
-			        	duplicatedDAL.setOriginal_ip(answerDME);
+					
+					//create a unique identifier for the new DAL
+					duplicatedDAL.setId(UUID.randomUUID().toString());
 					
 					//add dal to vdc
 					violatedVDC.getDALs().add(duplicatedDAL);

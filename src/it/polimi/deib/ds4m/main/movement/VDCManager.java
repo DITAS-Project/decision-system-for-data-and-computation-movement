@@ -320,6 +320,7 @@ public class VDCManager
 		{
 			throw new Exception("the Methods_Input Section of the Blueprint is empty");
 		}
+		
 		ArrayList<Method> methodsInputs;
 		try {
 			methodsInputs = new ArrayList<Method>(Arrays.asList(mapper.treeToValue(methodsInputsJSON, Method[].class)));
@@ -370,10 +371,12 @@ public class VDCManager
 		//for each data source [DAL] creates a fake (initial) infrastructure for the data source, to allow movement
 		//create an array list to it in the VDC object
 		ArrayList<DAL> DALsArrayList = new ArrayList<DAL>();
-		for (DAL DAL: DALs.values())
+		//for (DAL dal: DALs.values())
+		for (Map.Entry<String,DAL> entry : DALs.entrySet())	
 		{
-			DAL.createResource(infrastructures);
-			DALsArrayList.add(DAL);
+			entry.getValue().createResource(infrastructures);
+			entry.getValue().setId(entry.getKey());
+			DALsArrayList.add(entry.getValue());
 		}
 		
 	    //retrieve VDC name
@@ -504,6 +507,28 @@ public class VDCManager
 
 
 		return blueprintJson ;
+	}
+	
+	/**
+	 * this function search for a DAL given its ID, among all DALs in the VDC
+	 * there should be always be 1 DAL assocxiated to 1 ID
+	 * 
+	 * @param IP
+	 * @param VDCs
+	 * @return
+	 */
+	public static DAL searchDALbyID (String ID, ArrayList<VDC> VDCs)
+	{
+		for (VDC vdc: VDCs)
+		{
+			for (DAL dal : vdc.getDALs())
+			{
+				if (dal.getId().equals(ID))
+					return dal;
+			}
+		}
+		
+		return null;
 	}
 	
 

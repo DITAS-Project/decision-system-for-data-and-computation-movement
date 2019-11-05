@@ -13,6 +13,7 @@ public class DAL implements Serializable
 	private String original_ip;
 	private Infrastructure position;
 	private ArrayList<DataSource> dataSources;
+	private String id;
 	
 	
 	/**
@@ -73,6 +74,20 @@ public class DAL implements Serializable
 	 */
 	public void setDataSources(ArrayList<DataSource> dataSources) {
 		this.dataSources = dataSources;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }
