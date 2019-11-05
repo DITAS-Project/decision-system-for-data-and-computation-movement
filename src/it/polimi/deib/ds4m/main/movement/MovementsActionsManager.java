@@ -396,7 +396,7 @@ public class MovementsActionsManager
 			jsonBody = mapper.writeValueAsString(movementEnaction);
 			StringEntity entity = new StringEntity(jsonBody);
 			post.setEntity(entity);
-			//System.out.println(jsonBody);
+			System.out.println("DME call: "+jsonBody);
 		} 
 		catch (JsonProcessingException e1) 
 		{

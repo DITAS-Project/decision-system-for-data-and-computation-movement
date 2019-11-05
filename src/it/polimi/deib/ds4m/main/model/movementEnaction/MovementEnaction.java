@@ -19,6 +19,7 @@ package it.polimi.deib.ds4m.main.model.movementEnaction;
 
 import java.util.ArrayList;
 
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 import it.polimi.deib.ds4m.main.model.methodsInput.DataSourceInput;
 import it.polimi.deib.ds4m.main.model.methodsInput.Method;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
@@ -30,7 +31,7 @@ public class MovementEnaction
 	//private ArrayList<String> transformations;
 	private String type;
 	private String DALid;
-	private  ArrayList<Method> methodsInputs;
+	//private  ArrayList<Method> methodsInputs;
 	private ArrayList<DataSourceInput> dataSources;
 	
 	
@@ -61,15 +62,26 @@ public class MovementEnaction
 	}
 
 	
-	public void importMovement (Movement movement, ArrayList<Method> methodsInputs) 
+	public void importMovement (Movement movement, VDC violatedVDC) 
 	{
 		this.from = movement.getFromLinked().getName();
 		this.to = movement.getToLinked().getName();
 		this.type = movement.getType();		
 
 
-		this.setMethodsInputs(methodsInputs);
-		this.setDataSources(methodsInputs.get(1).getDataSources());
+		//this.setMethodsInputs(methodsInputs);
+		
+		//select the method which passed and is in the abstract properties of the concrete blueprint
+		for (Method method : violatedVDC.getMethodsInputs())
+		{
+			//TODO:this selects and support only 1 method, it it is more than one only the first one will be selected
+			if (method.getMethod_id().equalsIgnoreCase(violatedVDC.getAbstractProperties().get(0).getMethod_id()))
+			{
+				this.setDataSources(method.getDataSources());
+				break;
+			}
+		}
+		
 		//If it's a computation movement there is no reference to DAL
 		if (movement.getDalToMove()!=null)
 			this.DALid = movement.getDalToMove().getId();
@@ -113,11 +125,5 @@ public class MovementEnaction
 	}
 	public void setDataSources(ArrayList<DataSourceInput> dataSources) {
 		this.dataSources = dataSources;
-	}
-	public ArrayList<Method> getMethodsInputs() {
-		return methodsInputs;
-	}
-	public void setMethodsInputs(ArrayList<Method> methodsInputs) {
-		this.methodsInputs = methodsInputs;
 	}
 }

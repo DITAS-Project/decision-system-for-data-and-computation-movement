@@ -137,7 +137,7 @@ public class NotifyViolation extends HttpServlet {
 		        
 		        //identify movement actions with positive effect on goal
 		        ArrayList<Movement> movementsToBeEnacted = MovementsActionsManager.findMovementAction(violatedGoals, violatedVDC);
-		        if (movementsToBeEnacted==null)
+		        if (movementsToBeEnacted==null || movementsToBeEnacted.size()==0)
 		        {
 		        	String message = "NotifyViolation: No movements to be enacted found";
 		        	System.err.println(message);
@@ -181,7 +181,7 @@ public class NotifyViolation extends HttpServlet {
 		      		        
 		       //transform the selected movement actions in element to be sent  
 	    	   MovementEnaction movementEnaction = new MovementEnaction();
-	    	   movementEnaction.importMovement(movement, violatedVDC.getMethodsInputs());
+	    	   movementEnaction.importMovement(movement, violatedVDC);
 		       
 		       
 		       
@@ -253,19 +253,11 @@ public class NotifyViolation extends HttpServlet {
 
 				
 				//end call data analytics
-		       
-				//create request for DME
-				//-from
-				//-to
-				//-trasformations?
-				//-which dal to move
-				//-which part to move (method input)
-				
 				
 
 				
 				//if it's a computation movement 
-				if (movement.getType().equals("ComputationMovement"))
+				if (movement.getType().equalsIgnoreCase("ComputationMovement"))
 				{
 					violatedVDC.setCurrentInfrastructure(movement.getToLinked());
 					
@@ -291,7 +283,7 @@ public class NotifyViolation extends HttpServlet {
 			        }
 					
 				}
-				else if (movement.getType().equals("ComputationDuplication"))
+				else if (movement.getType().equalsIgnoreCase("ComputationDuplication"))
 				{
 					//add a new vdc, with a different name?
 						//deep copy VDC
@@ -310,36 +302,40 @@ public class NotifyViolation extends HttpServlet {
 				
 				//if it's a data movement i update the existing dal
 				//if it's a data duplication i add the dal to the dal of the vdc				
-				else if (movement.getType().equals("DataMovement"))
+				else if (movement.getType().equalsIgnoreCase("DataMovement"))
 				{
-					System.out.println(mapper.writeValueAsString(movementEnaction));
-					
-					MovementsActionsManager.DMECall(movementEnaction);
-					
-					//answer call DME ignored 
+					//call DME
+					MovementsActionsManager.DMECall(movementEnaction); 
 					
 					
-			        //update the moved dal with new position
+					//this is now moved to the new NotifyDALmoved API
+//			        //update the moved dal with new position
 //			        movement.getDalToMove().setPosition(movement.getToLinked());  
 //			        if (answerDME!="")//add this for tests
 //			        	movement.getDalToMove().setOriginal_ip(answerDME);
 					
 				}	
-				else if (movement.getType().equals("DataDuplication"))
+				else if (movement.getType().equalsIgnoreCase("DataDuplication"))
 				{
-					System.out.println(mapper.writeValueAsString(movementEnaction));
 					
+					//set new id DAL
+					String newDALID=UUID.randomUUID().toString();
+					
+					movementEnaction.setDALid(newDALID);
+					
+					//call DME
 					MovementsActionsManager.DMECall(movementEnaction);
 					
 					//answer DME ignored
 					
+					//***update VDC with new DAL
 					//create DAL
 					DAL duplicatedDAL = new DAL();
 					duplicatedDAL.setPosition(movement.getToLinked());
 					duplicatedDAL.setDataSources(movement.getDalToMove().getDataSources());
 					
-					//create a unique identifier for the new DAL
-					duplicatedDAL.setId(UUID.randomUUID().toString());
+					//create the unique identifier for the new DAL
+					duplicatedDAL.setId(newDALID);
 					
 					//add dal to vdc
 					violatedVDC.getDALs().add(duplicatedDAL);
@@ -363,6 +359,7 @@ public class NotifyViolation extends HttpServlet {
 						response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 						return;
 					}
+					
 					
 					//i skip the update if i failed to load the movement class. 
 					// this control is needed because of the PathNotFoundException: i still continue even if the share volume is not accessible
@@ -391,6 +388,8 @@ public class NotifyViolation extends HttpServlet {
 						{
 							System.err.println("NotifyViolation: " + e.getMessage());
 						}
+						
+						System.out.println("VDC updated");
 					}
 				}
 				
