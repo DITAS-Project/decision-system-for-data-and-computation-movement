@@ -39,7 +39,6 @@ public class NotifyDALMoved extends HttpServlet {
      */
     public NotifyDALMoved() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -110,6 +109,7 @@ public class NotifyDALMoved extends HttpServlet {
 		dal.setOriginal_ip(updatedDal.getDalNewIP());
 		
 		//once it is set, call the CME to instantiate the VDC using the moved or duplicated DAL
+		
 		
 		//for all VDCs
 		for(VDC vdc: VDCs)

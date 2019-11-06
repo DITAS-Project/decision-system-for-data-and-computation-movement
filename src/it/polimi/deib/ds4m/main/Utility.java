@@ -76,11 +76,17 @@ public class Utility {
 		File dir = new java.io.File(pathToDir);
 		
 		if (!dir.exists())
+		{
+			System.err.println("The path "+pathToDir+" is not a directory" );
 			return false;
+		}
 		
 		for(File file: dir.listFiles()) 
 		    if (!file.isDirectory()) 
+		    {
+		    	System.out.println("Removed: "+file.getAbsolutePath());
 		        file.delete();
+		    }
 		
 		return true;
 	}
