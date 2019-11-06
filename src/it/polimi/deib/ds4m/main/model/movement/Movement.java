@@ -29,9 +29,9 @@ import wiremock.org.apache.commons.lang3.builder.HashCodeBuilder;
 public class Movement implements Serializable
 {
 	private static final long serialVersionUID = -453139816550873541L;
-	private String type; //DataMovement,DataDuplication, ComputationMovement, ComputationDuplication
+	private String type; //DataMovement,DataDuplication, ComputationMovement, ComputationDuplication, dataDuplicationComputationMovement, dataMovementComputationMovement
 	private String fromType;//cloud/edge
-	private String toType;//cloud/esdge
+	private String toType;//cloud/edge
 	private double restTime;
 	
 	//linked to data source class, when the movement is instantiated
@@ -41,6 +41,9 @@ public class Movement implements Serializable
 	private Infrastructure toLinked;
 	@JsonIgnore
 	private DAL dalToMove;
+	
+	@JsonIgnore
+	private Movement nextMovement;//if it is a chain of movement (supported only dataComputationMovement, i.e first a data movement then a conmputation movement)
 	
 	private ArrayList<String> positiveImpacts; //list of IDs of goals with a positive impact
 	private ArrayList<String> negativeImpacts; //list of IDs of goals with a negative impact
@@ -61,6 +64,40 @@ public class Movement implements Serializable
 		
 	}
 	
+	/**
+	 * creates a new instance, no deep copy
+	 * 
+	 * @param newMovement
+	 */
+	public Movement (Movement newMovement)
+	{
+		this.type=newMovement.getType();
+		this.fromType=newMovement.getFromType();
+		this.toType=newMovement.getToType();
+		this.positiveImpacts=newMovement.getPositiveImpacts();
+		this.negativeImpacts=newMovement.getNegativeImpacts();
+		this.transformations=newMovement.getTransformations();
+		this.costs=newMovement.getCosts();
+		this.restTime=newMovement.getRestTime();
+		this.fromLinked= newMovement.getFromLinked();
+		this.toLinked=newMovement.getToLinked();
+		dalToMove=newMovement.getDalToMove();
+	}
+	
+	
+	
+	/**
+	 * create a new movement, without the from/to linked infrastructure setted
+	 * 
+	 * @param type
+	 * @param fromType
+	 * @param toType
+	 * @param positiveImpacts
+	 * @param negativeImpacts
+	 * @param transformations
+	 * @param costs
+	 * @param restTime
+	 */
 	public Movement(String type, String fromType, String toType, ArrayList<String> positiveImpacts, ArrayList<String> negativeImpacts, ArrayList<Transformation> transformations, ArrayList<Cost> costs, double restTime ) 
 	{
 		this.type=type;
@@ -290,6 +327,20 @@ public class Movement implements Serializable
 	 */
 	public void setDalToMove(DAL dalToMove) {
 		this.dalToMove = dalToMove;
+	}
+
+	/**
+	 * @return the nextMovement
+	 */
+	public Movement getNextMovement() {
+		return nextMovement;
+	}
+
+	/**
+	 * @param nextMovement the nextMovement to set
+	 */
+	public void setNextMovement(Movement nextMovement) {
+		this.nextMovement = nextMovement;
 	}
 	
 

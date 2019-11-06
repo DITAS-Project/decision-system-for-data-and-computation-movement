@@ -196,7 +196,7 @@ public class NotifyViolation extends HttpServlet {
 	    	   if (movement.getType().equals("DataDuplication") || movement.getType().equals("DataMovement"))
 	    	   {  
 	    		   
-	    		   System.out.println("skip data movement");
+	    		   System.out.println("skip query DAL");
 //		     	   //if empty is it a test i skip connection with DAL
 //		     	   if (movement.getDalToMove().getOriginal_ip()!=null && (!movement.getDalToMove().getOriginal_ip().equals("")) )
 //		     	   {	    		   
@@ -302,20 +302,19 @@ public class NotifyViolation extends HttpServlet {
 				
 				//if it's a data movement i update the existing dal
 				//if it's a data duplication i add the dal to the dal of the vdc				
-				else if (movement.getType().equalsIgnoreCase("DataMovement"))
+				else if (movement.getType().equalsIgnoreCase("DataMovement") || movement.getType().equalsIgnoreCase("dataMovementComputationMovement"))
 				{
 					//call DME
 					MovementsActionsManager.DMECall(movementEnaction); 
 					
-					
-					//this is now moved to the new NotifyDALmoved API
-//			        //update the moved dal with new position
-//			        movement.getDalToMove().setPosition(movement.getToLinked());  
-//			        if (answerDME!="")//add this for tests
-//			        	movement.getDalToMove().setOriginal_ip(answerDME);
+					//if there is a movement to perform after movement, I set it
+					if (movement.getType().equalsIgnoreCase("dataMovementComputationMovement"))
+					{
+						violatedVDC.setNextMovement(movement.getNextMovement());
+					}
 					
 				}	
-				else if (movement.getType().equalsIgnoreCase("DataDuplication"))
+				else if (movement.getType().equalsIgnoreCase("DataDuplication") || movement.getType().equalsIgnoreCase("dataDuplicationComputationMovement"))
 				{
 					
 					//set new id DAL
@@ -329,6 +328,12 @@ public class NotifyViolation extends HttpServlet {
 					//answer DME ignored
 					
 					//***update VDC with new DAL
+					//if there is a movement to perform after movement, I set it
+					if (movement.getType().equalsIgnoreCase("dataDuplicationComputationMovement"))
+					{
+						violatedVDC.setNextMovement(movement.getNextMovement());
+					}
+					
 					//create DAL
 					DAL duplicatedDAL = new DAL();
 					duplicatedDAL.setPosition(movement.getToLinked());
