@@ -114,10 +114,23 @@ public class NotifyDALMoved extends HttpServlet {
 		//for all VDCs
 		for(VDC vdc: VDCs)
 		{
-			String call = PathSetting.urlComputationMovementEnactor+"/vdc/"+
+			String call="";
+			
+			if (vdc.getNextMovement()!=null)
+			{
+				call = PathSetting.urlComputationMovementEnactor+"/vdc/"+
 					vdc.getId()+
 					"?sourceInfra="+vdc.getCurrentInfrastructure().getId()+ 
-					"&targetInfra="+vdc.getCurrentInfrastructure().getId();
+					"&targetInfra="+vdc.getNextMovement().getToLinked().getId();
+				
+				//i remove the next movement
+				vdc.setNextMovement(null);
+			}
+			else
+				call = PathSetting.urlComputationMovementEnactor+"/vdc/"+
+						vdc.getId()+
+						"?sourceInfra="+vdc.getCurrentInfrastructure().getId()+ 
+						"&targetInfra="+vdc.getCurrentInfrastructure().getId();
 
 			System.out.println("NotifyDALMoved: call CME: "+call);
 			
