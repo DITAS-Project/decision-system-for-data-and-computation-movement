@@ -34,7 +34,9 @@ public class BootConfigurator implements ServletContextListener {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void contextInitialized(ServletContextEvent arg0) {
+	public void contextInitialized(ServletContextEvent arg0) 
+	{
+		System.out.println("DS4M: V2.1");
 		
 		if ((new File(PathSetting.statusSerializeSer)).exists())
 		{
