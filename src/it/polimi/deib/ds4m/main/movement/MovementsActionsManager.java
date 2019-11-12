@@ -109,7 +109,7 @@ public class MovementsActionsManager
 					for (Movement movement: newMovements)
 					{
 						//computation movement:
-						if (movement.getType().toLowerCase().equals("computationmovement") || movement.getType().toLowerCase().equals("computationduplication") )
+						if (movement.getType().equalsIgnoreCase("computationmovement") || movement.getType().equalsIgnoreCase("computationduplication") )
 						{
 							//i create the mobvement only if both infrastructures are not dummy ( created as placeholder for original DAL)
 							if (infrastructure_target.getId()!=null && infrastrucure_source.getId()!=null)
@@ -122,13 +122,18 @@ public class MovementsActionsManager
 						
 						
 						//data movement:						
-						if (movement.getType().toLowerCase().equals("dataduplication") || movement.getType().toLowerCase().equals("datamovement") )
+						if (movement.getType().equalsIgnoreCase("dataduplication") || movement.getType().equalsIgnoreCase("datamovement") || 
+								movement.getType().equalsIgnoreCase("dataDuplicationComputationMovement") || movement.getType().equalsIgnoreCase("dataMovementComputationMovement"))
 						{
 							//for each DAL
 							for (DAL dal :DALs) 
 							{
+								//TODO: this check is to exclude streaming VDC, but needs to be improved since we needa new variable "type" in the blueprint, to dfine that a dal is streaming 
+								if (dal.getId().equalsIgnoreCase("streaming-dal"))
+									continue;
+								
 								if (		
-										(!(infrastrucure_source.getIsDataSource()) || movement.getType().toLowerCase().equals("dataduplication")) && //if the source infrastructure is a data source, i can only duplicate from it 
+										(!(infrastrucure_source.getIsDataSource()) || movement.getType().equalsIgnoreCase("dataduplication") || movement.getType().equalsIgnoreCase("dataDuplicationComputationMovement")) && //if the source infrastructure is a data source, i can only duplicate from it 
 										
 										(!(infrastructure_target.getIsDataSource()) ) //&& //The target infrastructure is not a data source (i cannot move to a data source, this infrastructure is dummy, only to represent the data source)
 										
@@ -144,8 +149,61 @@ public class MovementsActionsManager
 									movement.setToLinked(infrastructure_target);
 									movement.setDalToMove(dal);
 									
-									//add to list of data movement action 
-									movements.add(movement);
+									
+									//if it is a mormal data movement/duplication
+									if (movement.getType().equalsIgnoreCase("dataduplication") || movement.getType().equalsIgnoreCase("datamovement"))
+									{
+										//add to list of data movement action 
+										movements.add(movement);
+									}
+									else 
+									//if it is a composite movement (dataComputationMovement, i.e., first data and then computation movement)
+									//i create multiple movements for the combination of the possible computation movement 
+									if (movement.getType().equalsIgnoreCase("dataDuplicationComputationMovement") || movement.getType().equalsIgnoreCase("dataMovementComputationMovement"))
+									{
+										for(Infrastructure infrastrucure_sourceCM: infrastructures)
+										{
+											for(Infrastructure infrastructure_targetCM: infrastructures)
+											{
+												//if it is the same resource don't instantiate data movement action
+												if (infrastrucure_sourceCM.equals(infrastructure_targetCM))
+													continue;
+												
+												//skip dummy infrastructuyre cretaed for DAL movement
+												if (infrastructure_targetCM.getId()!=null && infrastrucure_sourceCM.getId()!=null)
+												{
+													//create a new data movement as the main one
+													Movement mainMovement = new Movement(movement);
+													
+													//create the subsequent computation movement
+													Movement nextMovement = new Movement(
+															"ComputationMovement", 
+															null,//from (string in the constructor, set later) 
+															null, //to (string in the constructor, set later)
+															null,//positive impacts [to null because it is defined in the main movement]
+															null,//negative impacts [to null because it is defined in the main movement]
+															null,//transformations [to null because not supported]
+															null,//costs [to null because it is defined in the main movement]
+															0.0//rest time [to null because it is defined in the main movement]
+															);
+													
+													nextMovement.setFromLinked(infrastrucure_sourceCM);
+													nextMovement.setToLinked(infrastructure_targetCM);
+													
+													//set the subsequent computation movement in the main data movement
+													
+													mainMovement.setNextMovement(nextMovement);
+													
+													//add the main data movement
+													movements.add(mainMovement);
+												}
+											}
+										}
+										
+									}
+									
+									
+									
 								}
 								
 							}
@@ -198,6 +256,15 @@ public class MovementsActionsManager
 							&&
 							( !(movement.getType().toLowerCase().equals("computationmovement") || movement.getType().toLowerCase().equals("computationduplication")) ||
 									vdc.getCurrentInfrastructure().equals(movement.getFromLinked())) // (computationmovement ||computationduplication) -> the source infrastructure is the current one
+							&&
+							( !(movement.getType().equalsIgnoreCase("dataDuplicationComputationMovement") || movement.getType().equalsIgnoreCase("dataMovementComputationMovement")) ||
+									(
+											movementEnactable(movement, vdc) &&
+											vdc.getCurrentInfrastructure().equals(movement.getNextMovement().getFromLinked())
+											
+											)
+									) // (dataDuplicationComputationMovement ||dataMovementComputationMovement) -> the data movement is enactable and for the next movement the source infrastructure is the current one
+							
 						)
 						
 						movementsToBeEnacted.add(movement);

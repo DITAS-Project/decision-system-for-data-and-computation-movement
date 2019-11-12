@@ -45,6 +45,9 @@ public class VDC implements Serializable
 	
     @JsonIgnore
     private ArrayList<Movement> movements;
+    
+    @JsonIgnore
+    private Movement nextMovement;
 	
 	
 	/**
@@ -231,6 +234,20 @@ public class VDC implements Serializable
 	 */
 	public void setInfrastructures(ArrayList<Infrastructure> infrastructures) {
 		this.infrastructures = infrastructures;
+	}
+
+	/**
+	 * @return the nextMovement
+	 */
+	public Movement getNextMovement() {
+		return nextMovement;
+	}
+
+	/**
+	 * @param nextMovement the nextMovement to set
+	 */
+	public void setNextMovement(Movement nextMovement) {
+		this.nextMovement = nextMovement;
 	}
 	
 	
