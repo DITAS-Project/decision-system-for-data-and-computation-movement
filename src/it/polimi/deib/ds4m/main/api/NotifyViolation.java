@@ -55,6 +55,7 @@ import it.polimi.deib.ds4m.main.configuration.PathSetting;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
+import it.polimi.deib.ds4m.main.model.da.ResultValueDA;
 import it.polimi.deib.ds4m.main.model.dataSources.DAL;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
@@ -241,7 +242,7 @@ public class NotifyViolation extends HttpServlet {
 
 					HttpResponse responseDA;
 
-					try {
+					try {						
 						responseDA = client.execute(requestDA);
 
 						System.out.println("\nSending 'GET' request to URL : " + callDA);
@@ -256,13 +257,15 @@ public class NotifyViolation extends HttpServlet {
 							result.append(line);
 						}
 
-						System.out.println(result.toString());
+						//System.out.println(result.toString());
 						
-						String test = "{'cpu': 4000, 'mem': 4096, 'storage': 150}";
+						//String test = "{\"cpu\": 4000, \"mem\": 4096, \"storage\": 150}";
+						ResultValueDA resultValueDA= mapper.readValue(result.toString(), ResultValueDA.class);
+						
 						
 
 					} catch (IOException e) {
-						System.out.println("Data Analitics not reached");
+						System.out.println("Data Analitics not reached or bad input");
 					}
 
 				}

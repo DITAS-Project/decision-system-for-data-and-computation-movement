@@ -33,6 +33,7 @@ public class MovementEnaction
 	private String DALid;
 	//private  ArrayList<Method> methodsInputs;
 	private ArrayList<DataSourceInput> dataSources;
+	private String VDCid;
 	
 	
 	
@@ -64,9 +65,10 @@ public class MovementEnaction
 	
 	public void importMovement (Movement movement, VDC violatedVDC) 
 	{
-		this.from = movement.getFromLinked().getName();
-		this.to = movement.getToLinked().getName();
+		this.from = movement.getFromLinked().getId();
+		this.to = movement.getToLinked().getId();
 		this.type = movement.getType();		
+		this.VDCid= violatedVDC.getId();
 
 
 		//this.setMethodsInputs(methodsInputs);
@@ -125,5 +127,17 @@ public class MovementEnaction
 	}
 	public void setDataSources(ArrayList<DataSourceInput> dataSources) {
 		this.dataSources = dataSources;
+	}
+	/**
+	 * @return the vDCid
+	 */
+	public String getVDCid() {
+		return VDCid;
+	}
+	/**
+	 * @param vDCid the vDCid to set
+	 */
+	public void setVDCid(String vDCid) {
+		VDCid = vDCid;
 	}
 }
