@@ -24,9 +24,14 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import it.polimi.deib.ds4m.main.evaluation.VDC_evaluation;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
 
 public class Utility {
 	
@@ -89,6 +94,23 @@ public class Utility {
 		    }
 		
 		return true;
+	}
+	
+	/**
+	 * function used to create an array of casted VDCs_evaluation
+	 * 
+	 * @param list
+	 * @return
+	 */
+	public static ArrayList<VDC> cast(ArrayList<VDC_evaluation> VDCs_evaluation) 
+	{
+		ArrayList<VDC> VDCs = new ArrayList<VDC>(); 
+		for (VDC vdc_evaluation : VDCs_evaluation)
+		{
+			VDCs.add(vdc_evaluation);
+		}
+		
+	    return VDCs;
 	}
 
 }

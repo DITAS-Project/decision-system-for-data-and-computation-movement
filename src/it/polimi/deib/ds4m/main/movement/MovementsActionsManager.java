@@ -392,7 +392,7 @@ public class MovementsActionsManager
 	/**
 	 * returns the movement class json
 	 * 
-	 * @param call the servlet object, to be used to read from the web inf in case the persisten volume is not available, if it is null it will no try to read the web inf 
+	 * @param call the servlet object, to be used to read from the web inf in case the persistent volume is not available, if it is null it will no try to read the web inf 
 	 * @return the Movement class json
 	 * @throws Exception
 	 */

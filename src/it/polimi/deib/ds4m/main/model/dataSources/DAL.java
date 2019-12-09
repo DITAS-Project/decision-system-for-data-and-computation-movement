@@ -4,12 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import it.polimi.deib.ds4m.main.evaluation.Infrastructure_evaluation;
 import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DAL implements Serializable
 {
 	private static final long serialVersionUID = 8797394367743432926L;
+	
 	private String original_ip;
 	private Infrastructure position;
 	private ArrayList<DataSource> dataSources;
@@ -30,6 +33,9 @@ public class DAL implements Serializable
 		this.position.setType("edge"); //edge since it is on premise of data owner
 		this.position.setIsDataSource(true);
 		
+		//TODO: set infrastructure resources? in rthis case bbecause it shoul only be moved from here
+		this.position = new Infrastructure_evaluation(position, null, null, null);
+				
 		infrastructures.add(position);//add the newly created resource to the list of resource to later create the movement
 
 	}

@@ -38,6 +38,8 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.polimi.deib.ds4m.main.configuration.PathSetting;
+import it.polimi.deib.ds4m.main.evaluation.DAL_evaluation;
+import it.polimi.deib.ds4m.main.evaluation.Infrastructure_evaluation;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.AbstractProperty;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.DataManagement;
@@ -247,24 +249,6 @@ public class VDCManager
 		
 		ArrayList<Infrastructure> infrastructures;
 		
-//previous version for "resource part without a map in JSON"
-//////
-//		try {
-//			
-//			infrastructures = new ArrayList<Infrastructure>(Arrays.asList(mapper.treeToValue(infrastructureJSON, Infrastructure[].class)));
-//			
-//		}
-//		catch (JsonProcessingException e) 
-//		{
-//			throw new Exception("error in parsing the INFRASTRUCURE Section of the Blueprint");
-//		}
-//		catch (Exception e) 
-//		{
-//			e.printStackTrace();
-//			throw new Exception("error in parsing the INFRASTRUCURE Section of the Blueprint");
-//		}
-
-		
 		Map<String,Infrastructure> infrastructuresMap;
 		try {
 			TypeReference<HashMap<String, Infrastructure>> typeRef = new TypeReference<HashMap<String, Infrastructure>>() {};
@@ -281,7 +265,8 @@ public class VDCManager
 		//create the array list with the infrastructures
 		infrastructures = new ArrayList<Infrastructure>();
 		for (Infrastructure infra: infrastructuresMap.values())
-			infrastructures.add(infra);
+			//TODO: add extra resources
+			infrastructures.add(new Infrastructure_evaluation(infra, null, null, null));//create infra evaluation
 		
 		//set the default infrastructure the current one
 		Infrastructure current = null;
@@ -371,12 +356,22 @@ public class VDCManager
 		//for each data source [DAL] creates a fake (initial) infrastructure for the data source, to allow movement
 		//create an array list to it in the VDC object
 		ArrayList<DAL> DALsArrayList = new ArrayList<DAL>();
+		
+		ArrayList<DAL_evaluation> DALs_evaluationArrayList = new ArrayList<DAL_evaluation>();
+		
+		
 		//for (DAL dal: DALs.values())
 		for (Map.Entry<String,DAL> entry : DALs.entrySet())	
 		{
 			entry.getValue().createResource(infrastructures);
 			entry.getValue().setId(entry.getKey());
-			DALsArrayList.add(entry.getValue());
+			
+			//create new object
+			//also create an array of DAL_evaluation
+			//TODO: add resources to VDC_evaluation
+			DALsArrayList.add((DAL)(new DAL_evaluation(entry.getValue(), null, null, null)));
+			
+
 		}
 		
 	    //retrieve VDC name

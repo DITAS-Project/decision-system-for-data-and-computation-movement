@@ -63,6 +63,8 @@ public class PathSetting
 	//public static final String urlDA_Resources = "http://178.22.69.180:8080/data-analytics/resources/cloudsigma-deployment/usage/";
 	public static final String urlDA_Resources = "http://localhost:30006/resources/";
 	
+	//*evaluation
+	public final static String test_pv= "/var/ditas/test/";
 	
 
 }
