@@ -67,9 +67,11 @@ public class MainEvaluation
 		}
 		
 		
+		System.out.println("Added " + VDCs.size() + " VDCs");
 		
-		//VDC added with the infreastructure that will be shared by all
-		//each VDC in placed in one infrstructure described in the blueprint
+		
+		//VDC added with the infrastructure that will be shared by all
+		//each VDC is placed in one infrastructure (DITAS default property) described in the blueprint
 		ArrayList<Infrastructure_evaluation> infrastructures = new ArrayList<Infrastructure_evaluation>();
 		for (VDC_evaluation vdc_evaluation : VDCs)
 		{
@@ -78,34 +80,81 @@ public class MainEvaluation
 			
 		}
 			
+		System.out.println("Added " + infrastructures.size() + " infrastructures");
+		
 		//connect infrastructures 
 		//1- Random
-		//2- fully connected
 		
-		//setup network with infrastructure
-		
-		//add connection as the number specified
-		for (int cnn =0; cnn<connectionNetworkNumber; cnn++)
-		{
-			//parameter set randomly
-			NetworkConnection nc = new NetworkConnection(
-					ThreadLocalRandom.current().nextDouble(0.0, 2.0), //latency in seconds
-					ThreadLocalRandom.current().nextDouble(95.0, 100.0) //availability
-					);
-			
-			network.add(nc);
-			
-			//i cycle until i added all the infrastructures to the nc 
-			for (int cpn =0; cpn < connectionsPerNetwork && nc.getResourcesConnected().size() < infrastructures.size() ; cpn++)
-			{
-				Random rand = new Random();
-				//select a number
-				int pic = rand.nextInt(infrastructures.size());
-				
-				nc.addResources(infrastructures.get(pic));
-			}
-		}
+//		setup network with infrastructure		
+//		add connection as the number specified
+//		for (int cnn =0; cnn<connectionNetworkNumber; cnn++)
+//		{
+//			//parameter set randomly
+//			NetworkConnection nc = new NetworkConnection(
+//					ThreadLocalRandom.current().nextDouble(0.0, 2.0), //latency in seconds
+//					ThreadLocalRandom.current().nextDouble(95.0, 100.0) //availability
+//					);
+//			
+//			network.add(nc);
+//			
+//			//i cycle until i added all the infrastructures to the nc 
+//			for (int cpn =0; cpn < connectionsPerNetwork && nc.getResourcesConnected().size() < infrastructures.size() ; cpn++)
+//			{
+//				Random rand = new Random();
+//				//select a number
+//				int pic = rand.nextInt(infrastructures.size());
+//				
+//				nc.addResources(infrastructures.get(pic));
+//			}
+//		}
 	
+		//2- fixed per case study
+		
+		NetworkConnection nc = new NetworkConnection(
+				ThreadLocalRandom.current().nextDouble(0.0, 2.0), //latency in seconds
+				ThreadLocalRandom.current().nextDouble(95.0, 100.0) //availability
+				);
+		
+		nc.addResources(searchInfrastructure(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")); //spart-fog-infrastructure
+		nc.addResources(searchInfrastructure(infrastructures, "4aaf7a50-ea9c-4525-8980-d05a2a692663")); //infr-cloudsigma-batch
+		network.add(nc);
+		
+		
+		nc = new NetworkConnection(
+				ThreadLocalRandom.current().nextDouble(0.0, 2.0), //latency in seconds
+				ThreadLocalRandom.current().nextDouble(95.0, 100.0) //availability
+				);
+		
+		nc.addResources(searchInfrastructure(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")); //spart-fog-infrastructure
+		nc.addResources(searchInfrastructure(infrastructures, "876a7464-6f75-4edd-a559-afd8bc48836c")); //infr-cloudsigma-stream
+		network.add(nc);
+		
+		nc = new NetworkConnection(
+				ThreadLocalRandom.current().nextDouble(0.0, 2.0), //latency in seconds
+				ThreadLocalRandom.current().nextDouble(95.0, 100.0) //availability
+				);
+		
+		nc.addResources(searchInfrastructure(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")); //spart-fog-infrastructure
+		nc.addResources(searchInfrastructure(infrastructures, "8022066a-7947-43a6-a823-a33cf34679b4")); //spart-edge-infrastructure
+		network.add(nc);
+		
+		nc = new NetworkConnection(
+				ThreadLocalRandom.current().nextDouble(0.0, 2.0), //latency in seconds
+				ThreadLocalRandom.current().nextDouble(95.0, 100.0) //availability
+				);
+		
+		nc.addResources(searchInfrastructure(infrastructures, "4aaf7a50-ea9c-4525-8980-d05a2a692663")); //infr-cloudsigma-batch
+		nc.addResources(searchInfrastructure(infrastructures, "876a7464-6f75-4edd-a559-afd8bc48836c")); //infr-cloudsigma-stream
+		network.add(nc);
+		
+		
+		
+		//1- infr-cloudsigma-batch     4aaf7a50-ea9c-4525-8980-d05a2a692663
+		//2- spart-fog-infrastructure  762a7547-ff4f-4f8d-b925-e3664003debc
+		//3- spart-edge-infrastructure 8022066a-7947-43a6-a823-a33cf34679b4
+		//4- infr-cloudsigma-stream    876a7464-6f75-4edd-a559-afd8bc48836c
+		
+		
 		//start VDCs
 		boolean violationFree=false;
 		int turns = 0;
@@ -178,6 +227,17 @@ public class MainEvaluation
 
 
 		return blueprintJson ;
+	}
+	
+	public static Infrastructure_evaluation searchInfrastructure(ArrayList<Infrastructure_evaluation> infrastructures, String infrastructureID)
+	{
+		for (Infrastructure infra : infrastructures)
+		{
+			if (infra.getId().equals(infrastructureID))
+				return (Infrastructure_evaluation) infra;
+		}
+		
+		return null;
 	}
 	
 
