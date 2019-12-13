@@ -22,6 +22,7 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import it.polimi.deib.ds4m.main.Utility;
 import it.polimi.deib.ds4m.main.configuration.PathSetting;
 
+
 public class GetVDCInfoTest 
 {
 	//set mockup server

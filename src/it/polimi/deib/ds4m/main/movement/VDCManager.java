@@ -196,6 +196,7 @@ public class VDCManager
 		mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 		
 		JsonNode root; 
+		
 		try {
 			root = mapper.readTree(concreteBlueprintJSON);
 		}
@@ -266,7 +267,7 @@ public class VDCManager
 		infrastructures = new ArrayList<Infrastructure>();
 		for (Infrastructure infra: infrastructuresMap.values())
 			//TODO: add extra resources
-			infrastructures.add(new Infrastructure_evaluation(infra, null, null, null));//create infra evaluation
+			infrastructures.add(new Infrastructure_evaluation(infra, null, null, null, null));//create infra evaluation
 		
 		//set the default infrastructure the current one
 		Infrastructure current = null;
@@ -477,29 +478,21 @@ public class VDCManager
 	public static String loadConcreteBlueprint(String VDC) throws Exception
 	{
 		String blueprintJson=null;
+
+		//System.out.println(path);
+		File blueprintJSONFile = new File(VDC);
 		
-		if ((new File(PathSetting.blueprints_pv)).exists())
-		{		
-			String path = PathSetting.blueprints_pv + "/" + VDC;
-			//System.out.println(path);
-			File blueprintJSONFile = new File(path);
-			
-			try(BufferedReader blueprintJSONBR = new BufferedReader(new FileReader(blueprintJSONFile)))
-			{
-				blueprintJson = blueprintJSONBR.lines().collect(Collectors.joining("\n"));		
-				blueprintJSONBR.close();
-				
-			} catch (FileNotFoundException e) 
-			{
-				throw new Exception("file not found");
-			} catch (IOException e) 
-			{
-				throw new Exception("problem in reading the concrete blueprint at "+path);
-			}
-		}
-		else
+		try(BufferedReader blueprintJSONBR = new BufferedReader(new FileReader(blueprintJSONFile)))
 		{
-			throw new PathNotFoundException("Persisten volume not found, load concrete blueprint");
+			blueprintJson = blueprintJSONBR.lines().collect(Collectors.joining("\n"));		
+			blueprintJSONBR.close();
+			
+		} catch (FileNotFoundException e) 
+		{
+			throw new Exception("file not found");
+		} catch (IOException e) 
+		{
+			throw new Exception("problem in reading the concrete blueprint at "+VDC);
 		}
 
 

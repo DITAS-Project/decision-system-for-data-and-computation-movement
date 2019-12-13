@@ -39,11 +39,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import com.ditas.ehealth.GetDataSourceMetricsReply;
-import com.ditas.ehealth.GetDataSourceMetricsRequest;
-import com.ditas.ehealth.MetricsServiceGrpc;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -55,7 +50,6 @@ import it.polimi.deib.ds4m.main.configuration.PathSetting;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
-import it.polimi.deib.ds4m.main.model.da.ResultValueDA;
 import it.polimi.deib.ds4m.main.model.dataSources.DAL;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
@@ -260,7 +254,7 @@ public class NotifyViolation extends HttpServlet {
 						//System.out.println(result.toString());
 						
 						//String test = "{\"cpu\": 4000, \"mem\": 4096, \"storage\": 150}";
-						ResultValueDA resultValueDA= mapper.readValue(result.toString(), ResultValueDA.class);
+						//ResultValueDA resultValueDA= mapper.readValue(result.toString(), ResultValueDA.class);
 						
 						
 
@@ -358,7 +352,7 @@ public class NotifyViolation extends HttpServlet {
 					String concreteBlueprintJSON = null;
 					try {
 						// the function needs the name of the file
-						concreteBlueprintJSON = VDCManager.loadConcreteBlueprint(violatedVDC.getId() + ".json");
+						concreteBlueprintJSON = VDCManager.loadConcreteBlueprint(PathSetting.blueprints_pv + "/"+violatedVDC.getId() + ".json");
 					} catch (PathNotFoundException pnfE) {
 						System.err.println("NofifyViolation: " + pnfE.getMessage());
 						System.err.println("NofifyViolation: skip update VDC");

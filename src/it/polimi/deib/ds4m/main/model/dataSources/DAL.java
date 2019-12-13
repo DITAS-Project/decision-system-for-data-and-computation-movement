@@ -34,7 +34,7 @@ public class DAL implements Serializable
 		this.position.setIsDataSource(true);
 		
 		//TODO: set infrastructure resources? in rthis case bbecause it shoul only be moved from here
-		this.position = new Infrastructure_evaluation(position, null, null, null);
+		this.position = new Infrastructure_evaluation(position, null, null, null, null);
 				
 		infrastructures.add(position);//add the newly created resource to the list of resource to later create the movement
 

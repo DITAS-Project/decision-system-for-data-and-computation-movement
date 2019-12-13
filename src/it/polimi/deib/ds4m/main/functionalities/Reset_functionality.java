@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import it.polimi.deib.ds4m.main.Utility;
 import it.polimi.deib.ds4m.main.configuration.PathSetting;
 
+
 /**
  * Servlet implementation class Reset
  */

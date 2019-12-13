@@ -17,39 +17,15 @@
  */
 package it.polimi.deib.ds4m.main.functionalities;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.impl.client.HttpClientBuilder;
-
-import com.ditas.ehealth.GetDataSourceMetricsReply;
-import com.ditas.ehealth.GetDataSourceMetricsRequest;
-import com.ditas.ehealth.MetricsServiceGrpc;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+
 
 import it.polimi.deib.ds4m.main.Utility;
 import it.polimi.deib.ds4m.main.configuration.PathSetting;
@@ -59,8 +35,6 @@ import it.polimi.deib.ds4m.main.evaluation.ResourceManager;
 import it.polimi.deib.ds4m.main.evaluation.VDC_evaluation;
 import it.polimi.deib.ds4m.main.model.Violation;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
-import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
-import it.polimi.deib.ds4m.main.model.da.ResultValueDA;
 import it.polimi.deib.ds4m.main.model.dataSources.DAL;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
@@ -70,10 +44,10 @@ import it.polimi.deib.ds4m.main.movement.VDCManager;
 import wiremock.com.jayway.jsonpath.PathNotFoundException;
 
 /**
- * Servlet implementation class NotifyViolation
+ * implementation class NotifyViolation
  */
-@WebServlet("/v2/NotifyViolation")
-public class NotifyViolation_functionality {
+public class NotifyViolation_functionality 
+{
 	private static final long serialVersionUID = 1L;
 
 	public static void doPost(ArrayList<VDC_evaluation> VDCs, ArrayList<Violation> violations) 
@@ -142,21 +116,6 @@ public class NotifyViolation_functionality {
 				MovementEnaction movementEnaction = new MovementEnaction();
 				movementEnaction.importMovement(movement, violatedVDC);
 
-				// once the movement action has been selected,
-				// 1-check the amount of space that is used by the sourse DAL
-
-				// String dalResourceJSON=null;
-
-				// i perform the call only if it is a data movement or data duplication
-				if (movement.getType().equalsIgnoreCase("DataDuplication")
-						|| movement.getType().equalsIgnoreCase("DataMovement")
-						|| movement.getType().equalsIgnoreCase("dataMovementComputationMovement")
-						|| movement.getType().equalsIgnoreCase("dataDuplicationComputationMovement")) {
-
-					//TODO: check space
-
-				}
-
 
 				// if it's a computation movement
 				if (movement.getType().equalsIgnoreCase("ComputationMovement")) 
@@ -191,72 +150,16 @@ public class NotifyViolation_functionality {
 					}
 
 				} else if (movement.getType().equalsIgnoreCase("DataDuplication")
-						|| movement.getType().equalsIgnoreCase("dataDuplicationComputationMovement")) {
-
-					// set new id DAL
-					String newDALID = UUID.randomUUID().toString();
-
-					movementEnaction.setDALid(newDALID);
-
-					// call DME
-					ResourceManager.duplicateDAL((DAL_evaluation) movement.getDalToMove(), (Infrastructure_evaluation) movement.getToLinked());
-
-					// answer DME ignored
-
-					// ***update VDC with new DAL
-					// if there is a movement to perform after movement, I set it
+						|| movement.getType().equalsIgnoreCase("dataDuplicationComputationMovement")) 
+				{
+					//movementEnaction.setDALid(newDALID);
+					
 					if (movement.getType().equalsIgnoreCase("dataDuplicationComputationMovement")) {
 						violatedVDC.setNextMovement(movement.getNextMovement());
 					}
 
-					// create DAL
-					DAL duplicatedDAL = new DAL();
-					duplicatedDAL.setPosition(movement.getToLinked());
-					duplicatedDAL.setDataSources(movement.getDalToMove().getDataSources());
+					ResourceManager.duplicateDAL((VDC_evaluation) violatedVDC, (DAL_evaluation) movement.getDalToMove(), (Infrastructure_evaluation) movement.getToLinked());
 
-					// create the unique identifier for the new DAL
-					duplicatedDAL.setId(newDALID);
-
-					// add dal to vdc
-					violatedVDC.getDALs().add(duplicatedDAL);
-
-					// update data movements (a new DAL means new data movements)
-					String concreteBlueprintJSON = null;
-					try {
-						// the function needs the name of the file
-						concreteBlueprintJSON = VDCManager.loadConcreteBlueprint(violatedVDC.getId() + ".json");
-					} catch (PathNotFoundException pnfE) {
-						System.err.println("NofifyViolation: " + pnfE.getMessage());
-						System.err.println("NofifyViolation: skip update VDC");
-					} catch (Exception e) {
-						System.err.println("NotifyViolation: " + e.getMessage());
-						return;
-					}
-
-					// i skip the update if i failed to load the movement class.
-					// this control is needed because of the PathNotFoundException: i still continue
-					// even if the share volume is not accessible
-					if (concreteBlueprintJSON != null) {
-						// check if the persistent volume folder exists. if not, it is not mounted (it
-						// is a junit test execution) and skip the save
-						String movementsJSON;
-						try {
-							movementsJSON = MovementsActionsManager.loadMovementClass(null);
-						} catch (Exception e) {
-							System.err.println("NotifyViolation: " + e.getMessage());
-							System.err.println("NotifyViolation: skip update VDC");
-							return;
-						}
-
-						// update the VDC
-						try {
-							VDCManager.updateVDCmovements(concreteBlueprintJSON, movementsJSON, violatedVDC);
-						} catch (Exception e) {
-							System.err.println("NotifyViolation: " + e.getMessage());
-						}
-
-						System.out.println("VDC updated");
-					}
 				}
 
 			}

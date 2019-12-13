@@ -9,13 +9,11 @@ public class NetworkConnection
 	
 	//network characteristics
 	Double latency;
-	Double availability;
 	
-	public NetworkConnection(Double latency, Double availability)
+	public NetworkConnection(Double latency)
 	{
 		this.resourcesConnected = new ArrayList<Infrastructure_evaluation>();
 		this.latency = latency;
-		this.availability=availability;
 		
 	}
 
@@ -56,19 +54,6 @@ public class NetworkConnection
 		this.latency = latency;
 	}
 
-	/**
-	 * @return the availability
-	 */
-	public Double getAvailability() {
-		return availability;
-	}
-
-	/**
-	 * @param availability the availability to set
-	 */
-	public void setAvailability(Double availability) {
-		this.availability = availability;
-	}
 
 
 }

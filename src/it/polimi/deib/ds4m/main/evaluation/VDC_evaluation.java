@@ -157,7 +157,7 @@ public class VDC_evaluation  extends it.polimi.deib.ds4m.main.model.concreteBlue
 		
 		switch(attribute.getType().toLowerCase())
 		{
-			case "latency":
+			case "latency"://latency is a resource to be chechked in the network 
 				{
 					//compare it with requirements
 					if(
@@ -182,12 +182,12 @@ public class VDC_evaluation  extends it.polimi.deib.ds4m.main.model.concreteBlue
 						
 				}
 				break;
-			case "availability":
+			case "availability"://avilability is a resource to be checked in VDC
 				{
-					//compare it with requirements
+					//compare it with requirements of resopurces where the vdc is stored
 					if(
-							(property.getMaximum()!=null && property.getMaximum()<=nc.getAvailability())  ||
-							property.getMinimum()!=null && property.getMinimum()>=nc.getAvailability()
+							(property.getMaximum()!=null && property.getMaximum()<= ((Infrastructure_evaluation)this.getCurrentInfrastructure()).getAvailability() )  ||
+							(property.getMinimum()!=null && property.getMinimum()>= ((Infrastructure_evaluation)this.getCurrentInfrastructure()).getAvailability() )
 							)
 					{
 						Violation violation = new Violation();
@@ -197,6 +197,7 @@ public class VDC_evaluation  extends it.polimi.deib.ds4m.main.model.concreteBlue
 						ArrayList<Metric> metrics = new ArrayList<Metric>();
 						Metric metric = new Metric();
 						metric.setKey("availability");
+						metric.setValue(((Infrastructure_evaluation)this.getCurrentInfrastructure()).getAvailability().toString());
 						metrics.add(metric);
 						
 						violation.setMetrics(metrics);

@@ -53,7 +53,10 @@ public class MainEvaluation
 						blueprint.substring(0,blueprint.lastIndexOf(".")), //VDC iD 
 						concreteBlueprintJSON, //concrete blueprint
 						100, 5, 1, 
-						blueprint.substring(0,blueprint.lastIndexOf(".")), //method id 
+						//blueprint.substring(0,blueprint.lastIndexOf("."))
+						blueprint.substring(0,blueprint.lastIndexOf(".")).equalsIgnoreCase("batch")? "GetSimplifiedDiagnostic" : "GetStreamingData"
+						
+						, //method id 
 						network
 						);
 			}	
@@ -81,6 +84,18 @@ public class MainEvaluation
 		}
 			
 		System.out.println("Added " + infrastructures.size() + " infrastructures");
+		
+		//for each infrastructure add availability
+		
+		//1- infr-cloudsigma-batch     4aaf7a50-ea9c-4525-8980-d05a2a692663
+		//2- spart-fog-infrastructure  762a7547-ff4f-4f8d-b925-e3664003debc
+		//3- spart-edge-infrastructure 8022066a-7947-43a6-a823-a33cf34679b4
+		//4- infr-cloudsigma-stream    876a7464-6f75-4edd-a559-afd8bc48836c
+		
+		(searchInfrastructureByID(infrastructures, "4aaf7a50-ea9c-4525-8980-d05a2a692663")).setAvailability(99.0);
+		(searchInfrastructureByID(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")).setAvailability(80.0);//default store VDC -> violation
+		(searchInfrastructureByID(infrastructures, "8022066a-7947-43a6-a823-a33cf34679b4")).setAvailability(99.0);
+		(searchInfrastructureByID(infrastructures, "876a7464-6f75-4edd-a559-afd8bc48836c")).setAvailability(99.0);
 		
 		//connect infrastructures 
 		//1- Random
@@ -110,49 +125,59 @@ public class MainEvaluation
 	
 		//2- fixed per case study
 		
-		NetworkConnection nc = new NetworkConnection(
-				ThreadLocalRandom.current().nextDouble(0.0, 2.0), //latency in seconds
-				ThreadLocalRandom.current().nextDouble(95.0, 100.0) //availability
-				);
+//		NetworkConnection nc = new NetworkConnection(
+//				ThreadLocalRandom.current().nextDouble(0.0, 2.0), //latency in seconds
+//				ThreadLocalRandom.current().nextDouble(95.0, 100.0) //availability
+//				);
 		
-		nc.addResources(searchInfrastructure(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")); //spart-fog-infrastructure
-		nc.addResources(searchInfrastructure(infrastructures, "4aaf7a50-ea9c-4525-8980-d05a2a692663")); //infr-cloudsigma-batch
+		NetworkConnection nc = new NetworkConnection(3.0);
+		
+		nc.addResources(searchInfrastructureByID(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")); //spart-fog-infrastructure
+		nc.addResources(searchInfrastructureByID(infrastructures, "4aaf7a50-ea9c-4525-8980-d05a2a692663")); //infr-cloudsigma-batch
 		network.add(nc);
 		
 		
 		nc = new NetworkConnection(
-				ThreadLocalRandom.current().nextDouble(0.0, 2.0), //latency in seconds
-				ThreadLocalRandom.current().nextDouble(95.0, 100.0) //availability
+				ThreadLocalRandom.current().nextDouble(0.0, 2.0) //latency in seconds
 				);
 		
-		nc.addResources(searchInfrastructure(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")); //spart-fog-infrastructure
-		nc.addResources(searchInfrastructure(infrastructures, "876a7464-6f75-4edd-a559-afd8bc48836c")); //infr-cloudsigma-stream
+		nc.addResources(searchInfrastructureByID(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")); //spart-fog-infrastructure
+		nc.addResources(searchInfrastructureByID(infrastructures, "876a7464-6f75-4edd-a559-afd8bc48836c")); //infr-cloudsigma-stream
 		network.add(nc);
 		
 		nc = new NetworkConnection(
-				ThreadLocalRandom.current().nextDouble(0.0, 2.0), //latency in seconds
-				ThreadLocalRandom.current().nextDouble(95.0, 100.0) //availability
+				ThreadLocalRandom.current().nextDouble(0.0, 2.0) //latency in seconds
 				);
 		
-		nc.addResources(searchInfrastructure(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")); //spart-fog-infrastructure
-		nc.addResources(searchInfrastructure(infrastructures, "8022066a-7947-43a6-a823-a33cf34679b4")); //spart-edge-infrastructure
+		nc.addResources(searchInfrastructureByID(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")); //spart-fog-infrastructure
+		nc.addResources(searchInfrastructureByID(infrastructures, "8022066a-7947-43a6-a823-a33cf34679b4")); //spart-edge-infrastructure
 		network.add(nc);
 		
 		nc = new NetworkConnection(
-				ThreadLocalRandom.current().nextDouble(0.0, 2.0), //latency in seconds
-				ThreadLocalRandom.current().nextDouble(95.0, 100.0) //availability
+				ThreadLocalRandom.current().nextDouble(0.0, 2.0) //latency in seconds
 				);
 		
-		nc.addResources(searchInfrastructure(infrastructures, "4aaf7a50-ea9c-4525-8980-d05a2a692663")); //infr-cloudsigma-batch
-		nc.addResources(searchInfrastructure(infrastructures, "876a7464-6f75-4edd-a559-afd8bc48836c")); //infr-cloudsigma-stream
+		nc.addResources(searchInfrastructureByID(infrastructures, "4aaf7a50-ea9c-4525-8980-d05a2a692663")); //infr-cloudsigma-batch
+		nc.addResources(searchInfrastructureByID(infrastructures, "876a7464-6f75-4edd-a559-afd8bc48836c")); //infr-cloudsigma-stream
 		network.add(nc);
 		
 		
+		// add connection dal (dall can be retrieved only by name)
+		nc = new NetworkConnection(
+				ThreadLocalRandom.current().nextDouble(0.0, 2.0) //latency in seconds
+				);
 		
-		//1- infr-cloudsigma-batch     4aaf7a50-ea9c-4525-8980-d05a2a692663
-		//2- spart-fog-infrastructure  762a7547-ff4f-4f8d-b925-e3664003debc
-		//3- spart-edge-infrastructure 8022066a-7947-43a6-a823-a33cf34679b4
-		//4- infr-cloudsigma-stream    876a7464-6f75-4edd-a559-afd8bc48836c
+		nc.addResources(searchInfrastructureByID(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")); //spart-fog-infrastructure
+		nc.addResources(searchInfrastructureByName(infrastructures, "212.8.121.134") ); //DAL influxdb-dal-local
+		network.add(nc);
+		
+		nc = new NetworkConnection(
+				ThreadLocalRandom.current().nextDouble(0.0, 2.0) //latency in seconds
+				);
+		
+		nc.addResources(searchInfrastructureByID(infrastructures, "876a7464-6f75-4edd-a559-afd8bc48836c")); //infr-cloudsigma-stream
+		nc.addResources(searchInfrastructureByName(infrastructures, "212.8.121.135") ); //DAL streaming-dal //remember to change the ip in the blueprint (before ssame IP) 
+		network.add(nc);
 		
 		
 		//start VDCs
@@ -181,6 +206,10 @@ public class MainEvaluation
 					violationFree=true;//end the while cycle
 			}
 		}
+		
+		System.out.println("System corrected in " + turns + " turns");
+		
+		
 
 	}
 	
@@ -229,11 +258,22 @@ public class MainEvaluation
 		return blueprintJson ;
 	}
 	
-	public static Infrastructure_evaluation searchInfrastructure(ArrayList<Infrastructure_evaluation> infrastructures, String infrastructureID)
+	public static Infrastructure_evaluation searchInfrastructureByID(ArrayList<Infrastructure_evaluation> infrastructures, String infrastructureID)
 	{
 		for (Infrastructure infra : infrastructures)
 		{
-			if (infra.getId().equals(infrastructureID))
+			if (infra.getId()!=null && infra.getId().equalsIgnoreCase(infrastructureID))
+				return (Infrastructure_evaluation) infra;
+		}
+		
+		return null;
+	}
+	
+	public static Infrastructure_evaluation searchInfrastructureByName(ArrayList<Infrastructure_evaluation> infrastructures, String infrastructureName)
+	{
+		for (Infrastructure infra : infrastructures)
+		{
+			if (infra.getName()!=null && infra.getName().equalsIgnoreCase(infrastructureName))
 				return (Infrastructure_evaluation) infra;
 		}
 		
