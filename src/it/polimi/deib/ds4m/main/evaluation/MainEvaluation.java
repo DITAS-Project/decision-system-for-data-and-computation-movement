@@ -92,7 +92,7 @@ public class MainEvaluation
 		//3- spart-edge-infrastructure 8022066a-7947-43a6-a823-a33cf34679b4
 		//4- infr-cloudsigma-stream    876a7464-6f75-4edd-a559-afd8bc48836c
 		
-		(searchInfrastructureByID(infrastructures, "4aaf7a50-ea9c-4525-8980-d05a2a692663")).setAvailability(99.0);
+		(searchInfrastructureByID(infrastructures, "4aaf7a50-ea9c-4525-8980-d05a2a692663")).setAvailability(80.0);
 		(searchInfrastructureByID(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")).setAvailability(80.0);//default store VDC -> violation
 		(searchInfrastructureByID(infrastructures, "8022066a-7947-43a6-a823-a33cf34679b4")).setAvailability(99.0);
 		(searchInfrastructureByID(infrastructures, "876a7464-6f75-4edd-a559-afd8bc48836c")).setAvailability(99.0);
@@ -182,32 +182,46 @@ public class MainEvaluation
 		
 		//start VDCs
 		boolean violationFree=false;
+		boolean nextTurn=false;
+		boolean violationFound=false;
+		
+		
 		int turns = 0;
 		
 		while (!violationFree)
 		{
 			System.out.println("turn: " + turns);
 			
-			for (VDC_evaluation vdc_evaluation : VDCs)
+			for (VDC_evaluation vdc_evaluation : VDCs) 
 			{
 				//(new Thread(vdc_evaluation, vdc_evaluation.getId())).start();
 				Violation violation = vdc_evaluation.checkViolation();
 				
 				if (violation!=null) 
 				{
-					System.out.println("violation found for VDC " + vdc_evaluation.getId());
+					System.out.println("Violation found for VDC " + vdc_evaluation.getId());
 					
 					ArrayList<Violation> violations = new ArrayList<Violation>();
 					violations.add(violation);
 					
 					NotifyViolation_functionality.doPost(VDCs, violations);
+					
+					nextTurn=false;
+					violationFound=true;
+					
+					turns++;
+					
 				}
-				else
-					violationFree=true;//end the while cycle
 			}
 		}
 		
-		System.out.println("System corrected in " + turns + " turns");
+		if (nextTurn)
+			violationFree=true;//end the while cycle
+		
+		if (violationFound)
+			nextTurn=true;
+		
+		System.out.println("System corrected in " + (turns + 1) + " turns");
 		
 		
 

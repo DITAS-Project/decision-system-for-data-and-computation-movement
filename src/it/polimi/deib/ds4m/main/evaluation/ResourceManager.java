@@ -17,9 +17,11 @@ public class ResourceManager
 	 * @param vdcToMove
 	 * @param targetResource
 	 */
-	public static void moveVDC(VDC_evaluation vdcToMove, Infrastructure_evaluation targetResource)
+	public static void moveVDC(VDC_evaluation vdcToMove, Infrastructure_evaluation targetInfrastructure)
 	{
-		vdcToMove.setCurrentInfrastructure(targetResource);
+		System.out.println("Moved VDC " + vdcToMove.getId() + " to " + targetInfrastructure.getName());
+		
+		vdcToMove.setCurrentInfrastructure(targetInfrastructure);
 	}
 	
 	/**
@@ -28,8 +30,11 @@ public class ResourceManager
 	 * @param vdcToDuplicate
 	 * @param targetResource
 	 */
-	public static void duplicateVDC(VDC_evaluation vdcToDuplicate, Infrastructure_evaluation targetResource)
+	public static void duplicateVDC(VDC_evaluation vdcToDuplicate, Infrastructure_evaluation targetInfrastructure)
 	{
+		
+		System.out.println("duplicated VDC " + vdcToDuplicate.getId() + " to " + targetInfrastructure.getName() + "[not implemented see notes]");
+		
 		//create a new VDC
 		
 //		//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
@@ -70,14 +75,15 @@ public class ResourceManager
 	 * @param dalToMove
 	 * @param targetResource
 	 */
-	public static void moveDAL(DAL_evaluation dalToMove, Infrastructure_evaluation targetResource)
+	public static void moveDAL(DAL_evaluation dalToMove, Infrastructure_evaluation targetInfrastructure)
 	{
+		System.out.println("Moved DAL " + dalToMove.getId() + " to " + targetInfrastructure.getName());
 		
-		dalToMove.setPosition(targetResource);
+		dalToMove.setPosition(targetInfrastructure);
 	}
 	
 	/**
-	 * moves a DAL in another resources 
+	 * duplicates a DAL in another resources 
 	 * 
 	 * @param dalToDuplicate
 	 * @param targetResource
@@ -86,6 +92,8 @@ public class ResourceManager
 	{
 		// ***update VDC with new DAL
 		// if there is a movement to perform after movement, I set it
+		
+		System.out.println("Duplicated DAL " + dalToDuplicate.getId() + " to " + targetInfrastructure.getName());
 
 
 		// create DAL
@@ -101,6 +109,9 @@ public class ResourceManager
 
 		// add dal to vdc
 		violatedVDC.getDALs().add(duplicatedDAL);
+		
+		//remove the old DAL
+		violatedVDC.getDALs().remove(dalToDuplicate);
 
 		// update data movements (a new DAL means new data movements)
 		String concreteBlueprintJSON = null;
