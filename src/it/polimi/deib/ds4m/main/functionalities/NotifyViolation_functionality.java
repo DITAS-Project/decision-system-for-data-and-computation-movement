@@ -19,6 +19,8 @@ package it.polimi.deib.ds4m.main.functionalities;
 
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
@@ -33,7 +35,10 @@ import it.polimi.deib.ds4m.main.evaluation.DAL_evaluation;
 import it.polimi.deib.ds4m.main.evaluation.Infrastructure_evaluation;
 import it.polimi.deib.ds4m.main.evaluation.ResourceManager;
 import it.polimi.deib.ds4m.main.evaluation.VDC_evaluation;
+import it.polimi.deib.ds4m.main.model.Metric;
 import it.polimi.deib.ds4m.main.model.Violation;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.Attribute;
+import it.polimi.deib.ds4m.main.model.concreteBlueprint.Property;
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.TreeStructure;
 import it.polimi.deib.ds4m.main.model.dataSources.DAL;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
@@ -90,6 +95,55 @@ public class NotifyViolation_functionality
 					String message = "NotifyViolation: No movements to be enacted found";
 					System.err.println(message);
 					return;
+				}
+				
+				//filter the movement action based on the violation and the target capability
+				
+				boolean examinedAllMovements = false;
+				
+				while (!examinedAllMovements)
+				{
+					examinedAllMovements=true;//if i reach this point it mens I examined all movements
+					
+					loopMovements:
+					for (int i=0; i< movementsToBeEnacted.size(); i++)
+					{
+						Movement movementToBeEnacted= movementsToBeEnacted.get(i);
+						
+						for (TreeStructure violatedGoal: violatedGoals)
+						{
+							for (Attribute attributeViolated : violatedGoal.getAttributesLinked() )
+							{
+								for (Entry<String, Property> entry : attributeViolated.getProperties().entrySet())
+								{
+									//check the type of the property of the violated goal
+									switch (attributeViolated.getType().toLowerCase())
+									{
+										case "availability":
+											if (entry.getValue().getMaximum()!=null)
+											{
+												if (  ((Infrastructure_evaluation) movementToBeEnacted.getToLinked()).getAvailability() > entry.getValue().getMaximum())
+												{
+													movementsToBeEnacted.remove(i);//if it does not match the requirements, remove the movement
+													examinedAllMovements=false;//set this variable to false, to repeat a cycle
+													break loopMovements;
+												}
+											}
+											if (entry.getValue().getMinimum()!=null)
+											{
+												if (  ((Infrastructure_evaluation) movementToBeEnacted.getToLinked()).getAvailability() < entry.getValue().getMinimum() )
+												{
+													movementsToBeEnacted.remove(i);//if it does not match the requirements, remove the movement
+													examinedAllMovements=false;//set this variable to false, to repeat a cycle
+													break loopMovements;
+												}
+											}
+									}
+								}
+							}
+						}
+					}//if i reach the end of the outer for without incurring in any break, the examineAllMovements variable will still be set top true and i can exitthe while loop 
+					
 				}
 
 				// order the dm action using a strategy
@@ -154,6 +208,7 @@ public class NotifyViolation_functionality
 				{
 					//movementEnaction.setDALid(newDALID);
 					
+					// if there is a movement to perform after movement, I set it
 					if (movement.getType().equalsIgnoreCase("dataDuplicationComputationMovement")) {
 						violatedVDC.setNextMovement(movement.getNextMovement());
 					}

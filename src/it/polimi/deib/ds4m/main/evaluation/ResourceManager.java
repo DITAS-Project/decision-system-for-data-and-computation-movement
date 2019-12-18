@@ -90,9 +90,6 @@ public class ResourceManager
 	 */
 	public static void duplicateDAL(VDC_evaluation violatedVDC, DAL_evaluation dalToDuplicate, Infrastructure_evaluation targetInfrastructure)
 	{
-		// ***update VDC with new DAL
-		// if there is a movement to perform after movement, I set it
-		
 		System.out.println("Duplicated DAL " + dalToDuplicate.getId() + " to " + targetInfrastructure.getName());
 
 
@@ -100,6 +97,8 @@ public class ResourceManager
 		DAL duplicatedDAL = new DAL();
 		duplicatedDAL.setPosition(targetInfrastructure);
 		duplicatedDAL.setDataSources(dalToDuplicate.getDataSources());
+		duplicatedDAL.setOriginal_ip(dalToDuplicate.getOriginal_ip());//not correct to real implementation cause the IP of the DAL will be comunicated later by a call from the DME. ignored in simulation
+		
 		
 		// set new id DAL
 		String newDALID = UUID.randomUUID().toString();
@@ -107,8 +106,9 @@ public class ResourceManager
 		// create the unique identifier for the new DAL
 		duplicatedDAL.setId(newDALID);
 
-		// add dal to vdc
-		violatedVDC.getDALs().add(duplicatedDAL);
+		
+		// add dal_evaluation to vdc
+		violatedVDC.getDALs().add(new DAL_evaluation(duplicatedDAL, dalToDuplicate.getDiskSpaceUsed(), dalToDuplicate.getRAMUsed(), dalToDuplicate.getCpuUsed()));
 		
 		//remove the old DAL
 		violatedVDC.getDALs().remove(dalToDuplicate);

@@ -192,7 +192,7 @@ public class MainEvaluation
 		{
 			System.out.println("turn: " + turns);
 			
-			for (VDC_evaluation vdc_evaluation : VDCs) 
+			for (VDC_evaluation vdc_evaluation : VDCs) //il provblema con la seconda iterazione, problemi con casting DAL? magari creazione DAL duplicatio..args serve duplicare il dsal o basta anche qui spostarlo? tanto quando lo duplico poi l'altro lo cancello
 			{
 				//(new Thread(vdc_evaluation, vdc_evaluation.getId())).start();
 				Violation violation = vdc_evaluation.checkViolation();
@@ -211,15 +211,19 @@ public class MainEvaluation
 					
 					turns++;
 					
+					break;//if there is a violation, fix it and repeat the while cycle
+					
 				}
 			}
+			
+			if (nextTurn)
+				violationFree=true;//end the while cycle
+			
+			if (violationFound)
+				nextTurn=true;
 		}
 		
-		if (nextTurn)
-			violationFree=true;//end the while cycle
-		
-		if (violationFound)
-			nextTurn=true;
+
 		
 		System.out.println("System corrected in " + (turns + 1) + " turns");
 		

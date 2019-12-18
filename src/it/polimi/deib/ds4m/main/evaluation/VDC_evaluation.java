@@ -125,7 +125,7 @@ public class VDC_evaluation  extends it.polimi.deib.ds4m.main.model.concreteBlue
 						}
 					}
 					
-					//for each network connection slected, check if al least one satisfy requirements of this childern
+					//for each network connection selected (i.e. for each reachable resources from the original one), check if al least one satisfy requirements of this childern
 					for(NetworkConnection nc : network_VDC_DAL)
 					{
 						return checkAttributerequirements(nc, attribute);
