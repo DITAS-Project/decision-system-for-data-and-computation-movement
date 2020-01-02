@@ -92,10 +92,20 @@ public class MainEvaluation
 		//3- spart-edge-infrastructure 8022066a-7947-43a6-a823-a33cf34679b4
 		//4- infr-cloudsigma-stream    876a7464-6f75-4edd-a559-afd8bc48836c
 		
-		(searchInfrastructureByID(infrastructures, "4aaf7a50-ea9c-4525-8980-d05a2a692663")).setAvailability(80.0);
-		(searchInfrastructureByID(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")).setAvailability(80.0);//default store VDC -> violation
+		
+		
+		(searchInfrastructureByID(infrastructures, "4aaf7a50-ea9c-4525-8980-d05a2a692663")).setAvailability(99.0); //
+		(searchInfrastructureByID(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")).setAvailability(99.0);//default store VDC -> violation / put to 80 to trigger computation movement for availability pboblem 
 		(searchInfrastructureByID(infrastructures, "8022066a-7947-43a6-a823-a33cf34679b4")).setAvailability(99.0);
 		(searchInfrastructureByID(infrastructures, "876a7464-6f75-4edd-a559-afd8bc48836c")).setAvailability(99.0);
+		
+		
+		(searchInfrastructureByID(infrastructures, "5")).setAvailability(99.0);
+		(searchInfrastructureByID(infrastructures, "6")).setAvailability(99.0);
+		(searchInfrastructureByID(infrastructures, "7")).setAvailability(99.0);
+		
+		
+		
 		
 		//connect infrastructures 
 		//1- Random
@@ -130,59 +140,62 @@ public class MainEvaluation
 //				ThreadLocalRandom.current().nextDouble(95.0, 100.0) //availability
 //				);
 		
-		NetworkConnection nc = new NetworkConnection(3.0);
+		NetworkConnection nc = new NetworkConnection(5.0);
 		
 		nc.addResources(searchInfrastructureByID(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")); //spart-fog-infrastructure
 		nc.addResources(searchInfrastructureByID(infrastructures, "4aaf7a50-ea9c-4525-8980-d05a2a692663")); //infr-cloudsigma-batch
 		network.add(nc);
 		
 		
-		nc = new NetworkConnection(
-				ThreadLocalRandom.current().nextDouble(0.0, 2.0) //latency in seconds
-				);
-		
+//		nc = new NetworkConnection(
+//				ThreadLocalRandom.current().nextDouble(0.0, 2.0) //latency in seconds
+//				);
+		nc = new NetworkConnection(5.0);
 		nc.addResources(searchInfrastructureByID(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")); //spart-fog-infrastructure
 		nc.addResources(searchInfrastructureByID(infrastructures, "876a7464-6f75-4edd-a559-afd8bc48836c")); //infr-cloudsigma-stream
 		network.add(nc);
 		
-		nc = new NetworkConnection(
-				ThreadLocalRandom.current().nextDouble(0.0, 2.0) //latency in seconds
-				);
-		
+		nc = new NetworkConnection(5.0);
 		nc.addResources(searchInfrastructureByID(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")); //spart-fog-infrastructure
 		nc.addResources(searchInfrastructureByID(infrastructures, "8022066a-7947-43a6-a823-a33cf34679b4")); //spart-edge-infrastructure
 		network.add(nc);
 		
-		nc = new NetworkConnection(
-				ThreadLocalRandom.current().nextDouble(0.0, 2.0) //latency in seconds
-				);
-		
+		nc = new NetworkConnection(5.0);
 		nc.addResources(searchInfrastructureByID(infrastructures, "4aaf7a50-ea9c-4525-8980-d05a2a692663")); //infr-cloudsigma-batch
 		nc.addResources(searchInfrastructureByID(infrastructures, "876a7464-6f75-4edd-a559-afd8bc48836c")); //infr-cloudsigma-stream
 		network.add(nc);
 		
 		
 		// add connection dal (dall can be retrieved only by name)
-		nc = new NetworkConnection(
-				ThreadLocalRandom.current().nextDouble(0.0, 2.0) //latency in seconds
-				);
-		
+		nc = new NetworkConnection(5.0);
 		nc.addResources(searchInfrastructureByID(infrastructures, "762a7547-ff4f-4f8d-b925-e3664003debc")); //spart-fog-infrastructure
 		nc.addResources(searchInfrastructureByName(infrastructures, "212.8.121.134") ); //DAL influxdb-dal-local
 		network.add(nc);
 		
-		nc = new NetworkConnection(
-				ThreadLocalRandom.current().nextDouble(0.0, 2.0) //latency in seconds
-				);
-		
+		nc = new NetworkConnection(5.0);
 		nc.addResources(searchInfrastructureByID(infrastructures, "876a7464-6f75-4edd-a559-afd8bc48836c")); //infr-cloudsigma-stream
-		nc.addResources(searchInfrastructureByName(infrastructures, "212.8.121.135") ); //DAL streaming-dal //remember to change the ip in the blueprint (before ssame IP) 
+		nc.addResources(searchInfrastructureByName(infrastructures, "212.8.121.135") ); //DAL streaming-dal //remember to change the ip in the blueprint (before ssame IP)
+		network.add(nc);
+		
+		//**latency blueprint batch, network connection connections
+
+		// 5 infr-cloudsigma-batch-latency
+		// 6 spart-fog-infrastructure-batch-latency (default)
+		// 7 spart-edge-infrastructure-batch-latency
+		
+		nc = new NetworkConnection(5.0);
+		nc.addResources(searchInfrastructureByID(infrastructures, "6")); //spart-fog-infrastructure-batch-latency -> connects the VDC dafauklt infrastructureto the DAL infrastructure
+		nc.addResources(searchInfrastructureByName(infrastructures, "212.8.121.100") ); //DAL batch latency //remember to change the ip in the blueprint (before ssame IP)
+		network.add(nc);
+		
+		nc = new NetworkConnection(1.0);
+		nc.addResources(searchInfrastructureByID(infrastructures, "5")); //
+		nc.addResources(searchInfrastructureByName(infrastructures, "6") ); //
 		network.add(nc);
 		
 		
 		//start VDCs
 		boolean violationFree=false;
-		boolean nextTurn=false;
 		boolean violationFound=false;
 		
 		
@@ -192,8 +205,13 @@ public class MainEvaluation
 		{
 			System.out.println("turn: " + turns);
 			
-			for (VDC_evaluation vdc_evaluation : VDCs) //il provblema con la seconda iterazione, problemi con casting DAL? magari creazione DAL duplicatio..args serve duplicare il dsal o basta anche qui spostarlo? tanto quando lo duplico poi l'altro lo cancello
+			violationFound=false;
+			int i;
+			
+			for (i =0; i < VDCs.size(); i++) 
 			{
+				VDC_evaluation vdc_evaluation = VDCs.get(i);
+				
 				//(new Thread(vdc_evaluation, vdc_evaluation.getId())).start();
 				Violation violation = vdc_evaluation.checkViolation();
 				
@@ -206,21 +224,21 @@ public class MainEvaluation
 					
 					NotifyViolation_functionality.doPost(VDCs, violations);
 					
-					nextTurn=false;
-					violationFound=true;
-					
 					turns++;
+					
+					violationFound=true; // i need this boolean because if the violation will be found in the last iteration, it will exit the while loop
 					
 					break;//if there is a violation, fix it and repeat the while cycle
 					
 				}
+
 			}
 			
-			if (nextTurn)
+			if (i==VDCs.size() && !violationFound)
+			{
 				violationFree=true;//end the while cycle
+			}
 			
-			if (violationFound)
-				nextTurn=true;
 		}
 		
 
@@ -230,12 +248,7 @@ public class MainEvaluation
 		
 
 	}
-	
-	public MainEvaluation() 
-	{
 
-		
-	}
 	
 	/**
 	 * given a VDC id, it search the abstract blueprint in the persistent volumes, if it exists it returns it. 

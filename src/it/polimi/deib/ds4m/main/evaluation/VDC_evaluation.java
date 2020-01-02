@@ -185,7 +185,7 @@ public class VDC_evaluation  extends it.polimi.deib.ds4m.main.model.concreteBlue
 			case "availability"://avilability is a resource to be checked in VDC
 				{
 					//compare it with requirements of resopurces where the vdc is stored
-					if(
+					if(//this assumes that availability issues are solved with computation movements
 							(property.getMaximum()!=null && property.getMaximum()<= ((Infrastructure_evaluation)this.getCurrentInfrastructure()).getAvailability() )  ||
 							(property.getMinimum()!=null && property.getMinimum()>= ((Infrastructure_evaluation)this.getCurrentInfrastructure()).getAvailability() )
 							)
@@ -204,7 +204,7 @@ public class VDC_evaluation  extends it.polimi.deib.ds4m.main.model.concreteBlue
 						
 						return violation;
 					}
-				}
+				}//needs somethig else for computation movement
 				break;
 			
 			//if the type has not been recognized
