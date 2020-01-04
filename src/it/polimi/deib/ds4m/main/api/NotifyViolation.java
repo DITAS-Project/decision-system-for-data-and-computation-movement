@@ -174,8 +174,20 @@ public class NotifyViolation extends HttpServlet {
 					return;
 				}
 
-				//workaround to select the ccloud ifrastructure for IDEKO case study
+				//workaround to select the cloud ifrastructure for IDEKO case study
 				Movement movement=null;
+				//fog->edge
+				if (violatedVDC.getCurrentInfrastructure().getName().equalsIgnoreCase("spart-fog-infrastructure"))
+				{
+					for (Movement movementtmp : movementsToBeEnacted)
+					{
+							if (movementtmp.getToLinked() !=null &&
+									movementtmp.getToLinked().getName().equalsIgnoreCase("spart-edge-infrastructure")
+									)
+								movement = movementtmp;
+					}
+				}
+				//edge->cloud
 				if (violatedVDC.getCurrentInfrastructure().getName().equalsIgnoreCase("spart-edge-infrastructure"))
 				{
 					for (Movement movementtmp : movementsToBeEnacted)
