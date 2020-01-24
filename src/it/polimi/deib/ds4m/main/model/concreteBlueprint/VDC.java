@@ -153,7 +153,8 @@ public class VDC implements Serializable
 	 */
 	private void connect(TreeStructure treeStructure, ArrayList<Attribute> attributes)
 	{
-		if (treeStructure.getLeaves()==null)
+		//if (treeStructure.getLeaves()==null)
+		if (treeStructure.getChildren()!=null)
 			for (TreeStructure cildren : treeStructure.getChildren())
 				connect(cildren, attributes);
 		else

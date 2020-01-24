@@ -376,6 +376,9 @@ public class VDCManager
 		{
 			entry.getValue().createResource(infrastructures);
 			entry.getValue().setId(entry.getKey());
+			//entry.getValue().setId(entry.getValue().getOriginal_ip());//used the original ip ad identifier
+			entry.getValue().getPosition().setId(entry.getValue().getOriginal_ip());//used the original ip ad identifier
+			
 			DALsArrayList.add(entry.getValue());
 		}
 		

@@ -37,7 +37,7 @@ public class MovementEnaction
 	private String VDCid;
 	
 	//datasources
-	private ArrayList<DataSource> dataSourcesDAL;
+	//private ArrayList<DataSource> dataSourcesDAL;
 	
 	/**
 	 * @return the from
@@ -141,16 +141,5 @@ public class MovementEnaction
 	public void setVDCid(String vDCid) {
 		VDCid = vDCid;
 	}
-	/**
-	 * @return the dataSourcesDAL
-	 */
-	public ArrayList<DataSource> getDataSourcesDAL() {
-		return dataSourcesDAL;
-	}
-	/**
-	 * @param dataSourcesDAL the dataSourcesDAL to set
-	 */
-	public void setDataSourcesDAL(ArrayList<DataSource> dataSourcesDAL) {
-		this.dataSourcesDAL = dataSourcesDAL;
-	}
+
 }
