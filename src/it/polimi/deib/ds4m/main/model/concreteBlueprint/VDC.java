@@ -160,7 +160,7 @@ public class VDC implements Serializable
 			for (TreeStructure leaf : treeStructure.getLeaves())
 				for (String attributeLeaf: leaf.getAttributes())
 					for (Attribute attributeDM : attributes)
-						if (attributeDM.getId().equals(attributeLeaf))
+						if (attributeDM.getId().equals(attributeLeaf))  
 							leaf.getAttributesLinked().add(attributeDM);
 							
 				

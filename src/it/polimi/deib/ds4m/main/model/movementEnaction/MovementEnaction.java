@@ -20,6 +20,7 @@ package it.polimi.deib.ds4m.main.model.movementEnaction;
 import java.util.ArrayList;
 
 import it.polimi.deib.ds4m.main.model.concreteBlueprint.VDC;
+import it.polimi.deib.ds4m.main.model.dataSources.DataSource;
 import it.polimi.deib.ds4m.main.model.methodsInput.DataSourceInput;
 import it.polimi.deib.ds4m.main.model.methodsInput.Method;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
@@ -35,7 +36,8 @@ public class MovementEnaction
 	private ArrayList<DataSourceInput> dataSources;
 	private String VDCid;
 	
-	
+	//datasources
+	private ArrayList<DataSource> dataSourcesDAL;
 	
 	/**
 	 * @return the from
@@ -69,7 +71,6 @@ public class MovementEnaction
 		this.to = movement.getToLinked().getId();
 		this.type = movement.getType();		
 		this.VDCid= violatedVDC.getId();
-
 
 		//this.setMethodsInputs(methodsInputs);
 		
@@ -139,5 +140,17 @@ public class MovementEnaction
 	 */
 	public void setVDCid(String vDCid) {
 		VDCid = vDCid;
+	}
+	/**
+	 * @return the dataSourcesDAL
+	 */
+	public ArrayList<DataSource> getDataSourcesDAL() {
+		return dataSourcesDAL;
+	}
+	/**
+	 * @param dataSourcesDAL the dataSourcesDAL to set
+	 */
+	public void setDataSourcesDAL(ArrayList<DataSource> dataSourcesDAL) {
+		this.dataSourcesDAL = dataSourcesDAL;
 	}
 }
