@@ -98,6 +98,7 @@ public class NotifyViolation extends HttpServlet {
 	{
 		System.out.println("NotifyViolation: called from " + request.getRemoteAddr());
 		
+		
 		// create the json parser
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);// to serialize arrays with only one
@@ -111,6 +112,8 @@ public class NotifyViolation extends HttpServlet {
 		// retrieve parameter (the list of violations)
 		String violationsJSON = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 
+		System.out.println("NotifyViolation: request:" + violationsJSON);
+		
 		try {
 			// convert
 			ArrayList<Violation> violations = new ArrayList<Violation>(
