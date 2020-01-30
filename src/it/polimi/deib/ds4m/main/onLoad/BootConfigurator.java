@@ -36,7 +36,7 @@ public class BootConfigurator implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) 
 	{
-		System.out.println("DS4M: V2.1");
+		System.out.println("DS4M: V2.2");
 		
 		if ((new File(PathSetting.statusSerializeSer)).exists())
 		{

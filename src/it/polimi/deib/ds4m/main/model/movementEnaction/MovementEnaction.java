@@ -31,7 +31,7 @@ public class MovementEnaction
 	private String to;
 	//private ArrayList<String> transformations;
 	private String type;
-	private String DALid;
+	private String DALid; //new dal ID
 	//private  ArrayList<Method> methodsInputs;
 	private ArrayList<DataSourceInput> dataSources;
 	private String VDCid;

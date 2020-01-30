@@ -94,7 +94,10 @@ public class NotifyViolation extends HttpServlet {
 	// @SuppressWarnings("unchecked")
 	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException 
+	{
+		System.out.println("NotifyViolation: called from " + request.getRemoteAddr());
+		
 		// create the json parser
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);// to serialize arrays with only one
@@ -113,6 +116,8 @@ public class NotifyViolation extends HttpServlet {
 			ArrayList<Violation> violations = new ArrayList<Violation>(
 					Arrays.asList(mapper.readValue(violationsJSON, Violation[].class)));
 
+			System.out.println("NotifyViolation: number of violation received " + violations.size());
+
 			// while the set of violations contain a violation, keep analysing them
 			for (Violation violation : violations) {
 				// identify VDC
@@ -124,8 +129,8 @@ public class NotifyViolation extends HttpServlet {
 
 					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 					return;
-				}
-
+				}				
+				
 				// identify goal
 				Set<TreeStructure> violatedGoals = GoalTreeManager.findViolatedGoals(violation, violatedVDC);
 				if (violatedGoals == null) {
@@ -175,6 +180,7 @@ public class NotifyViolation extends HttpServlet {
 				}
 
 				//workaround to select the cloud ifrastructure for IDEKO case study
+				//TODO: remove hotfix
 				Movement movement=null;
 				//fog->edge
 				if (violatedVDC.getCurrentInfrastructure().getName().equalsIgnoreCase("spart-fog-infrastructure"))
@@ -198,6 +204,8 @@ public class NotifyViolation extends HttpServlet {
 								movement = movementtmp;
 					}
 				}
+				
+				//END hotfix
 				
 				// select first data movement action
 				if (movement==null)
@@ -306,7 +314,7 @@ public class NotifyViolation extends HttpServlet {
 							+ "?sourceInfra=" + movement.getFromLinked().getId() + "&targetInfra="
 							+ movement.getToLinked().getId();
 
-					System.out.println("Nofifyviolation: call CME: " + call);
+					System.out.println("NotifyViolation: call CME: " + call);
 
 					// call to computation movement enactors
 					HttpClient client = HttpClientBuilder.create().build();

@@ -100,8 +100,6 @@ public class AddVDC extends HttpServlet {
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
-		
-		System.out.println("ADDVDC: parsed movements");
 
 		//created a VDC from the json files
 		VDC vdc;
@@ -116,6 +114,16 @@ public class AddVDC extends HttpServlet {
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
+		
+//**hotfix to ignore streaming VDC of IDEKO
+//		//TODO: hotfix IDEKO to ignore bluprint streming
+//		if (vdc.getId().equalsIgnoreCase("Computation blueprints for SPART MANUFACTURING plant"))
+//		{
+//			String message = "ADDVDC: Ignored blueprint streaming";
+//        	response.getWriter().println(message);
+//			response.setStatus(HttpStatus.SC_OK);
+//			return;
+//		}
 		
 		
 		// i change the name with the name in the parameter
@@ -149,6 +157,8 @@ public class AddVDC extends HttpServlet {
 		
 		//add the VDC
 		VDCs.add(vdc);
+		
+		System.out.println("ADDVDC: VDC "+VDCID+" added to pool VDCs");
 		
 		//check if the persistent volume folder exists. if not, it is not mounted (it is a junit test execution) and skip the save
 		if ((new File(PathSetting.pv)).exists())
