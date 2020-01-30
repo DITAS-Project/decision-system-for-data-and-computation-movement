@@ -92,11 +92,65 @@ public class NotifyViolation extends HttpServlet {
 	 *      response)
 	 */
 	// @SuppressWarnings("unchecked")
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException 
 	{
-		System.out.println("NotifyViolation: called from " + request.getRemoteAddr());
+
+		//TODO: Hotfix IDEKO
+		ArrayList<String> VDCs_ip;
+		if  (this.getServletConfig().getServletContext().getAttribute("VDCs_ip") == null)
+		{
+			VDCs_ip = new ArrayList<String>();
+			this.getServletConfig().getServletContext().setAttribute("VDCs_ip", VDCs_ip);
+		}
+		else
+			VDCs_ip = (ArrayList<String>) this.getServletConfig().getServletContext().getAttribute("VDCs_ip");
+		
+		//String SLA_IP =  request.getRemoteAddr();
+		
+        String SLA_IP = request.getHeader("X-Forwarded-For");  
+        if (SLA_IP == null || SLA_IP.length() == 0 || "unknown".equalsIgnoreCase(SLA_IP)) 
+        {  
+            SLA_IP = request.getHeader("Proxy-Client-IP");  
+        }
+        
+        if (SLA_IP == null || SLA_IP.length() == 0 || "unknown".equalsIgnoreCase(SLA_IP)) 
+        {  
+            SLA_IP = request.getHeader("WL-Proxy-Client-IP");  
+        }
+        
+        if (SLA_IP == null || SLA_IP.length() == 0 || "unknown".equalsIgnoreCase(SLA_IP)) 
+        {  
+            SLA_IP = request.getHeader("HTTP_CLIENT_IP");  
+        }
+        
+        if (SLA_IP == null || SLA_IP.length() == 0 || "unknown".equalsIgnoreCase(SLA_IP)) 
+        {  
+            SLA_IP = request.getHeader("HTTP_X_FORWARDED_FOR");  
+        }
+        
+        if (SLA_IP == null || SLA_IP.length() == 0 || "unknown".equalsIgnoreCase(SLA_IP)) 
+        {  
+            SLA_IP = request.getRemoteAddr();  
+        }  
+
+		
+		System.out.println("NotifyViolation: called from " + SLA_IP);
+		
+		for (String ip: VDCs_ip)
+		{
+			if (ip.equalsIgnoreCase(SLA_IP))
+			{
+				response.setStatus(HttpStatus.SC_OK);
+				System.out.println("NotifyViolation: violation ignored, IP SLA manager found in blacklist");
+				return;
+			}
+		}
+		
+		System.out.println("NotifyViolation: IP not found in blacklist,. violation processed, IP stored in blacklist");
+		VDCs_ip.add(SLA_IP);
+		//hotfix finished
 		
 		
 		// create the json parser
