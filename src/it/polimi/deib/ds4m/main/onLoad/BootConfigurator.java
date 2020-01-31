@@ -36,7 +36,42 @@ public class BootConfigurator implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) 
 	{
-		System.out.println("DS4M: V2.2");
+		System.out.println("DS4M: V2.3");
+		
+		//check folder structure and create it
+		
+		File dirDS4M_pv = new File(PathSetting.DS4M_pv);
+	    if (! dirDS4M_pv.exists())
+	    {
+	    	System.out.println("BootConfigurator: folder structure not present, created.");
+	    	
+	        dirDS4M_pv.mkdirs();
+	        // If you require it to make the entire directory path including parents,
+	        // use directory.mkdirs(); here instead.
+	        
+	        //create sub folders
+	        File dirStatusSerializeSer = new File(PathSetting.statusSerialize_pv);
+	        dirStatusSerializeSer.mkdirs();
+	        
+	        File dirBlueprints_pv = new File(PathSetting.blueprints_pv);
+	        dirBlueprints_pv.mkdirs();
+	        
+	    }
+	    else//if the DS4M folder exists check and create sub folders
+	    {
+	    	System.out.println("BootConfigurator: folder structure partially not present, created.");
+	    	
+	    	File dirStatusSerializeSer = new File(PathSetting.statusSerialize_pv);
+	    	if (! dirStatusSerializeSer.exists())
+	    		dirStatusSerializeSer.mkdirs();
+	        
+	        File dirBlueprints_pv = new File(PathSetting.blueprints_pv);
+	        if (! dirBlueprints_pv.exists())
+	        	dirBlueprints_pv.mkdirs();
+	    	
+	    }
+
+		
 		
 		if ((new File(PathSetting.statusSerializeSer)).exists())
 		{
@@ -60,6 +95,7 @@ public class BootConfigurator implements ServletContextListener {
 	        catch(IOException ex) 
 	        { 
 	            System.out.println("IOException is caught"); 
+	            ex.printStackTrace();
 	        } 
 	          
 	        catch(ClassNotFoundException ex) 
