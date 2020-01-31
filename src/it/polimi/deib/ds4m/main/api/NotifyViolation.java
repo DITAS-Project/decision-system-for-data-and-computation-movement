@@ -98,58 +98,15 @@ public class NotifyViolation extends HttpServlet {
 	{
 
 		//TODO: Hotfix IDEKO
-		ArrayList<String> VDCs_ip;
-		if  (this.getServletConfig().getServletContext().getAttribute("VDCs_ip") == null)
+		ArrayList<String> violationsType;
+		if  (this.getServletConfig().getServletContext().getAttribute("violationsType") == null)
 		{
-			VDCs_ip = new ArrayList<String>();
-			this.getServletConfig().getServletContext().setAttribute("VDCs_ip", VDCs_ip);
+			violationsType = new ArrayList<String>();
+			this.getServletConfig().getServletContext().setAttribute("violationsType", violationsType);
 		}
 		else
-			VDCs_ip = (ArrayList<String>) this.getServletConfig().getServletContext().getAttribute("VDCs_ip");
+			violationsType = (ArrayList<String>) this.getServletConfig().getServletContext().getAttribute("violationsType");
 		
-		//String SLA_IP =  request.getRemoteAddr();
-		
-        String SLA_IP = request.getHeader("X-Forwarded-For");  
-        if (SLA_IP == null || SLA_IP.length() == 0 || "unknown".equalsIgnoreCase(SLA_IP)) 
-        {  
-            SLA_IP = request.getHeader("Proxy-Client-IP");  
-        }
-        
-        if (SLA_IP == null || SLA_IP.length() == 0 || "unknown".equalsIgnoreCase(SLA_IP)) 
-        {  
-            SLA_IP = request.getHeader("WL-Proxy-Client-IP");  
-        }
-        
-        if (SLA_IP == null || SLA_IP.length() == 0 || "unknown".equalsIgnoreCase(SLA_IP)) 
-        {  
-            SLA_IP = request.getHeader("HTTP_CLIENT_IP");  
-        }
-        
-        if (SLA_IP == null || SLA_IP.length() == 0 || "unknown".equalsIgnoreCase(SLA_IP)) 
-        {  
-            SLA_IP = request.getHeader("HTTP_X_FORWARDED_FOR");  
-        }
-        
-        if (SLA_IP == null || SLA_IP.length() == 0 || "unknown".equalsIgnoreCase(SLA_IP)) 
-        {  
-            SLA_IP = request.getRemoteAddr();  
-        }  
-
-		
-		System.out.println("NotifyViolation: called from " + SLA_IP);
-		
-		for (String ip: VDCs_ip)
-		{
-			if (ip.equalsIgnoreCase(SLA_IP))
-			{
-				response.setStatus(HttpStatus.SC_OK);
-				System.out.println("NotifyViolation: violation ignored, IP SLA manager found in blacklist");
-				return;
-			}
-		}
-		
-		System.out.println("NotifyViolation: IP not found in blacklist,. violation processed, IP stored in blacklist");
-		VDCs_ip.add(SLA_IP);
 		//hotfix finished
 		
 		
@@ -177,6 +134,23 @@ public class NotifyViolation extends HttpServlet {
 
 			// while the set of violations contain a violation, keep analysing them
 			for (Violation violation : violations) {
+				
+				//TODO: Hotfix IDEKO
+				for (String violationType : violationsType) 
+				{
+					if (violationType.equalsIgnoreCase(violation.getMetrics().get(0).getKey()) )
+					{
+						String message = "NotifyViolation: violation ignored, metric type " + violation.getMetrics().get(0).getKey() + " already processed";
+						response.setStatus(HttpStatus.SC_OK);
+						System.err.println(message);
+						response.getWriter().println(message);
+						return;
+					}
+				}
+				
+				System.out.println("NotifyViolation: violation with metric type " + violation.getMetrics().get(0).getKey() + " will be processed"); 
+				violationsType.add(violation.getMetrics().get(0).getKey());
+				
 				// identify VDC
 				VDC violatedVDC = VDCManager.findViolatedVDC(violation, VDCs);
 				if (violatedVDC == null) {
