@@ -59,6 +59,7 @@ import it.polimi.deib.ds4m.main.model.da.ResultValueDA;
 import it.polimi.deib.ds4m.main.model.dataSources.DAL;
 import it.polimi.deib.ds4m.main.model.movement.Movement;
 import it.polimi.deib.ds4m.main.model.movementEnaction.MovementEnaction;
+import it.polimi.deib.ds4m.main.model.resources.Infrastructure;
 import it.polimi.deib.ds4m.main.movement.GoalTreeManager;
 import it.polimi.deib.ds4m.main.movement.MovementsActionsManager;
 import it.polimi.deib.ds4m.main.movement.VDCManager;
@@ -211,9 +212,9 @@ public class NotifyViolation extends HttpServlet {
 				}
 
 				//workaround to select the cloud ifrastructure for IDEKO case study
-				//TODO: remove hotfix
+				//TODO: hotfix to fix start and end points
 				Movement movement=null;
-				//fog->edge
+				//fog->edge (IDEKO)
 				if (violatedVDC.getCurrentInfrastructure().getName().equalsIgnoreCase("spart-fog-infrastructure"))
 				{
 					for (Movement movementtmp : movementsToBeEnacted)
@@ -224,13 +225,32 @@ public class NotifyViolation extends HttpServlet {
 								movement = movementtmp;
 					}
 				}
-				//edge->cloud
+				//edge->cloud (IDEKO)
 				if (violatedVDC.getCurrentInfrastructure().getName().equalsIgnoreCase("spart-edge-infrastructure"))
 				{
 					for (Movement movementtmp : movementsToBeEnacted)
 					{
 							if (movementtmp.getToLinked() !=null &&
 									movementtmp.getToLinked().getName().equalsIgnoreCase("infr-cloudsigma-batch")
+									)
+								movement = movementtmp;
+					}
+				}
+				
+				//dal SJC private -> NSC private (OSR)
+				boolean osr = false;
+				for (DAL dalTmp : violatedVDC.getDALs())
+				{
+					if (dalTmp.getId().equalsIgnoreCase("osr-dal"))
+						osr=true;
+				}
+				
+				if (osr)
+				{
+					for (Movement movementtmp : movementsToBeEnacted)
+					{
+							if (movementtmp.getToLinked() !=null &&
+									movementtmp.getToLinked().getName().equalsIgnoreCase("infr-cloudsigma-sjc")
 									)
 								movement = movementtmp;
 					}
