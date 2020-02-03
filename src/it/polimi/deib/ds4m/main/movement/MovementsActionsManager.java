@@ -470,7 +470,7 @@ public class MovementsActionsManager
 			System.err.println("DMECall: error in parsing the call to DME");
 			jsonBody="";
 		} catch (UnsupportedEncodingException e) 
-		{
+		{ 
 			System.err.println("DMECall: error in encoding the call to DME");
 		}
         
