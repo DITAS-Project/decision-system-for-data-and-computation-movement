@@ -453,7 +453,7 @@ public class MovementsActionsManager
         HttpClient client = HttpClientBuilder.create().build();
         
         //call to dma in kubernetes
-        HttpPost post = new HttpPost("http://178.22.69.180:8111/dme/init_movement/");
+        HttpPost post = new HttpPost("http://localhost:30030/dme/init_movement/");
         
         post.setHeader("Accept", "application/json");
         post.setHeader("Content-type", "application/json");
