@@ -2,7 +2,7 @@
 The goal of the component consists in selecting the best data and computation movement actions to be adopted in order to restore the level of data quality, quality of service and security defined by the application developer.
 
 ## Input
-* Concrete blueprint
+* Concrete blueprint (Goal model)
 * List of violated requirements
 
 ## Output
@@ -37,7 +37,7 @@ The goal of the component consists in selecting the best data and computation mo
 Java
 
 ## Installation
-In order to deploy the DS4M it is not mnandatory to compile the code since an already compiled version of the software is already provided in /target/ROOT.war. If you don't want to compile teh source code skip step _Compilation_.
+In order to deploy the DS4M it is not mandatory to compile the code since an already compiled version of the software is already provided in /target/ROOT.war. If you don't want to compile the source code, skip step _Compilation_.
 
 ### Requirements for deployment
 In order to be executed, this component requires the following elements to be installed:
@@ -65,6 +65,17 @@ To test if the application is deployed correctly:
 __address__: address of the machine where tomcat is installed
 
 __port__: port of the application, if no port forwarding has been specified, it is 8080
+
+## Deployment with Doker
+It is possible to find a doker container boundled with the last version of DS4M ar https://hub.docker.com/r/ditas/decision-system-for-data-and-computation-movement.
+In this case, you need [docker](https://www.docker.com) to be installed in your computer. 
+Once docker is installed, run on your comman line
+```docker run ditas/decision-system-for-data-and-computation-movement:latest```
+This will create a running container listening on port 8080.
+
+## Test DS4M
+To test DS4M you can use the files in /testResources, or run the Junit tests.
+
 
 ## License
 The  project is under Apache 2.0 license. You can find the license [here](https://github.com/DITAS-Project/decision-system-for-data-and-computation-movement/blob/master/LICENSE).
