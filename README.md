@@ -6,33 +6,43 @@ The goal of the component consists in selecting the best data and computation mo
 * List of violated requirements
 
 ## Output
-* List of data and computation actions
+* List of data and computation actions (adaptation actions)
 
 ## List of functionalities
-* /api/NotifyViolation
-  * description: the method receives in input a list of violations.
-  * caller SLA manager
+* /v2/CheckStatus
+  * description: the api shows the number of active VDCs (goal models)
+  * HTTP call: GET
   * input
     * list of violated requirements
   * output
-    * list of data and computation movement actions
-    
-* /api/SetUP
-  * description: the method receives in input the concrete blueprint of the first VDC deployed.
-  * caller deployment module
-  * input
-    * concrete blueprint
-  * output
-    * none
-     
-* /api/AddVDC
-  * description: the method receives in input the concrete blueprint of the VDC deployed.
-  * caller deployment module
-  * input
-    * concrete blueprint
-  * output
-    * none
+    * HTTP code 200 if goal model correcly parsed
 
+* /v2/NotifyViolation
+  * description: the method receives in input a list of violations.
+  * HTTP call: POST
+  * input
+    * list of violated requirements
+  * output
+    * HTTP code 200 if goal model correcly parsed
+    * HTTP code 500 if problems occurred
+     
+* /v2/AddVDC   
+  * description: the method receives in input the concrete blueprint of the VDC deployed.
+  * HTTP call: POST
+  * input
+    * concrete blueprint
+  * output
+    * HTTP code 200 if goal model correcly parsed
+    * HTTP code 500 if problems occurred
+
+* /v2/Reset
+  * description: the method reset the internal statius of the software
+  * HTTP call: GET
+  * input
+    * empty
+  * output
+    * HTTP code 200 
+    
 ## Implementation language
 Java
 
@@ -49,11 +59,16 @@ In order to be executed, this component requires the following elements to be in
 * Maven
 
 ### Compilation
+* install Apache Tomcat 
 * Download the source code from this repository
-* Copile it using maven: with a shell navigate to the main folder and use the command  _mvn package_
+* Copile it using maven: 
+ * with a shell navigate to the main folder and use the command  _mvn package_
+* compile using eclipse
+ * import the prioject usinh eclipse (oxygen, with pligin for maven)
+ * right click on the main project and run _maven install_ 
 
 ### Deployment
-* Move the war file _/target/ROOT.war_ just created in the _webapps_ folder of Apache Tomcat
+* the file war file _/target/ROOT.war_ creted with maven should be moved to the _webapps_ folder of Apache Tomcat, if it is not the case, move it manually
 * Start Apache Tomcat
 
 ### Check deployment
@@ -62,7 +77,7 @@ To test if the application is deployed correctly:
 * go to __address__:__port__/NotifyViolation
 * a web page saying that the service is up and running should be displayed.
 
-__address__: address of the machine where tomcat is installed
+__address__: address of the machine where tomcat is installed (_localhost_,depending on the settings, you may need to add _/ROOT_ at the end fo the address
 
 __port__: port of the application, if no port forwarding has been specified, it is 8080
 
@@ -70,8 +85,19 @@ __port__: port of the application, if no port forwarding has been specified, it 
 It is possible to find a doker container boundled with the last version of DS4M ar https://hub.docker.com/r/ditas/decision-system-for-data-and-computation-movement.
 In this case, you need [docker](https://www.docker.com) to be installed in your computer. 
 Once docker is installed, run on your comman line
-```docker run ditas/decision-system-for-data-and-computation-movement:latest```
+```
+docker run -d \
+  --name DS4M \
+  -v <path to a local folder containing configuration file>:/etc/ditas/ \
+  -v <path to a empty local folder>:/var/ditas/vdm/ \
+  ditas/decision-system-for-data-and-computation-movement:production
+```
+
 This will create a running container listening on port 8080.
+DS4M saves the status of the application and read configuration in two permanet folders. 
+```<path to a local folder containing configuration file>``` must contain a file ```DS4M_movementClasses.json``` that contains the descriprtion on adaptation action classes. an example of this file can bve found [here](https://github.com/DITAS-Project/VDC-Shared-Config/blob/master/vdm/DS4M_movementClasses.json) 
+```<path to a empty local folder>:/var/ditas/vdm/``` must contain an empty folder ```DS4M```. If this folder is not provided the DS4M will still work, but is a completely stateless mode (i.e. it will not save nor the status of the client nor the status of the VDCs ( goal models) provided).
+
 
 ## Test DS4M
 To test DS4M you can use the files in /testResources, or run the Junit tests.
