@@ -121,8 +121,11 @@ BootConfigurator: imported 0 blueprints
 ```
 ### clean up
 To stop the container execute ```docker container stop <container ID>```
+
 To remove the container execute ```docker container rm <container ID>```
+
 To show the images execute ```docker images```
+
 To remove the images excute ```docker rmi <image ID>``` you can safely remove all images, if you are using Docker only for DS4M.
 
 ## Test DS4M
