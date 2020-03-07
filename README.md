@@ -82,22 +82,48 @@ __address__: address of the machine where tomcat is installed (_localhost_,depen
 __port__: port of the application, if no port forwarding has been specified, it is 8080
 
 ## Deployment with Doker
-It is possible to find a doker container boundled with the last version of DS4M ar https://hub.docker.com/r/ditas/decision-system-for-data-and-computation-movement.
+It is possible to find a doker container boundled with the last version of DS4M [here](https://hub.docker.com/r/ditas/decision-system-for-data-and-computation-movement). the tag to use is ```production```.
 In this case, you need [docker](https://www.docker.com) to be installed in your computer. 
 Once docker is installed, run on your comman line
 ```
 docker run -d \
   --name DS4M \
-  -v <path to a local folder containing configuration file>:/etc/ditas/ \
-  -v <path to a empty local folder>:/var/ditas/vdm/ \
+  -p 30003:30003 \
+  -v /Users/mattia/_etc/ditas/:/etc/ditas/ \
+  -v /Users/mattia/_var/ditas/vdm/:/var/ditas/vdm/ \
   ditas/decision-system-for-data-and-computation-movement:production
 ```
 
-This will create a running container listening on port 8080.
+This will create a running container listening on port 30003.
+
 DS4M saves the status of the application and read configuration in two permanet folders. 
-```<path to a local folder containing configuration file>``` must contain a file ```DS4M_movementClasses.json``` that contains the descriprtion on adaptation action classes. an example of this file can bve found [here](https://github.com/DITAS-Project/VDC-Shared-Config/blob/master/vdm/DS4M_movementClasses.json) 
+```<path to a local folder containing configuration file>``` must contain a file ```DS4M_movementClasses.json``` that contains the descriprtion on adaptation action classes. An example of this file can be found [here](https://github.com/DITAS-Project/VDC-Shared-Config/blob/master/vdm/DS4M_movementClasses.json) 
+
 ```<path to a empty local folder>:/var/ditas/vdm/``` must contain an empty folder ```DS4M```. If this folder is not provided the DS4M will still work, but is a completely stateless mode (i.e. it will not save nor the status of the client nor the status of the VDCs ( goal models) provided).
 
+To check if DS4M is up and running open a browser and go to ```http://localhost:30003/v2/CheckStatus```.
+
+To check the logs 
+* identify the container id with ```docker container ps -all```
+* show the loigs with ```docker logs <container id>```
+
+the output should be similar to the next one
+```[...]
+07-Mar-2020 12:12:12.493 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+DS4M: V2.3
+BootConfigurator: folder structure partially not present, created.
+BootConfigurator: status file does not exists, importing concrete blueprints
+BootConfigurator: imported 0 blueprints
+[...]
+07-Mar-2020 12:12:12.883 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-apr-30003"]
+07-Mar-2020 12:12:12.895 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-apr-8009"]
+07-Mar-2020 12:12:12.897 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 2416 ms
+```
+### clean up
+To stop the container execute ```docker container stop <container ID>```
+To remove the container execute ```docker container rm <container ID>```
+To show the images execute ```docker images```
+To remove the images excute ```docker rmi <image ID>``` you can safely remove all images, if you are using Docker only for DS4M.
 
 ## Test DS4M
 To test DS4M you can use the files in /testResources, or run the Junit tests.
